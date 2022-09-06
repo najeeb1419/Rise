@@ -55,18 +55,18 @@
         <div>
             @if (privileges.isClientCreate)
             {
-                <div class="container" style="margin:20px;">
+                @*<div class="container" style="margin:20px;">
                     <label hidden id="currencyNamelbl">Please select currency pair.</label>
                     <form action="CurrencyView" enctype="multipart/form-data" method="post">
                         <div class="row">
-                            @*<div class="col-md-6">
-                                <label class="control-label">Currency(1)</label>
-                                <input style="box-shadow: none" type="text" name="FirstCurrency" class="form-control" placeholder="" value="" />
-                            </div>
                             <div class="col-md-6">
-                                <label class="control-label">Currency(2)</label>
-                                <input style="box-shadow: none" type="text" name="SecondCurrency" class="form-control" placeholder="" value="" />
-                            </div>*@
+                                    <label class="control-label">Currency(1)</label>
+                                    <input style="box-shadow: none" type="text" name="FirstCurrency" class="form-control" placeholder="" required value="" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Currency(2)</label>
+                                    <input style="box-shadow: none" type="text" name="SecondCurrency" class="form-control" placeholder="" required value="" />
+                                </div>
                             <div class="col-md-12 mb-4">
                                 <label class="control-label">Currency</label>
                                 <select class="form-control" name="CurrencyListId" id="addCurrency_dropdown">
@@ -104,7 +104,7 @@
                             }
                         </div>
                     </form>
-                </div>
+                </div>*@
             }
 
             @if (privileges.isClientView)
@@ -169,16 +169,16 @@
                                                         @CreatedDate
                                                     </td>
                                                     @*<td>
-                                                            @if (privileges != null)
+                                                        @if (privileges != null)
+                                                        {
+                                                            if (privileges.isClientUpdate)
                                                             {
-                                                                if (privileges.isClientUpdate)
-                                                                {
-                                                                    <center>
-                                                                        <a href="/Currency/EditCurrency?id=@item.CurrenciesId" class="btn  btn-outline-warning btn-sm"><span class="fa fa-pencil" aria-hidden="true"></span></a>
-                                                                    </center>
-                                                                }
+                                                                <center>
+                                                                    <a href="/Currency/EditCurrency?id=@item.CurrenciesId" class="btn  btn-outline-warning btn-sm"><span class="fa fa-pencil" aria-hidden="true"></span></a>
+                                                                </center>
                                                             }
-                                                        </td>*@
+                                                        }
+                                                    </td>*@
                                                 </tr>
                                             }
                                         }
@@ -204,6 +204,7 @@
    /* $('select').chosen();*/
 
     $("#Staff_image").change(function () {
+        debugger;
         var element = this;
         var formData = new FormData();
         var totalFiles = element.files.length;
@@ -228,6 +229,7 @@
             });
 
             $("#Staff_image1").change(function () {
+            debugger;
             var element = this;
             var formData = new FormData();
             var totalFiles = element.files.length;
@@ -254,6 +256,9 @@
     /////////////////////////////////////////////
     // on change currency dropdown
     $("#addCurrency_dropdown").change(function () {
+        debugger;
+
+
         var Curren = $("#addCurrency_dropdown").val();
         if (Curren != "") {
             //$("#CurrencyUpdate_btn").prop("disabled", true);
@@ -273,6 +278,7 @@
                     data: { id: 0, Curren: Curren },
                     dataType: "json",
                     success: function (data) {
+                        debugger;
                         if (data == "ok") {
                             $("#currencyNamelbl").hide();
                             $("#AddCurrency_btn").prop("disabled", false);
@@ -297,6 +303,7 @@
     });
 
     $("#CurrencyUpdate_btn").click(function () {
+        debugger;
         var CurrencyName = $("#currencyNoUpdate option:selected").text();
         var Curren = $("#currencyNoUpdate").val();
         var currencyid = $("#Currency_id").val();

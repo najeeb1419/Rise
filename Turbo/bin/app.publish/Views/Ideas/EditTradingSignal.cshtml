@@ -280,6 +280,7 @@
 
     var IdeaType_Value = "";
     $("#Current_price").click(function () {
+        debugger;
         IdeaType_Value = $("#Current_price").val();
     });
 
@@ -358,6 +359,7 @@
 
 
     $("#Staff_image").change(function () {
+        debugger;
         var element = this;
         var formData = new FormData();
         var totalFiles = element.files.length;
@@ -374,6 +376,7 @@
             processData: false
         })
             .done(function (response) {
+                debugger;
                 document.getElementById('staffImage_url123').value = response.ImageURL;
                 $("#Imag_src").attr("src", "/Images/Charts/" + response.ImageURL);
 
@@ -391,32 +394,27 @@
             data: { TradingSignalId: tradingid },
             dataType: "json",
             success: function (data) {
+
                 if (data != "") {
+
                     //for first  row because first dos'nt have delete button
                     for (var i = 0; i < data.TakeProfitList.length; i++) {
                         k = k + 1;
-                        if (data.TakeProfitList[i].Disble == true) {
-                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><span class="control-label required"></span><input readonly onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><span class="control-label required"></span><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
-                        }
-                        else {
-                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><span class="control-label required"></span><input onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><span class="control-label required"></span><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
-                        }
+                        $('#takeProfit_tbody').append('<tr id=' + k + '><td><span class="control-label required"></span><input onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><span class="control-label required"></span><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
                         break;
                     }
-                    //break for first  row because first dos'nt have delete button
+                    //end for first  row because first dos'nt have delete button
 
                     //Remainig records start from second record
                     for (var i = 1; i < data.TakeProfitList.length; i++) {
                         k = k + 1;
-                        if (data.TakeProfitList[i].Disble == true) {
-                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><input readonly onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
-                        }
-                        else {
-                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><input type="number" step="any" onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><input readonly type="number" id="tkpips_' + k + '" step="any" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td><a class="text-danger fa fa-window-close fa-2x" style="margin-left:0px;color:white" id="Add_row_id" onclick="DeleteRow(' + k + ')"></a></td></tr>');
-                        }
+                        $('#takeProfit_tbody').append('<tr id=' + k + '><td><input type="number" step="any" onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><input readonly type="number" id="tkpips_' + k + '" step="any" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td><a class="text-danger fa fa-window-close fa-2x" style="margin-left:0px;color:white" id="Add_row_id" onclick="DeleteRow(' + k + ')"></a></td></tr>');
                     }
                     //end
+
                     //Stop Loss we just need first record
+
+
                     $('#stoploss_body').append('<tr><td><span class="control-label required"></span><input onchange="GetLosePIPS()" id="stoplose_1" required  type="number" step="any" value=' + data.StopLose.SL + ' class="form-control" name="SL"/></td><td><span class="control-label required"></span><input required id="losePips" type="number" step="any" readonly class="form-control" value=' + data.StopLose.Points + ' name="StopPIPS"/></td></tr>');
 
                     //end stop loss
@@ -451,16 +449,15 @@
 
 
     function GetProfitPIPS(id) {
+        debugger
         var ideatype = $("#IdeaType_dropdown").val();
         var tpValue = $("#tpRow_" + id).val();
-        tpValue = Math.floor(parseFloat(tpValue));
         var PreviousTpValue = 0;
         if (id > 1) {
             var preId = id - 1;
             PreviousTpValue = $("#tpRow_" + preId).val();
         }
         var currentPriceVal = $("#CurrncyPrice").val();
-        currentPriceVal = Math.floor(parseFloat(currentPriceVal));
         var lablename = $("#type_lbl").text();
         if (ideatype == 3 || ideatype == 4 || ideatype == 5 || ideatype == 6) {
             currentPriceVal = $("#Current_price").val();
@@ -479,17 +476,28 @@
                     }
                     else {
                         if (parseFloat(tpValue) > parseFloat(currentPriceVal)) {
-
                             alert("TP must be less than " + " " + lablename);
                             $("#tpRow_" + id).val('');
                             $("#tkpips_" + id).val('');
                         }
                         else {
-                            var countPips = currentPriceVal - tpValue;
-                            $("#tkpips_" + id).val(countPips);
-                            $("#tpRow_" + id).val(tpValue);
+                            if (lastthree == "JPY") {
+                                var countPips = parseFloat(currentPriceVal).toFixed(2) - parseFloat(tpValue).toFixed(2);
+                                countPips = countPips.toFixed(2) * 100;
+                                $("#tkpips_" + id).val(Math.round(countPips));
+                                tpValue = parseFloat(tpValue).toFixed(2);
+                                $("#tpRow_" + id).val(tpValue);
+                            }
+                            else {
+                                var countPips = parseFloat(currentPriceVal).toFixed(4) - parseFloat(tpValue).toFixed(4);
+                                countPips = countPips.toFixed(4) * 10000;
+                                $("#tkpips_" + id).val(Math.round(countPips));
+                                tpValue = parseFloat(tpValue).toFixed(4);
+                                $("#tpRow_" + id).val(tpValue);
+                            }
                         }
                     }
+
                 }
                 else if (ideatype == 1 || ideatype == 3 || ideatype == 6) {
                     if (PreviousTpValue >= tpValue) {
@@ -504,9 +512,21 @@
                             $("#tpRow_" + id).val('');
                         }
                         else {
-                            var countPips = tpValue - currentPriceVal;
-                            $("#tkpips_" + id).val(Math.round(countPips));
-                            $("#tpRow_" + id).val(tpValue);
+                            if (lastthree == "JPY") {
+                                var countPips = parseFloat(tpValue).toFixed(2) - parseFloat(currentPriceVal).toFixed(2);
+                                countPips = countPips.toFixed(2) * 100;
+                                $("#tkpips_" + id).val(Math.round(countPips));
+
+                                tpValue = parseFloat(tpValue).toFixed(2);
+                                $("#tpRow_" + id).val(tpValue);
+                            }
+                            else {
+                                var countPips = parseFloat(tpValue).toFixed(4) - parseFloat(currentPriceVal).toFixed(4);
+                                countPips = countPips.toFixed(4) * 10000;
+                                $("#tkpips_" + id).val(Math.round(countPips));
+                                tpValue = parseFloat(tpValue).toFixed(4);
+                                $("#tpRow_" + id).val(tpValue);
+                            }
                         }
                     }
 
@@ -532,17 +552,17 @@
 
 
     function GetLosePIPS() {
+        debugger;
         var ideatype = $("#IdeaType_dropdown").val();
         var slValue = $("#stoplose_1").val();
-        slValue = Math.floor(parseFloat(slValue));
-
         var currentPriceVal = $("#Current_price1").val();
-        currentPriceVal = Math.floor(parseFloat(currentPriceVal));
+        var currencyName = $("#currencyDropdown option:selected").text();
         var lablename = $("#type_lbl").text();
         if (ideatype == 3 || ideatype == 4 || ideatype == 5 || ideatype == 6) {
             currentPriceVal = $("#Current_price").val();
         }
 
+        var lastthree = currencyName.substr(currencyName.length - 3);
         if (currentPriceVal != null && currentPriceVal != "") {
             if (ideatype == 2 || ideatype == 4 || ideatype == 5) {
                 if (slValue < currentPriceVal) {
@@ -551,10 +571,18 @@
                     $("#losePips").val('');
                 }
                 else {
-
-                    var countPips = currentPriceVal - slValue;
-                    $("#losePips").val(countPips);
-                    $("#stoplose_1").val(slValue);
+                    if (lastthree == "JPY") {
+                        var countPips = parseFloat(currentPriceVal).toFixed(2) - parseFloat(slValue).toFixed(2);
+                        $("#losePips").val(Math.round(countPips.toFixed(2) * 100));
+                        slValue = parseFloat(slValue).toFixed(2);
+                        $("#stoplose_1").val(slValue);
+                    }
+                    else {
+                        var countPips = parseFloat(currentPriceVal).toFixed(4) - parseFloat(slValue).toFixed(4);
+                        $("#losePips").val(Math.round(countPips.toFixed(4) * 10000));
+                        slValue = parseFloat(slValue).toFixed(4);
+                        $("#stoplose_1").val(slValue);
+                    }
                 }
             }
             else if (ideatype == 1 || ideatype == 3 || ideatype == 6) {
@@ -565,9 +593,18 @@
 
                 }
                 else {
-                    var countPips = slValue - currentPriceVal;
-                    $("#losePips").val(countPips);
-                    $("#stoplose_1").val(slValue);
+                    if (lastthree == "JPY") {
+                        var countPips = parseFloat(slValue).toFixed(2) - parseFloat(currentPriceVal).toFixed(2);
+                        $("#losePips").val(Math.round(Math.round(countPips.toFixed(2) * 100)));
+                        slValue = parseFloat(slValue).toFixed(2);
+                        $("#stoplose_1").val(slValue);
+                    }
+                    else {
+                        var countPips = parseFloat(slValue).toFixed(4) - parseFloat(currentPriceVal).toFixed(4);
+                        $("#losePips").val(Math.round(countPips.toFixed(4) * 10000));
+                        slValue = parseFloat(slValue).toFixed(4);
+                        $("#stoplose_1").val(slValue);
+                    }
                 }
             }
             else {
@@ -579,13 +616,14 @@
         else {
 
             alert("Please select currency pair first.");
-            $("#stoplose_1").val('');
             $("#losePips").val('');
         }
     }
 
 
+
     $("#IdeaType_dropdown").change(function () {
+        debugger;
         var typeval = $("#IdeaType_dropdown").val();
 
         var result = false;
@@ -794,6 +832,7 @@
 
     // on change currency get current price
     $("#currencyDropdown").change(function () {
+        debugger;
         var currencyval = $("#currencyDropdown").val();
 
         var pair = $("#currencyDropdown option:selected").text();
@@ -806,6 +845,7 @@
                 // data: { TradingSignalId: tradingid },
                 dataType: "json",
                 success: function (data) {
+                    debugger;
                     if (data != "") {
 
                         $("#Current_price1").val(data.bid);

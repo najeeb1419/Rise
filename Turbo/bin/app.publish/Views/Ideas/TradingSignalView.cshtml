@@ -366,11 +366,14 @@
                     "mData": "TradingSignalId",
                     "render": function (data, type, full, meta) {
                         var tradeId = 0;
+                        debugger;
                         var status = undefined;
                         if (meta.row < meta.settings._iDisplayLength) {
                             tradeId = meta.settings.aoData[meta.row]._aData.TradingSignalId;
                             status = meta.settings.aoData[meta.row]._aData.Status;
                         }
+
+                        debugger;
                         var statusList = '<select onchange = "ChangeStatus(' + tradeId + ')" class="form-control" id="TradingStatus_' + tradeId + '">'
                         if (status == "0") {
                             statusList += '<option selected value="0">Pending</option>'

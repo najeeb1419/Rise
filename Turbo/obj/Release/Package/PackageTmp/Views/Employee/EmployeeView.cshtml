@@ -393,6 +393,7 @@
 
 
     $("#EmployeeContact").focusout(function () {
+        debugger;
                 var contact = $("#EmployeeContact").val();
                 if (contact != "") {
                     $.ajax({
@@ -401,6 +402,7 @@
                         data: { contact: contact },
                         dataType: "json",
                         success: function (data) {
+                            debugger;
                             if (data == "ok") {
                                 $("#warninig").hide();
                                 $("#Employeebtn").prop("disabled", false);

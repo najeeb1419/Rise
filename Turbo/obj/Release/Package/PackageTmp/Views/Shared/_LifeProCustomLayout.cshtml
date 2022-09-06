@@ -361,6 +361,7 @@
 
     <script>
         function ActiveLink(id) {
+            debugger;
             for (var i = 1; i < 7; i++) {
                 $("#Li_" + i).removeProp("background-color");
             }
@@ -393,6 +394,7 @@
 
 
          $("#customerNotificationImage").change(function () {
+             debugger;
              var element = this;
              var formData = new FormData();
              var totalFiles = element.files.length;
@@ -416,6 +418,7 @@
 
 
         $("#Notification_btn").click(function () {
+            debugger;
             var title = $("#title").val();
             var NotBody = $("#body").val();
             var notImage = $("#customeImage_123").val();

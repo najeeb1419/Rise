@@ -72,11 +72,11 @@
                         </div>
 
                         <div class="col-md-12">
-                            <label class="">Remarks</label>
+                            <label class="control-label">Remarks</label>
                             <textarea style="box-shadow: none" type="text" name="Remarks" class="form-control" placeholder="" value=""></textarea>
                         </div>
                         <div class="col-md-12" style="margin-bottom:10px;">
-                            <label class="">Attachment</label>
+                            <label class="control-label">Attachment</label>
                             <input style="box-shadow: none" type="file" class="form-control" name="" id="Staff_image" />
                         </div>
                         <div class="col-sm-12" style="margin-bottom: 10px; margin-top: 30px; justify-content: center; padding-left: 120px; padding-right: 120px">
@@ -248,6 +248,7 @@
     });
 
     function GetProfitPIPS(id) {
+        debugger
         var ideatype = $("#IdeaType_dropdown").val();
         var tpValue = $("#tpRow_" + id).val();
         tpValue = Math.floor(parseFloat(tpValue));
@@ -272,7 +273,6 @@
                     if (PreviousTpValue > 0 && PreviousTpValue <= tpValue) {
                         alert("TP value must be less than previous TP value");
                         $("#tpRow_" + id).val('');
-                        $("#tkpips_" + id).val('');
                     }
                     else {
                         if (parseFloat(tpValue) > parseFloat(currentPriceVal)) {
@@ -292,7 +292,7 @@
                     if (PreviousTpValue >= tpValue) {
                         alert("TP value must be greater than previous TP value");
                         $("#tpRow_" + id).val('');
-                        $("#tkpips_" + id).val('');
+
                     }
                     else {
                         if (parseFloat(tpValue) < parseFloat(currentPriceVal)) {
@@ -329,6 +329,7 @@
 
 
     function GetLosePIPS() {
+        debugger;
         var ideatype = $("#IdeaType_dropdown").val();
         var slValue = $("#stoplose_1").val();
         slValue = Math.floor(parseFloat(slValue));
@@ -376,7 +377,6 @@
         else {
 
             alert("Please select currency pair first.");
-            $("#stoplose_1").val('');
             $("#losePips").val('');
         }
     }
@@ -412,7 +412,7 @@
                     $("#CurrncyPrice").val(currencyPairPrice);
                 }
                 else if (typeval == 2) {
-                    $("#type_lbl").text("sell");
+                    $("#type_lbl").text("Sale");
                     $("#Current_price").attr("readonly", "readonly");
                     currencyPairPrice = $("#Current_price1").val();
                     $("#CurrncyPrice").val(currencyPairPrice);
@@ -581,6 +581,8 @@
     });
 
     $("#Current_price").change(function () {
+        debugger;
+
         var currPValue = $("#Current_price").val();
         var pair = $("#currencyDropdown option:selected").text();
         var ideatype = $("#IdeaType_dropdown").val();
@@ -593,6 +595,8 @@
 
     // on change currency get current price
     $("#currencyDropdown").change(function () {
+        debugger;
+
         var result = false;
         var one = $("#tpRow_1").val();
         var lossOne = $("#stoplose_1").val();
@@ -635,6 +639,7 @@
                     // data: { TradingSignalId: tradingid },
                     dataType: "json",
                     success: function (data) {
+                        debugger;
                         if (data != "") {
 
                             currencyValue = Math.floor(parseFloat(data.price));
@@ -664,6 +669,7 @@
 
     // after a while get currency current price
     function FetchCurrencyData() {
+        debugger;
         var currencyval = $("#currencyDropdown").val();
         $.ajax({
             type: "GET",
@@ -693,6 +699,7 @@
                 // data: { TradingSignalId: tradingid },
                 dataType: "json",
                 success: function (data) {
+                    debugger;
                     if (data != "") {
                         currencyValue = Math.floor(parseFloat(data.price));
                         $("#Current_price1").val(currencyValue);
