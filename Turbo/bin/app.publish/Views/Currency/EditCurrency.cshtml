@@ -1,0 +1,281 @@
+﻿@model Risen.Models.Currencies
+@{
+    ViewBag.Title = "EditCurrency";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+
+@using Risen.Models
+
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.1/chosen.css" />
+
+<style>
+
+    .under {
+        position: relative;
+        top: 15px;
+        left: 15px;
+        width: 50px;
+    }
+
+    .over {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 50px;
+    }
+</style>
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Update Currency</h2>
+                </div>
+
+            </div>
+        </div>
+        @if (privileges.isClientUpdate)
+        {
+            <div class="card">
+                <label hidden id="currencyNamelbl">Please select currency pair.</label>
+                <div class="container" style="margin:20px;">
+                    @if (ViewBag.mdg != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Sorry!</strong>  @ViewBag.mdg.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                    <form action="EditCurrency" enctype="multipart/form-data" method="post" id="UpdateCurrency_frm">
+                        <input type="text" value="@Model.CurrenciesId" name="CurrenciesId" hidden id="Currency_id" />
+                        <div class="row">
+                            @*<div class="col-md-6">
+                                    <label class="control-label">Currency(1)</label>
+                                    <input style="box-shadow: none" type="text" name="FirstCurrency" id="FirstCurrency" class="form-control" placeholder="" required value="@Model.FirstCurrency" />
+                                    <label style="color:red" hidden id="FirstCurrency_lbl">Please enter first currency name.</label>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="control-label">Currency(2)</label>
+                                    <input style="box-shadow: none" type="text" name="SecondCurrency" id="SecondCurrency" class="form-control" placeholder="" required value="@Model.SecondCurrency" />
+                                    <label style="color:red" hidden id="SecondCurrency_lbl">Same currency pair already exist.</label>
+                                </div>*@
+
+                            <div class="col-md-12 mb-4">
+                                <label class="control-label">Currency</label>
+                                <select class="form-control" name="CurrencyListId" id="currencyNoUpdate">
+                                    <option value="">--select--</option>
+                                    @foreach (var item in ViewBag.CurrencyList)
+                                    {
+                                        if (item.CurrencyListId == Model.CurrencyListId)
+                                        {
+                                            <option selected value="@item.CurrencyListId">@item.firstImage</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.CurrencyListId">@item.firstImage</option>
+                                        }
+                                    }
+                                </select>
+
+
+                            </div>
+                            @if (Model.FirstCurrencyImage != null)
+                            {
+                                <div class="col-md-6" style="margin-bottom:10px;">
+                                    <label class="control-label">Image(1)</label>
+                                    <input style="box-shadow: none" type="file" class="form-control" name="Staff_img" id="Staff_image" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-6" style="margin-bottom:10px;">
+                                    <label class="control-label">Image(1)</label>
+                                    <input style="box-shadow: none" type="file" class="form-control" name="Staff_img" id="Staff_image" required />
+                                </div>
+                            }
+
+                            @if (Model.SecondCurrencyImage != null)
+                            {
+                                <div class="col-md-6" style="margin-bottom:10px;">
+                                    <label class="control-label">Image(2)</label>
+                                    <input style="box-shadow: none" type="file" class="form-control" name="Staff_img1" id="Staff_image1" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-6" style="margin-bottom:10px;">
+                                    <label class="control-label">Image(2)</label>
+                                    <input style="box-shadow: none" type="file" class="form-control" name="Staff_img1" id="Staff_image1" required />
+                                </div>
+                            }
+
+                            @if (Model.FirstCurrencyImage != null)
+                            {
+                                <div class="col-sm-6" style="margin-bottom:10px">
+                                    <img style="height:120px; width:100px; border:solid gray" src="~/Images/Currency/@Model.FirstCurrencyImage" id="Imag_src" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-6" style="margin-bottom:10px">
+                                    <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src" />
+                                </div>
+                            }
+
+                            @if (Model.SecondCurrencyImage != null)
+                            {
+                                <div class="col-sm-6" style="margin-bottom:10px">
+                                    <img style="height:120px; width:100px; border:solid gray" src="~/Images/Currency/@Model.SecondCurrencyImage" id="Imag_src1" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-6" style="margin-bottom:10px">
+                                    <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src1" />
+                                </div>
+                            }
+                            <input type="text" id="staffImage_url123" name="FirstCurrencyImage" hidden required value="" />
+                            <input type="text" id="staffImage_url1231" name="SecondCurrencyImage" hidden required value="" />
+                            @if (privileges.isClientCreate)
+                            {
+                                <div class="col-md-12" style="margin-bottom:10px;">
+                                    <br /><br />
+                                    <input type="button" id="CurrencyUpdate_btn" value="Update" class="btn  buttoncolor" style="width:100px" />
+                                </div>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <center><h3>You are not authorized user</h3></center>
+        }
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.6.1/chosen.jquery.js"></script>
+
+<script>
+   
+
+    $("#Staff_image").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ClientImage", "Currency")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Currency/" + response.ImageURL);
+            });
+
+    });
+
+     $("#Staff_image1").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ClientImage", "Currency")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+                document.getElementById('staffImage_url1231').value = response.ImageURL;
+                $("#Imag_src1").attr("src", "/Images/Currency/" + response.ImageURL);
+            });
+
+     });
+
+    //currency dropdown
+    $("#currencyNoUpdate").change(function () {
+        var Curren = $("#currencyNoUpdate").val();
+        if (Curren != "") {
+            //$("#CurrencyUpdate_btn").prop("disabled", true);
+            //var CurrencyName = $("#currencyNoUpdate option:selected").text();
+
+            var currencyid = $("#Currency_id").val();
+            if (Curren == ""|| Curren ==null) {
+                alert("please select currency");
+                $("#currencyNamelbl").show();
+                $("#CurrencyUpdate_btn").prop("disabled", true);
+            }
+            else {
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Currency/CheckCurrency",
+                    data: { id: currencyid, Curren: Curren},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data == "ok") {
+                            $("#currencyNamelbl").hide();
+                            $("#CurrencyUpdate_btn").prop("disabled", false);
+                            /* window.location.href = "/Currency/CurrencyView";*/
+                        }
+                        else if (data == "session") {
+                            alert("Session has been expired please refresh the page.");
+                            $("#CurrencyUpdate_btn").prop("disabled", true);
+                        }
+                        else {
+                            alert("This pair already exist.");
+
+                            $("#CurrencyUpdate_btn").prop("disabled", true);
+                        }
+                    },
+                });
+            }
+        }
+        else {
+            $("#CurrencyUpdate_btn").prop("disabled", false);
+        }
+    });
+
+    $("#CurrencyUpdate_btn").click(function () {
+        var CurrencyName = $("#currencyNoUpdate option:selected").text();
+        var Curren = $("#currencyNoUpdate").val();
+        var currencyid = $("#Currency_id").val();
+        if (Curren == "" ) {
+            $("#currencyNamelbl").show();
+            alert("Please select currency pair.")
+        }
+        else {
+            $("#UpdateCurrency_frm").submit();
+        }
+
+    });
+</script>
+
+

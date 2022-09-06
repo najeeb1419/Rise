@@ -1,0 +1,150 @@
+﻿@model IEnumerable<Risen.Models.Designation>
+@{
+    ViewBag.Title = "DesignationView";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+
+@using Risen.Models
+
+@{
+    CompanyEmployee staff = new CompanyEmployee();
+    staff = Session["Employee"] as CompanyEmployee;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+
+<style>
+    .control-label:after {
+        content: "*";
+        color: red;
+    }
+
+   
+</style>
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Designation</h2>
+                </div>
+            </div>
+        </div>
+        @if (privileges.isDesignationView)
+        {
+            <div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="DesignationView" enctype="multipart/form-data" method="post" id="Designation_frm">
+
+                        <div class="modal-content">
+                            <div class="modal-header backgroundcolor">
+                                <h5 class="modal-title backgroundtitle" id="exampleModalLabel">Create new Designation</h5>
+                                <button type="button" class="close backgroundtitle" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="row">
+                                    <div class="col-md-12" style="padding:3%">
+                                        <label class="control-label">Designation</label>
+                                        <input type="text" id="Designation_Name" required name="DesignationName" class="form-control" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn closebtn"  data-dismiss="modal">Close</button>
+                                @if (privileges != null)
+                                {
+                                    if (privileges.isDesignationCreate)
+                                    {
+                                        <button type="submit" class="btn  buttoncolor">Save changes</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row column2 graph margin_bottom_30 card ">
+                <div class="col-md-12">
+                    <div class="white_shd full margin_bottom_30" style="margin-top:20px;">
+                        @if (TempData["message"] == "update")
+                        {
+                            <div class="alert alert-success alert-dismissible">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong><label style="color: green" id="success">Priviliges Updated Successfully </label>
+                            </div>
+                        }
+
+                        <div class="row" style="margin-top:5px;">
+                            <idv class="col-md-12" style="text-align:right; margin-left:-1%">
+                                <button type="button" class="btn btnstyle buttoncolor" data-toggle="modal" data-target="#exampleModal">
+                                    New Designation
+                                </button>
+                            </idv>
+                        </div>
+                        <div class="table_section padding_infor_info mb-4">
+                            @if (TempData["Designation"] != null)
+                            {
+                                <label style="color:red"><b>@TempData["Designation"]</b></label>
+                            }
+                            <div class="table-responsive-sm">
+                                <table class="table table-hover">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Designation</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.Name</td>
+                                                @if (privileges.isDesignationUpdate)
+                                                {
+                                                    <td><a class="fa fa-lock" href="/Designation/PreviligesView/?id=@item.DesignationID"></a></td>
+                                                }
+                                                <lable style="color:red" id="Designation_lable"></lable>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <center><h3>You are not authorized user.</h3></center>
+        }
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('table').DataTable();
+    });
+
+    $(":submit").closest("form").submit(function () {
+        $(':submit').attr('disabled', 'disabled');
+    });
+
+
+
+    //loader
+   
+
+</script>
+
+
+

@@ -1,0 +1,253 @@
+﻿
+
+@model Risen.Models.CompanyEmployee
+
+@{
+    ViewBag.Title = "EditEmployee";
+
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+@using Risen.Models
+
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+<style>
+    .col-md-6 {
+        margin-bottom: 10px;
+    }
+
+    .col-md-12 {
+        margin-bottom: 10px;
+    }
+
+    .control-label:after {
+        content: "*";
+        color: red;
+    }
+</style>
+
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Update Employee</h2>
+                </div>
+            </div>
+
+        </div>
+        @if (privileges.isEmployeeView == true && privileges.isEmployeeUpdate)
+        {
+
+
+            <div class="card p-5">
+
+
+                <form action="EditEmployee" enctype="multipart/form-data" method="post" id="Edit_Employeefrm">
+
+                    <div class="row">
+                        <input type="text" name="CompanyEmployeeID" id="employeeEditId" hidden value="@Model.CompanyEmployeeID" />
+                        <div class="col-md-6">
+                            <label class="control-label">First name</label>
+                            <input type="text" class="form-control" name="fName" placeholder="First Name" required value="@Model.fName" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Last name</label>
+                            <input type="text" class="form-control" name="lName" placeholder="Last Name" value="@Model.lName" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Email address</label>
+                            <input type="email" class="form-control" name="Email" id="employeeeditmail" placeholder="Email Address" required value="@Model.Email" />
+                            <label style="color:red;" id="EmployeeEditmailwarninig11">A record with this email already exist!</label>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Password</label>
+                            <input type="password" class="form-control" name="Password" id="employeeeditmail" placeholder="Password" required value="@Model.Password" />
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Phone number</label>
+                            <input type="number" class="form-control" name="Contact" id="employeeeditcontact" required placeholder="Phone No." value="@Model.Contact" />
+                            <label style="color:red;" id="EmployeeEditwarninig11">A record with this phone number already exist!</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Designation</label>
+                            <select name="DesignationId" id="empDesigedit_id" required class="form-control">
+                                <option value="">--Select Designation--</option>
+                                @if (ViewBag.Designation != null)
+                                {
+                                    foreach (var item in ViewBag.Designation)
+                                    {
+                                        if (Model.DesignationId == item.DesignationID)
+                                        {
+                                            <option selected value="@item.DesignationID">@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.DesignationID">@item.Name</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Address</label>
+                            <textarea type="text" class="form-control" name="Address" required placeholder="Address">@Model.Address</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Date of birth</label>
+                            @{
+                                DateTime myDate = DateTime.ParseExact(Model.DateOfBirth, "dd-MM-yyyy",
+                                               System.Globalization.CultureInfo.InvariantCulture);
+
+                            }
+                            <input type="date" class="form-control" name="DateOfBirth" required placeholder="Date of Birth" value="@myDate.Date.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="">Profile image</label>
+                            @if (Model.Image != null)
+                            {
+                                <input type="file" class="form-control" name="Staff_image" id="Staff_image" />
+                            }
+                            else
+                            {
+                                <input type="file" class="form-control"  name="Staff_image" id="Staff_image" />
+                            }
+                        </div>
+
+                        @if (Model.Image == null)
+                        {
+                            <div class="col-md-12">
+                                <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-12">
+                                <img style="height:120px; width:100px; border:solid gray" src="~/Images/Employee/@Model.Image" id="Imag_src" />
+                            </div>
+                        }
+
+
+                        <input type="text" id="staffImage_url123" name="Image" hidden />
+                        @if (privileges.isEmployeeUpdate)
+                        {
+                            <div class="col-md-12 mt-3">
+                                <button id="EmpEdit_btn" type="submit" style="width:12%" class="btn buttoncolor">Update</button>
+                            </div>
+                        }
+
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+            <center>
+                <h3>You are not authorized user. </h3>
+            </center>
+        }
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+
+    $("#EmployeeEditwarninig11").hide();
+    $("#EmployeeEditmailwarninig11").hide();
+
+    $('#empDesigedit_id').change(function () {
+
+        var desgval = $("#empDesigedit_id").val();
+        if (desgval <= 0 || desgval == "") {
+            $("#EmpEdit_btn").prop("disabled", true);
+        }
+        else {
+            $("#EmpEdit_btn").prop("disabled", false);
+        }
+    });
+
+    //
+    $("#Staff_image").change(function () {
+
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmployeeImage", "Employee")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+
+        })
+            .done(function (response) {
+
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Employee/" + response.ImageURL);
+            });
+
+    });
+
+    $("#employeeeditcontact").focusout(function () {
+        var contact = $("#employeeeditcontact").val();
+        var id = $("#employeeEditId").val();
+        if (contact != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Staff/CheckStaff",
+                data: { contact: contact, id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#EmployeeEditwarninig11").hide();
+                        $("#EmpEdit_btn").prop("disabled", false);
+                    }
+                    else {
+                        $("#EmployeeEditwarninig11").show();
+                        $("#EmpEdit_btn").prop("disabled", true);
+                    }
+                },
+            });
+        }
+    });
+    $("#employeeeditmail").focusout(function () {
+        var mail = $("#employeeeditmail").val();
+        var id = $("#employeeEditId").val();
+        if (mail != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Staff/CheckStaffMail",
+                data: { mail: mail, id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#EmployeeEditmailwarninig11").hide();
+                        $("#EmpEdit_btn").prop("disabled", false);
+                    }
+                    else {
+                        $("#EmployeeEditmailwarninig11").show();
+                        $("#EmpEdit_btn").prop("disabled", true);
+                    }
+                },
+            });
+        }
+    });
+</script>

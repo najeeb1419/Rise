@@ -1,0 +1,154 @@
+﻿@model Risen.Models.CompanyEmployee
+
+@{
+    ViewBag.Title = "MyProfile";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+}
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>User profile</h2>
+                </div>
+
+            </div>
+        </div>
+        <div class="row column1 card mt-5 mb-5">
+            <br />
+
+            <div class="row">
+                <div class="col-lg-2 col-md-12 col-xs-12">
+
+                </div>
+                <div class="col-lg-2 col-md-12" style="text-align:center;">
+
+
+                    @if (Model.Image != null || Model.Image != "")
+                    {
+                        <div class="profile_img"><img width="180" class="rounded-circle" src="~/Images/Employee/@Model.Image" alt="#" /></div>
+                    }
+                    else
+                    {
+                        <div class="profile_img"><img width="180" class="rounded-circle" src="~/Images/select_image.png" alt="#" /></div>
+                    }
+                </div>
+                <div class="col-lg-4 col-md-12 col-xs-6 ml-1 mb-3 mt-2" style="text-align:center;">
+                    <div class="contact_inner">
+                        <h3>@Model.fName @Model.lName</h3>
+                        <p><strong>About: </strong>@Model.Designation.Name</p>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-envelope"></i> :@Model.Email</li>
+                            <li><i class="fa fa-phone"></i> : @Model.Contact</li>
+                        </ul>
+                        <p><strong>Address: </strong>@Model.Address</p>
+                        <form action="" method="get">
+                            <input type="text" value="@Model.CompanyEmployeeID" name="EmployeeId" hidden />
+                            @if (ViewBag.admin == "admin")
+                            {
+                                <p><a class="btn buttoncolor" style="width:100px;" href="/Employee/EditProfile">Edit</a></p>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/assets/libs/semantic-UI/semantic.min.js" type="text/javascript"></script>
+<script src="~/assets/js/insura.js" type="text/javascript"></script>
+<!-- Page Specific Scripts -->
+<script src="~/assets/libs/scrollbars/jquery.scrollbar.min.js" type="text/javascript"></script>
+<script src="~/assets/libs/datepicker/datepicker.min.js" type="text/javascript"></script>
+<script src="~/assets/libs/dropify/js/dropify.min.js" type="text/javascript"></script>
+<script src="~/assets/libs/intl-tel-input/js/intlTelInput.min.js" type="text/javascript"></script>
+
+<script>
+
+    $("#EmployeeEditwarninig11").hide();
+    $("#EmployeeEditmailwarninig11").hide();
+
+    $('#empDesigedit_id').change(function () {
+
+        var desgval = $("#empDesigedit_id").val();
+        if (desgval <= 0 || desgval == "") {
+            $("#EmpEdit_btn").prop("disabled", true);
+        }
+        else {
+            $("#EmpEdit_btn").prop("disabled", false);
+        }
+    });
+
+    //
+    $("#Staff_image").change(function () {
+
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmployeeImage", "Employee")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+
+        })
+            .done(function (response) {
+
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Employee/" + response.ImageURL);
+            });
+
+    });
+
+    $("#employeeeditcontact").focusout(function () {
+        var contact = $("#employeeeditcontact").val();
+        var id = $("#employeeEditId").val();
+        if (contact != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Staff/CheckStaff",
+                data: { contact: contact, id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#EmployeeEditwarninig11").hide();
+                        $("#EmpEdit_btn").prop("disabled", false);
+                    }
+                    else {
+                        $("#EmployeeEditwarninig11").show();
+                        $("#EmpEdit_btn").prop("disabled", true);
+                    }
+                },
+            });
+        }
+    });
+    $("#employeeeditmail").focusout(function () {
+        var mail = $("#employeeeditmail").val();
+        var id = $("#employeeEditId").val();
+        if (mail != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Staff/CheckStaffMail",
+                data: { mail: mail, id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#EmployeeEditmailwarninig11").hide();
+                        $("#EmpEdit_btn").prop("disabled", false);
+                    }
+                    else {
+                        $("#EmployeeEditmailwarninig11").show();
+                        $("#EmpEdit_btn").prop("disabled", true);
+                    }
+                },
+            });
+        }
+    });
+</script>

@@ -1,0 +1,428 @@
+﻿@model IEnumerable<Risen.Models.CompanyEmployee>
+@{
+    ViewBag.Title = "EmployeeView";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+
+@using Risen.Models
+
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+<style>
+    .col-md-12 {
+        margin-bottom: 10px;
+    }
+
+    .col-md-6 {
+        margin-bottom: 10px;
+    }
+
+    .control-label:after {
+        content: "*";
+        color: red;
+    }
+</style>
+@*<head>
+         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+         <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    </head>*@
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Employee</h2>
+                </div>
+                @if (TempData["msg"] != null)
+                {
+                    if (TempData["msg"] == "exist")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Please!</strong>  use diffirent email.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @*<label style="color:red;"><b>Please use diffirent email.</b></label>*@
+                    }
+                    else if (TempData["msg"] == "success")
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Employee Registerd successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                    else if (TempData["msg"] == "eidt")
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Employee Updated successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:20px;">
+            <div class="modal-dialog">
+                <form action="EmployeeView" enctype="multipart/form-data" method="post" id="Employeefrm">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Create New Employee</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="padding-left:6%; padding-right:6%">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="control-label">First name</label>
+                                    <input type="text" class="form-control" name="fName" placeholder="First Name" value="" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Last name</label>
+                                    <input type="text" class="form-control" name="lName" placeholder="Last Name" value="" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Email address</label>
+                                    <input type="email" class="form-control" name="Email" autocomplete="nope" id="employeemail" placeholder="Email Address" value="" required />
+                                    <label style="color:red;" id="emailwarninig">A record with this email number already exist!</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Password</label>
+                                    <input type="password" class="form-control" name="Password" autocomplete="new-password" placeholder="Password" value="" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Phone number</label>
+                                    <input type="number" class="form-control" name="Contact" id="EmployeeContact" placeholder="Phone No." value="" required />
+                                    <label style="color:red;" id="warninig">A record with save phone number already exist!</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="control-label">Date of birth</label>
+                                    <input type="date" class="form-control" name="DateofBirth" placeholder="Date of Birth" value="" required />
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="control-label">Designation</label>
+                                    <select name="DesignationId" id="empDesigedit_id" required class="form-control">
+                                        <option value="">--Select Designation--</option>
+                                        @if (ViewBag.Designation != null)
+                                        {
+                                            foreach (var item in ViewBag.Designation)
+                                            {
+                                                <option value="@item.DesignationID">@item.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Address</label>
+                                    <textarea type="text" class="form-control" name="address" placeholder="Address" value="" required></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="control-label">Profile image</label>
+                                    <input type="file" class="form-control" name="Staff_image" id="Staff_image" required />
+                                </div>
+                                <div class="col-md-12">
+                                    <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src" />
+                                </div>
+                                <input type="text" id="staffImage_url123" name="ProfileImage" hidden />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn  closebtn" data-dismiss="modal">Close</button>
+                            @if (privileges != null)
+                            {
+                                if (privileges.isEmployeeCreate)
+                                {
+                                    <button type="submit" id="Employeebtn" class="btn buttoncolor">Save changes</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="white_shd full margin_bottom_30" style="margin-top:0px;">
+                    <div class="row">
+                        <br />
+                        <div class="col-md-12 mt-3" style="text-align:right; margin-left:0%">
+                            @if (privileges != null)
+                            {
+                                if (privileges.isEmployeeCreate)
+                                {
+                                    <button type="button" class="btn buttoncolor" data-toggle="modal" data-target="#exampleModal">
+                                        New Employee
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    @if (privileges != null)
+                    {
+                        if (privileges.isEmployeeView)
+                        {
+                            <center>
+                                <div class="table_section padding_infor_info">
+                                    <div class="table-responsive-sm">
+                                        <table class="table" id="Employeetable">
+                                            <thead>
+                                                <tr>
+                                                    <th>#No</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Contact</th>
+                                                    <th>Designation</th>
+                                                    <th>DateofBirth</th>
+                                                    <th>Address</th>
+                                                    <th class="center aligned">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    int i = 0;
+                                                }
+                                                @if (Model != null)
+                                                {
+                                                    foreach (var item in Model.OrderByDescending(x => x.CompanyEmployeeID))
+                                                    {
+                                                        i++;
+                                                        <tr>
+                                                            <td>@i</td>
+                                                            <td>@item.fName  @item.lName </td>
+                                                            <td>@item.Email</td>
+                                                            <td>@item.Contact</td>
+                                                            <td>@item.Designation.Name</td>
+                                                            <td>@item.DateOfBirth</td>
+                                                            <td>@item.Address</td>
+                                                            <td>
+                                                                @if (privileges != null)
+                                                                {
+                                                                    if (privileges.isEmployeeUpdate)
+                                                                    {
+                                                                        <center>
+                                                                            <a href="/Employee/EditEmployee?id=@item.CompanyEmployeeID" class="btn  btn-outline-warning btn-sm"><span class="fa fa-pencil" aria-hidden="true"></span></a>
+                                                                        </center>
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </center>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+    //for data table
+    $(document).ready(function () {
+                $('table').DataTable();
+            });
+
+
+
+     $("#Staff_image").change(function () {
+
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmployeeImage", "Employee")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+
+        })
+            .done(function (response) {
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Employee/" + response.ImageURL);
+            });
+
+    });
+
+
+    $("#warninig").hide();
+    $("#emailwarninig").hide();
+
+
+
+    $("#EmployeeContact").focusout(function () {
+        var contact = $("#EmployeeContact").val();
+        if (contact != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Employee/CheckEmployee",
+                data: { contact: contact },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#warninig").hide();
+                        $("#Employeebtn").prop("disabled", false);
+                    }
+                    else {
+                        $("#warninig").show();
+                        $("#Employeebtn").prop("disabled", true);
+                    }
+                },
+            });
+        }
+    });
+    $("#employeemail").focusout(function () {
+        var mail = $("#employeemail").val();
+        if (mail != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Employee/CheckEmployeeMail",
+                data: { mail: mail },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#emailwarninig").hide();
+                        $("#Employeebtn").prop("disabled", false);
+                    }
+                    else {
+                        $("#emailwarninig").show();
+                        $("#Employeebtn").prop("disabled", true);
+                    }
+                },
+            });
+        }
+    });
+
+    @*$("#Employee_image").change(function () {
+
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.lenght;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmployeeImage", "Employee")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+
+        })
+            .done(function (response) {
+
+
+                if (response.success) {
+
+                    $("#EmployeeImage_url12").val(response.ImageURL);
+                    var Imagename = $("#EmployeeImage_url").val();
+
+                }
+            });
+
+    });*@
+    $('#Designation_id').change(function () {
+
+        var desgval = ("#Designation_id").val();
+        if (desgval == "") {
+            $("#Employeebtn").prop("disabled", true);
+        }
+        else {
+            $("#Employeebtn").prop("disabled", false);
+        }
+    })
+
+    $('#Employeefrm').submit(function () {
+        $(this).find(':input[type=submit]').prop('disabled', true);
+    });
+
+
+
+
+
+    $("#EmployeeContact").focusout(function () {
+        debugger;
+                var contact = $("#EmployeeContact").val();
+                if (contact != "") {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Employee/CheckEmployee",
+                        data: { contact: contact },
+                        dataType: "json",
+                        success: function (data) {
+                            debugger;
+                            if (data == "ok") {
+                                $("#warninig").hide();
+                                $("#Employeebtn").prop("disabled", false);
+                            }
+                            else {
+                                $("#warninig").show();
+                                $("#Employeebtn").prop("disabled", true);
+                            }
+                        },
+                    });
+                }
+            });
+            $("#employeemail").focusout(function () {
+                var mail = $("#employeemail").val();
+                if (mail != "") {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Employee/CheckEmployeeMail",
+                        data: { mail: mail },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data == "ok") {
+                                $("#emailwarninig").hide();
+                                $("#Employeebtn").prop("disabled", false);
+                            }
+                            else {
+                                $("#emailwarninig").show();
+                                $("#Employeebtn").prop("disabled", true);
+                            }
+                        },
+                    });
+                }
+            });
+
+
+</script>

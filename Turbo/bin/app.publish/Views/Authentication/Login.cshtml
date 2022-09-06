@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Risen</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- site icon -->
+
+    <link rel="icon" href="~/Images/app_icon.png" type="image/png" />
+    <link href="~/css Jq link/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/style.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/responsive.css" rel="stylesheet" />
+
+    <link href="~/css Jq link/css/color_2.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- scrollbar css -->
+    <link href="~/css Jq link/css/perfect-scrollbar.css" rel="stylesheet" />
+    <!-- custom css -->
+    <link href="~/css Jq link/css/custom.css" rel="stylesheet" />
+    <!-- calendar file css -->
+    <script src="~/css Jq link/js/semantic.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="inner_page login">
+    <div class="full_container">
+        <div class="container">
+            <div class="center verticle_center full_height">
+                <div class="login_section">
+                    <div class="logo_login" style="background: url(/assets/images/rm21-background-tong-058.jpg); background-position: center; ">
+                        <div class="center">
+                            <img width="210" src="~/Images/app_icon.png" alt="#" />
+                        </div>
+                    </div>
+                    <div class="login_form">
+                        <form method="post">
+                            <fieldset>
+                                <div class="field">
+                                    <label class="label_field">Email</label>
+                                    <input type="email" name="Email" placeholder="Enter Your Email" />
+                                </div>
+                                <div class="field">
+                                    <label class="label_field">Password</label>
+                                    <input type="password" name="Password" placeholder="Password" />
+                                </div>
+                                <div class="field">
+                                    @*<label class="label_field hidden">hidden label</label>
+                                        <label class="form-check-label"><input type="checkbox" class="form-check-input"> Remember Me</label>*@
+                                    @*<a class="forgot" href="/PartnerLead/RegisterPartner">Register?</a>*@
+                                </div>
+                                <div class="field margin_0">
+                                    <label class="label_field hidden">hidden label</label>
+                                    <button type="submit" class="main_bt">Sign In</button>
+                                </div>
+                            </fieldset>
+                        </form>
+
+                        <br />
+                        @if (TempData["mdg"] != null)
+                        {
+                            <label style="color:red;">@TempData["mdg"]</label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/css Jq link/js/popper.min.js"></script>
+    <script src="~/css Jq link/js/bootstrap.min.js"></script>
+    <!-- wow animation -->
+    <script src="~/css Jq link/js/animate.js"></script>
+    <!-- select country -->
+    <script src="~/css Jq link/js/bootstrap-select.js"></script>
+    <!-- nice scrollbar -->
+    <script src="~/css Jq link/js/perfect-scrollbar.min.js"></script>
+    <script>
+        var ps = new PerfectScrollbar('#sidebar');
+    </script>
+    <!-- custom js -->
+    <script src="~/css Jq link/js/custom.js"></script>
+</body>
+</html>

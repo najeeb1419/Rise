@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Risen</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- site icon -->
+    <link rel="icon" href="~/Images/app_icon.png" type="image/png" />
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <link rel="stylesheet" href="~/css Jq link/css/bootstrap.min.css" />
+    <link href="~/css Jq link/css/style.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/responsive.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/color_2.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/css Jq link/css/perfect-scrollbar.css" rel="stylesheet" />
+
+    <!-- custom css -->
+    @*<link rel="stylesheet" href="css/custom.css" />*@
+    <link href="~/css Jq link/css/custom.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <style>
+        .table {
+            background-color: #e1e1e1;
+            color: black;
+        }
+
+            .table thead {
+                background-color: #0F85B1 !important;
+                color: white !important;
+            }
+
+        .buttoncolor {
+            color: white;
+            background-color: #0e749a !important;
+        }
+
+        .backcolor {
+            background-color: #0F85B1 !important;
+        }
+
+        .backredcolor {
+            background-color: #0e749a;
+        }
+
+        .iconcolor {
+            color: white;
+        }
+
+        .activeclass:hover {
+            background-color: #00719b;
+        }
+
+        .activeclass:active {
+            background-color: #00719b;
+        }
+
+        /*page loader css*/
+        #page {
+            display: none;
+        }
+
+        #loading {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(192, 192, 192, 0.5);
+            background-image: url('../../Images/FhHRx.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .col-md-12 {
+            margin-bottom: 10px;
+        }
+
+        .col-md-6 {
+            margin-bottom: 10px;
+        }
+
+        .control-label:after {
+            content: "*";
+            color: red;
+        }
+        /*end page loader css*/
+    </style>
+</head>
+@using System.Linq
+@using Risen.Models
+@{ string Name = "";
+    RegisterComapany company = new RegisterComapany();
+    CompanyEmployee employee = new CompanyEmployee();
+    Privileges privileges = new Privileges();
+    string Image = "";
+    if (Session["Company"] != null || Session["Employee"] != null)
+    {
+        if (Session["Company"] != null)
+        {
+            company = Session["Company"] as RegisterComapany;
+            Name = company.Name;
+            Image = company.logo;
+        }
+        else if (Session["Employee"] != null)
+        {
+            employee = Session["Employee"] as CompanyEmployee;
+            Name = employee.fName;
+            Image = employee.lName;
+        }
+        privileges = Session["Priviliges"] as Privileges;
+    } 
+    }
+
+
+<body class="dashboard dashboard_2">
+    <div class="full_container">
+        <div class="inner_container">
+            <!-- Sidebar  -->
+            <nav id="sidebar" class="backcolor">
+                <div class="sidebar_blog_1">
+                    <div class="sidebar-header">
+                        <div class="logo_section">
+                            <a href="#"><img class="logo_icon img-responsive" src="~/Images/app_icon.png" alt="#" /></a>
+                        </div>
+
+                    </div>
+                    <div class="sidebar_user_info">
+                        <div class="icon_setting"></div>
+                        <div class="user_profle_side">
+                            @if (company.RegisterComapanyID > 0)
+                            {
+                                <img class="ui avatar image" src="~/Images/Logo.png" style="width:35%">
+                            }
+                            else
+                            {
+                                <img class="ui avatar image" src="~/Images/Employee/@employee.Image" style="width:35%">
+                            }
+                            <div class="user_info">
+                                <h6>@Name</h6>
+                                <p><span class="online_animation"></span> Online</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar_blog_2">
+                    <h4>Menu</h4>
+                    <ul class="list-unstyled components">
+                        <li class="activeclass" id="Li_1">
+                            @if (privileges != null)
+                            {
+                                if (privileges.IsDashboard)
+                                {
+                                }
+                                if (privileges.IsDashboard)
+                                {
+                                    <a href="~/Home/Index"><i class="fa fa-tachometer-alt iconcolor"></i> <span class="iconcolor">Dashboard</span></a>}
+                            }
+                        </li>
+                        @if (privileges != null)
+                        {
+                            if (privileges.isStaffView)
+                            {
+                                <li class="nav-item activeclass" onclick="ActiveLink(2)" id="Li_2">
+                                    <a class="nav-link iconcolor" href="~/Ideas/TradingSignalView" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-signal iconcolor"></i> <span class="iconcolor">Trading Ideas</span></a>
+                                </li>
+                            }
+                        }
+                        @if (privileges != null)
+                        {
+                            if (privileges.isStaffView)
+                            {
+                                <li class="nav-item activeclass" onclick="ActiveLink(3)" id="Li_3">
+                                    <a class="nav-link iconcolor" href="~/Home/Dashbaord" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-signal iconcolor"></i> <span class="iconcolor">Add Trading Idea</span></a>
+
+                                </li>
+                            }
+                        }
+
+                        @if (privileges != null)
+                        {
+                            if (privileges.isEmployeeView)
+                            {
+                                <li class="nav-item activeclass active" onclick="ActiveLink(4)" id="Li_4">
+                                    <a class="nav-link iconcolor" href="~/Employee/EmployeeView" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-user iconcolor"></i> <span class="iconcolor">Employee</span></a>
+                                </li>
+                            }
+                        }
+
+                        @if (privileges != null)
+                        {
+                            if (privileges.isClientView)
+                            {
+                                <li class="nav-item activeclass" onclick="ActiveLink(5)" id="Li_5">
+                                    <a class="nav-link iconcolor" href="~/Currency/CurrencyView" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-dollar-sign iconcolor"></i> <span class="iconcolor">Indices</span></a>
+                                </li>
+                            }
+                        }
+                        @if (privileges != null)
+                        {
+                            if (privileges.isDesignationView)
+                            {
+                                <li class="nav-item activeclass" onclick="ActiveLink(6)" id="Li_6">
+                                    <a class="nav-link iconcolor" href="~/Designation/DesignationView" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-cog iconcolor"></i> <span class="iconcolor">Settings</span></a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </nav>
+            <div id="content">
+
+                <div class="topbar">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="full">
+                            <button type="button" id="sidebarCollapse" class="sidebar_toggle backredcolor"><i class="fa fa-bars"></i></button>
+                            <div class="logo_section">
+                                <a href="/Home/Index"><img class="img-responsive" src="~/Images/app_icon.png" alt="#" /></a>
+                            </div>
+                            <div class="right_topbar">
+                                <div class="icon_info">
+                                    <ul>
+                                        <li>
+                                            <button style=" position: absolute; right: 10%; }" class="btn btn-sm buttoncolor m-6" data-toggle="modal" data-target="#bellModel">Custom Notification</button>
+
+                                        </li>
+                                    </ul>
+                                    <ul class="user_profile_dd">
+                                        <li>
+                                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                                @if (employee.Image != null && employee.Image != "")
+                                                {
+                                                    <img class="img-responsive rounded-circle" src="~/Images/Employee/@employee.Image" alt="#" /><span class="name_user">@Name</span> @*<img class="ui avatar image" src="~/Images/Employee/@employee.ProfileImage">*@
+
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-responsive rounded-circle" src="~/Images/Logo.png" alt="#" /><span class="name_user">@Name</span> @*<img class="ui avatar image" src="~/Images/Employee/@employee.ProfileImage">*@
+                                                }
+
+                                                @*<img class="img-responsive rounded-circle" src="~/css Jq link/images/layout_img/user_img.jpg" alt="#" /><span class="name_user">John David</span>*@
+                                                <i class="fas fa-angle-down" style="color:white; margin-left:-11%"></i>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                @if (company.RegisterComapanyID == 0)
+                                                {
+                                                    <a class="dropdown-item" href="/Employee/MyProfile">My Profile</a>
+                                                }
+                                                @if (privileges != null)
+                                                {
+                                                    if (privileges.IsSetting)
+                                                    {
+                                                        <a class="dropdown-item" href="/Designation/DesignationView">Settings</a>}
+                                                }
+                                                <!-- <a class="dropdown-item" href="help.html">Help</a> -->
+                                                <a class="dropdown-item" href="/Authentication/Logout"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+                <!-- end topbar -->
+                <!-- dashboard inner -->
+
+                <div id="loading"></div>
+                <div class="modal fade modal-dialog-scrollable" id="bellModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding:20px;">
+                    <div class="modal-dialog">
+                        <form enctype="multipart/form-data" id="custome_notification_frm">
+
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Create Notification</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="padding-left:6%; padding-right:6%">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">Title</label>
+                                            <input type="text" class="form-control" id="title" name="Title" placeholder="Title" value="" required />
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label class="control-label">Body</label>
+                                            <textarea type="text" class="form-control" id="body" name="Body" placeholder="Body" value="" required></textarea>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="control-label">Image</label>
+                                            <input type="file" class="form-control" name="" id="customerNotificationImage" required />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="custome_Imag_src" />
+                                        </div>
+                                        <input type="text" id="customeImage_123" name="ProfileImage" hidden />
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn  closebtn" data-dismiss="modal">Close</button>
+                                    @if (privileges != null)
+                                    {
+                                        if (privileges.isEmployeeCreate)
+                                        {
+                                            <button type="button" id="Notification_btn" class="btn buttoncolor">Send</button>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @RenderBody()
+
+                <footer>
+                    <hr />
+                    <p>&copy; @DateTime.Now.Year - Izla Technologies</p>
+                </footer>
+
+                <!-- end dashboard inner -->
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+  
+    <script src="~/css Jq link/js/popper.min.js"></script>
+    <script src="~/css Jq link/js/bootstrap.min.js"></script>
+    <script src="~/css Jq link/js/animate.js"></script>
+    <script src="~/css Jq link/js/bootstrap-select.js"></script>
+    <script src="~/css Jq link/js/owl.carousel.js"></script>
+    <script src="~/css Jq link/js/Chart.min.js"></script>
+    <script src="~/css Jq link/js/Chart.bundle.min.js"></script>
+    <script src="~/css Jq link/js/utils.js"></script>
+    <script src="~/css Jq link/js/analyser.js"></script>
+    <script src="~/css Jq link/js/perfect-scrollbar.min.js"></script>
+    <script>var ps = new PerfectScrollbar('#sidebar');</script>
+    <script src="~/css Jq link/js/custom.js"></script>
+    <script src="~/css Jq link/js/chart_custom_style2.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        function ActiveLink(id) {
+            for (var i = 1; i < 7; i++) {
+                $("#Li_" + i).removeProp("background-color");
+            }
+            $("#Li_" + id).css({ "background-color": "#013153e0" });
+        }
+
+
+        // loader script
+
+        function onReady(callback) {
+            var intervalID = window.setInterval(checkReady, 1000);
+
+            function checkReady() {
+                if (document.getElementsByTagName('body')[0] !== undefined) {
+                    window.clearInterval(intervalID);
+                    callback.call(this);
+                }
+            }
+        }
+
+        function show(id, value) {
+            document.getElementById(id).style.display = value ? 'block' : 'none';
+        }
+
+        onReady(function () {
+            show('page', true);
+            show('loading', false);
+        });
+                    // end loader script
+
+
+         $("#customerNotificationImage").change(function () {
+             var element = this;
+             var formData = new FormData();
+             var totalFiles = element.files.length;
+             for (var i = 0; i < totalFiles; i++) {
+                 var file = element.files[i];
+                 formData.append("Photo", file);
+             }
+             $.ajax({
+                 type: 'POST',
+                 url: '@Url.Action("CustomeImage", "Home")',
+                 dataType: 'json',
+                 data: formData,
+                 contentType: false,
+                 processData: false
+             })
+            .done(function (response) {
+                document.getElementById('customeImage_123').value = response.ImageURL;
+                $("#custome_Imag_src").attr("src", "/Images/Notifications/" + response.ImageURL);
+            });
+         });
+
+
+        $("#Notification_btn").click(function () {
+            var title = $("#title").val();
+            var NotBody = $("#body").val();
+            var notImage = $("#customeImage_123").val();
+            if (title != "" || NotBody != "" || notImage != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/SaveCustomeNotification",
+                    data: { title: title, NotBody: NotBody, notImage: notImage },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data == "success") {
+                            alert("Notification sent successfully.");
+                        }
+                        else if (data == "expire") {
+                            alert("Session has been expired please refresh the page.");
+                        }
+                        $('#bellModel').modal('toggle');
+
+                    },
+                });
+            }
+            else {
+                alert("Please fill all necessory fields");
+            }
+        });
+    </script>
+
+</body>
+</html>

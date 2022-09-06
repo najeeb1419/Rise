@@ -1,0 +1,157 @@
+﻿
+@model Risen.Models.CompanyEmployee
+@{
+    ViewBag.Title = "EditProfile";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+}
+
+<style>
+    .col-md-12 {
+        margin-bottom: 10px;
+    }
+
+    .col-md-6 {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Update Profile</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card p-5">
+            <form action="EditProfile" enctype="multipart/form-data" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>First name</label>
+                        <input type="text" name="fName" class="form-control" placeholder="First Name" required value="@Model.fName" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Last name</label>
+                        <input type="text" name="lName" class="form-control" placeholder="Last Name" value="@Model.lName" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Date of birth</label>
+                        <input type="date" class="form-control" name="DateofBirth" placeholder="Date of Birth" value="@Model.DateOfBirth" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Address</label>
+                        <input type="text" name="address" class="form-control" placeholder="Address" value="@Model.Address" required />
+                    </div>
+                    <div class="col-md-12">
+                        <label>Profile image</label>
+                        <input type="file" class="form-control"  id="Staff_image"  />
+                    </div>
+                    <div class="col-sm-3">
+                        @if (Model.Image == null || Model.Image == "")
+                        {
+                            <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src" />
+                        }
+                        else
+                        {
+                            <img style="height:120px; width:100px; border:solid gray" src="~/Images/Employee/@Model.Image" id="Imag_src" />
+                        }
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <button id="upddatstaffbtn" type="submit" class="btn buttoncolor" style="width:100px;">Update</button>
+                    </div>
+                    <input type="text" id="staffImage_url123" name="Image" hidden />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+     $("#Staff_image").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmployeeImage", "Employee")',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+
+        })
+            .done(function (response) {
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Employee/" + response.ImageURL);
+            });
+
+    });
+
+    $("#staffEditwarninig11").hide();
+    $("#staffEditmailwarninig11").hide();
+
+    $('#Desig_id').change(function () {
+
+        var desgval = $("#Desig_id").val();
+        if (desgval <= 0 || desgval == "") {
+            $("#upddatstaffbtn").prop("disabled", true);
+        }
+        else {
+            $("#upddatstaffbtn").prop("disabled", false);
+        }
+    });
+
+    //
+
+
+    $("#staffeditcontact").focusout(function () {
+        var contact = $("#staffeditcontact").val();
+        var id = $("#staffEditId").val();
+        if (contact != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Staff/CheckStaff",
+                data: { contact: contact, id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#staffEditwarninig11").hide();
+                        $("#upddatstaffbtn").prop("disabled", false);
+                    }
+                    else {
+                        $("#staffEditwarninig11").show();
+                        $("#staffeditcontact").val('');
+                    }
+                },
+            });
+        }
+    });
+    $("#staffeditmail").focusout(function () {
+        var mail = $("#staffeditmail").val();
+        var id = $("#staffEditId").val();
+        if (mail != "") {
+            $.ajax({
+                type: "GET",
+                url: "/Staff/CheckStaffMail",
+                data: { mail: mail, id: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data == "ok") {
+                        $("#staffEditmailwarninig11").hide();
+                        $("#upddatstaffbtn").prop("disabled", false);
+                    }
+                    else {
+                        $("#staffEditmailwarninig11").show();
+                        $("#staffeditmail").val('');
+                    }
+                },
+            });
+        }
+    });
+</script>

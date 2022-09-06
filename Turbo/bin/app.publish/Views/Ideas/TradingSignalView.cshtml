@@ -1,0 +1,429 @@
+﻿@model  IEnumerable<Risen.Models.TradingSignals>
+@{
+    ViewBag.Title = "TradingSignalView";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+}
+@using Risen.Models
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+
+}
+
+@* new *@
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Trade Idea</h2>
+                </div>
+                @if (TempData["msg"] != null)
+                {
+                    if (TempData["msg"] == "empty")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Please!</strong>  Please fill all necessary fields.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                    else if (TempData["msg"] == "success")
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Updated successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                }
+                <br />
+                <label id="Alert_div" style="color:red"></label>
+                <label id="Alert_div1" style="color:green"></label>
+            </div>
+            <div class="white_shd full margin_bottom_30" style="margin-top:0px;">
+                @if (privileges.isStaffView)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="white_shd full margin_bottom_30" style="margin-top:10px;">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align:right; margin-left:-1%">
+                                        <form>
+                                            <div class="row pl-5 pr-5">
+                                                <div class="col-md-2">
+                                                    <label>Status</label>
+                                                    <select class="form-control" name="Status" id="tradeStatus">
+                                                        <option value="">--Select--</option>
+                                                        <option value="">Active</option>
+                                                        <option value="5">Won</option>
+                                                        <option value="4">Loss</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Indices</label>
+                                                    <select class="form-control" name="CurrencyName" id="CurrencyName_id">
+                                                        <option value="">--Select--</option>
+                                                        @foreach (var item in ViewBag.currencieslist)
+                                                        {
+                                                            <option value="@item.CurrencyList.firstImage">@item.CurrencyList.firstImage</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Employee</label>
+                                                    <select class="form-control" name="EmployeeId" id="Employee_Id">
+                                                        @foreach (var item in ViewBag.employee)
+                                                        {
+                                                            <option value="@item.CompanyEmployeeID">@item.fName @item.lName</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label style="color:white"> .</label>
+                                                    <input style="display:block" type="button" onclick="BindDataTable()" value="Search" class="btn buttoncolor" />
+                                                </div>
+                                                <div class="offset-2 col-md-2">
+                                                    <label style="color:white"> .</label>
+                                                    @if (privileges.isStaffCreate)
+                                                    {
+                                                        <a style="display:block" class="btn buttoncolor" href="/Home/Dashbaord">New Trade Idea</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="table_section padding_infor_info">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover " id="Trading_table" style="border:1px solid gray">
+                                            <thead class="bg-light text-dark">
+                                                <tr>
+                                                    <th>
+                                                        Indices
+                                                    </th>
+                                                    <th>
+                                                        Type
+                                                    </th>
+                                                    <th>
+                                                        Entry At
+                                                    </th>
+                                                    <th>
+                                                        Created By
+                                                    </th>
+                                                    <th>
+                                                        Created Date
+                                                    </th>
+                                                    <th>
+                                                        Status
+                                                    </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-dialog-scrollable" id="tradePips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form enctype="multipart/form-data" id="TakeProfit_frm">
+            <div class="modal-content">
+                <div class="modal-header backgroundcolor">
+                    <h5 class="modal-title backgroundtitle" id="exampleModalLabel"></h5>
+                    <button type="button" class="close backgroundtitle" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" id="hidden_tr_2424342">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn  btn-outline-default closebtn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+    /* Initialization of datatables */
+
+</script>
+<script>
+    var CallFunction = 0;
+    var TradingSignalId = 0;
+
+    function GetTakePrfit(id) {
+
+        TradingSignalId = id;
+    }
+
+    function GetTradingData(id) {
+        $('#hidden_tr_2424342').children().remove();
+        if (id != 0) {
+            $.ajax({
+                type: "GET",
+                url: "/Ideas/GetProfitLost",
+                data: { TradingSignalId: id },
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        var takeProfittbl = "<div class='col-md-6' ><center><h5 style='color:black'>Take Profit</h5></center><table class='table table-hover'><thead ><tr><th>#</th><th>TP</th><th>Points</th></tr></thead><tbody>"
+                        if (data.TakeProfitList.length > 0) {
+                            for (var i = 0; i < data.TakeProfitList.length; i++) {
+                                var j = i + 1;
+                                takeProfittbl += '<tr><td>' + j + '</td><td>' + data.TakeProfitList[i].TP + '</td><td>' + data.TakeProfitList[i].Points + '</td></tr>';
+                            }
+                        }
+                        else {
+                            takeProfittbl += '<tr><td colspan="3"><center><h6>No data found.</h6></center></td></tr>';
+                        }
+                        takeProfittbl += "</tbody></table></div>"
+                        takeProfittbl += "<div class='col-md-6' ><center><h5 style='color:black'>Stop Lose</h5></center><table class='table'><thead style='background-image:linear-gradient(toright,#480606,#b50000);background-color: #ef0808;'><tr><th>SL</th><th>Points</th></tr></thead><tbody>"
+                        //for (var i = 0; i < data.StopLoseList.length; i++) {
+                        //    var j = i + 1;
+                        if (data.StopLose.StopLoseId > 0) {
+                            takeProfittbl += '<tr><td>' + data.StopLose.SL + '</td><td>' + data.StopLose.Points + '</td></tr>';
+                        }
+                        else {
+                            takeProfittbl += '<tr><td colspan=="2"><center><h6>No data found.</h6></center></td></tr>';
+                        }
+                        /*}*/
+                        takeProfittbl += "</tbody></table></div>"
+                        //$('#myTable tr:last').after('<tr>...</tr><tr>...</tr>');
+                        $('#hidden_tr_2424342').append(takeProfittbl);
+                    }
+                    else if (data != "NoData") {
+                        alert("not data found");
+                    }
+                    else if (data != "Expire") {
+                        alert("Session Expire Please Refresh The Page");
+                    }
+                },
+            });
+        }
+        else {
+
+            alert("Please first select record");
+        }
+    }
+
+    $(document).ready(function () {
+        BindDataTable();
+    });
+
+
+
+    function DeleteTradingIdea(id) {
+
+        if (confirm('Are you sure you want to delete this Idea?')) {
+            if (id != 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Ideas/DeleteTrading",
+                    data: { TradingSignalId: id },
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data == "success") {
+                            $("#Alert_div").text("Deleted successfully.");
+                            //Swal.fire(
+                            //    'Deleted!',
+                            //    'Successfully Deleted!',
+                            //    'success'
+                            //)
+                            location.reload();
+
+                        }
+                        else if (data == "expire") {
+                            alert("Session Has Been Expired Please Refresh The Page.");
+                        }
+                    },
+                });
+            }
+            else {
+
+                alert("Please first select record");
+            }
+        }
+    }
+
+    function ChangeStatus(id) {
+        var status = $("#TradingStatus_" + id).val();
+        if (id != 0) {
+            $.ajax({
+                type: "POST",
+                url: "/Ideas/ChangeStatus",
+                data: { TradingSignalId: id, status: status },
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "success") {
+                        $("#TradingStatus_" + id).val(status);
+                        BindDataTable();
+                    }
+                    else if (data == "expire") {
+
+                        alert("Session expired please refresh the page.");
+                    }
+                    else if (data == "Empty") {
+
+                        alert("record not found");
+                    }
+                },
+            });
+        }
+        else {
+
+            alert("Please first select record");
+        }
+    }
+
+
+    var BindDataTable = function (response) {
+        $('#Trading_table').dataTable().fnClearTable();
+        $('#Trading_table').dataTable().fnDestroy();
+
+        $("#Trading_table").DataTable({
+            //"order": [[2, "asce"]],
+            "bServerSide": true,
+            "sAjaxSource": "/Ideas/TradingDataTable",
+            bFilter: false,
+            bSortable: false,
+
+            "fnServerData": function (sSource, aoData, fnCallback) {
+                aoData.push({ "name": "Status", "value": $("#tradeStatus").val() });
+                aoData.push({ "name": "CurrencyName", "value": $("#CurrencyName_id").val() });
+                aoData.push({ "name": "EmployeeId", "value": $("#Employee_Id").val() });
+                $.ajax({
+                    type: "Get",
+                    data: aoData,
+                    url: sSource,
+                    success: fnCallback
+                })
+            },
+
+            "aoColumns": [
+
+                {
+                    "mData": "CurrencyName"
+                },
+                {
+                    "mData": "Type",
+                    "render": function (Type, type, full, meta) {
+                        if (Type == "1") {
+                            return 'Buy'
+                        }
+                        else if (Type == "2") {
+                            return 'Sell'
+                        }
+                        else if (Type == "3") {
+                            return 'Buy limit'
+                        }
+                        else if (Type == "4") {
+                            return 'Sell limit'
+                        }
+                        else if (Type == "5") {
+                            return 'Sell stop'
+                        }
+                        else if (Type == "6") {
+                            return 'Buy stop'
+                        }
+
+                    }
+                },
+                {
+                    "mData": "Buy"
+                },
+                { "mData": "CreatedBy" },
+                { "mData": "CreatedTime" },
+                {
+                    "mData": "TradingSignalId",
+                    "render": function (data, type, full, meta) {
+                        var tradeId = 0;
+                        var status = undefined;
+                        if (meta.row < meta.settings._iDisplayLength) {
+                            tradeId = meta.settings.aoData[meta.row]._aData.TradingSignalId;
+                            status = meta.settings.aoData[meta.row]._aData.Status;
+                        }
+                        var statusList = '<select onchange = "ChangeStatus(' + tradeId + ')" class="form-control" id="TradingStatus_' + tradeId + '">'
+                        if (status == "0") {
+                            statusList += '<option selected value="0">Pending</option>'
+                                + ' <option value="1">Approved</option>'
+                                + ' <option value="2">Rejected</option>'
+                        }
+                        else if (status == "1") {
+                            statusList += '<option value="0">Pending</option>'
+                                + ' <option selected value="1">Approved</option>'
+                                + ' <option value="2">Rejected</option>'
+                        }
+                        else if (status == "2") {
+                            statusList += '<option value="0">Pending</option>'
+                                + ' <option value="1">Approved</option>'
+                                + ' <option selected value="2">Rejected</option>'
+                        }
+                        else if (status == "4") {
+                            statusList += '<option value="4">Loss</option>'
+                        }
+                        else if (status == "5") {
+                            statusList += '<option value="5">Won</option>'
+                        }
+                        return statusList += '</select>'
+                    }
+                },
+                {
+                    "mData": "TradingSignalId",
+                    "render": function (TradingSignalId, type, full, meta) {
+                        var buttons = '';
+                        if (meta.row < meta.settings._iDisplayLength) {
+                            status = meta.settings.aoData[meta.row]._aData.Status;
+                        }
+                        if (status == "0" || status == "1" || status == "2") {
+                            buttons += '<a href="/Ideas/EditTradingSignal?id=' + TradingSignalId + '" class="btn btn-sm buttoncolor">Edit</a> '
+                        }
+                        buttons += ' <button data-toggle="modal" data-target="#tradePips" href="#hidden_tr_' + TradingSignalId + '" onclick="GetTradingData(' + TradingSignalId + ')" class="btn  btn-sm" title="View Detail" style=" border: none; background-color: #0F85B1;  color: white;"><span id="icon_' + TradingSignalId + '" class="fa fa-caret-down" aria-hidden="true"></span></button>'
+                        return buttons
+                    }
+
+                },
+
+            ]
+        });
+
+        if (CallFunction == 0) {
+            CallFunction = 1;
+            RelaodDataBinding();
+        }
+    }
+
+
+    function RelaodDataBinding() {
+        setTimeout("BindDataTable()", 2000);
+    }
+
+</script>

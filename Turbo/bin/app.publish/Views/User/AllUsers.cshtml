@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Risen.Models.CustomerDetail>
+@{
+    ViewBag.Title = "AllUsers";
+    Layout = "~/Views/Shared/_CustomLayout.cshtml";
+}
+
+<div class="midde_cont" id="page">
+    <div class="card">
+        <div class="container" style="margin:20px;">
+            <div class="row column_title">
+                <div class="col-md-12">
+                    <div class="page_title">
+                        <h2>Users</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="white_shd full margin_bottom_30" style="margin-top:0px;">
+                        <div class="table_section padding_infor_info">
+                            <div class="table-responsive-sm">
+                                <table class="table" id="User_table">
+                                    <thead>
+                                        <tr>
+                                            <th>#No</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Date</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int i = 0;
+                                        }
+                                        @if (Model != null)
+                                        {
+                                            foreach (var item in Model.OrderByDescending(x => x.CustomerDetailId))
+                                            {
+                                                i++;
+                                                <tr>
+                                                    <td>@i</td>
+                                                    <td>@item.fName</td>
+                                                    <td>@item.Email</td>
+                                                    <td>@item.CreatedTime.Date</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+
+<script type="text/javascript">
+    
+    //for data table
+        //$(document).ready(function () {
+        //    $('table').DataTable();
+        //    });
+    
+</script>
+

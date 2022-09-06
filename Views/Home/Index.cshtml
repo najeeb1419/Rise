@@ -1,0 +1,324 @@
+﻿@model Risen.ViewModel.DashboardVM
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+@using Risen.Models
+
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+
+
+
+
+
+}
+@{
+    string days = "";
+    days = "365";
+    List<TradingSignals> signalList = new List<TradingSignals>();
+
+    if (ViewBag.TradingSignal != null)
+    {
+        signalList = ViewBag.TradingSignal as List<TradingSignals>;
+    }
+}
+<style>
+    .dashtab {
+        background-color: #0F85B1;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Risen Dashboard</h2>
+                </div>
+            </div>
+        </div>
+        @if (privileges.IsDashboard == true)
+        {
+            <div class="row column1">
+                <div class="col-md-6 col-lg-3 ">
+                    <a href="~/Employee/EmployeeView">
+                        <div class="full counter_section margin_bottom_30 dashtab">
+                            <div class="couter_icon">
+                                <div>
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="counter_no">
+                                <div>
+                                    <p class="total_no">@Model.Employees</p>
+                                    <p class="head_couter">Employees</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3 ">
+                    <a href="/Ideas/TradingSignalView">
+                        <div class="full counter_section margin_bottom_30 dashtab">
+                            <div class="couter_icon">
+                                <div>
+                                    <i class="fa fa-signal"></i>
+                                </div>
+                            </div>
+                            <div class="counter_no">
+                                <div>
+                                    <p class="total_no">@Model.TradingIdeas</p>
+                                    <p class="head_couter">Trade Ideas</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3 ">
+                    <a href="/Currency/CurrencyView">
+                        <div class="full counter_section margin_bottom_30 dashtab">
+                            <div class="couter_icon">
+                                <div>
+                                    <i class="fa fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <div class="counter_no">
+                                <div>
+                                    <p class="total_no">@Model.Currencies</p>
+                                    <p class="head_couter">Currencies</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3 ">
+
+
+                    <div class="full counter_section margin_bottom_30 dashtab">
+                        <div class="couter_icon">
+                            <div>
+                                <i class="fa fa-fighter-jet"></i>
+                            </div>
+                        </div>
+                        <div class="counter_no">
+                            <div>
+                                <p class="total_no">30%</p>
+                                <p class="head_couter">Growth</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row column2 graph margin_bottom_30">
+                <div class="col-md-l2 col-lg-12">
+                    <div class="white_shd full">
+                        <div class="full graph_head">
+                            <div class="heading1 margin_0">
+                                <h2>Chart Analytics</h2>
+                            </div>
+                        </div>
+                        <div class="full graph_revenue">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="content">
+                                        <div class="area_chart">
+                                            <div class="row">
+                                                <div class="col-md-6" style="border-right:2px solid lightgray;">
+                                                    <div class="segment-header text-center">
+
+                                                        <h5>This Month</h5>
+                                                    </div>
+                                                    <canvas id="DaysChart" style="width:100%;max-width:600px"></canvas>
+
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="segment-header text-center">
+                                                        <h5>year @DateTime.Now.Year</h5>
+                                                    </div>
+                                                    <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="white_shd full margin_bottom_30" style="margin-top:20px;">
+                        <div class="full graph_head">
+                            <div class="heading1 margin_0">
+                                <h2>Latest Trade Ideas</h2>
+                            </div>
+                        </div>
+                        <div class="table_section padding_infor_info">
+
+                            <table class="table table-hover table-responsive-sm" id="Trading_table">
+                                <thead class="bg-light text-dark">
+                                    <tr>
+                                        <th>
+                                            #No
+                                        </th>
+                                        <th>
+                                            Currency
+                                        </th>
+                                        <th>
+                                            Buy
+                                        </th>
+                                        <th>
+                                            Created By
+                                        </th>
+                                        <th>
+                                            Created Date
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (signalList.Count > 0)
+                                    {
+
+                                        int i = 0;
+
+                                        foreach (var item in signalList.OrderByDescending(x => x.TradingSignalId))
+                                        {
+                                            i++;
+                                            <tr id="display_tr_@item.TradingSignalId">
+                                                <td>
+                                                    @i
+                                                </td>
+                                                <td>
+                                                    @item.CurrencyList.CurrencyName
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Buy)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CreatedBy)
+                                                </td>
+                                                <td>
+                                                    @{
+                                                        var CreatedDate = item.CreatedTime.ToString("dd-MM-yyyy hh:mm:ss tt");
+                                                    }
+                                                    @CreatedDate
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <center><h3>You are not authorized user.</h3></center>
+        }
+    </div>
+
+
+</div>
+
+<script src="js/Chart.min.js"></script>
+<script src="js/Chart.bundle.min.js"></script>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('table').DataTable();
+    });
+
+
+</script>
+
+<script>
+    var currentTime = new Date();
+    var months = ["Jan", "Fab", "Ma", "Ap", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+
+    var xValues = months;
+
+    var yValues = [@Html.Raw(ViewBag.Incomlist[0]), @Html.Raw(ViewBag.Incomlist[1]), @Html.Raw(ViewBag.Incomlist[2]), @Html.Raw(ViewBag.Incomlist[3]), @Html.Raw(ViewBag.Incomlist[4]), @Html.Raw(ViewBag.Incomlist[5]), @Html.Raw(ViewBag.Incomlist[6]), @Html.Raw(ViewBag.Incomlist[7]), @Html.Raw(ViewBag.Incomlist[8]), @Html.Raw(ViewBag.Incomlist[9]), @Html.Raw(ViewBag.Incomlist[10]), @Html.Raw(ViewBag.Incomlist[11])];
+    var barColors = ["red", "green", "blue", "orange", "brown", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02"];
+
+    new Chart("myChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true
+               //text:"This year"+" "+ currentTime.getFullYear()
+            }
+        }
+    });
+
+
+
+    // days chart
+    var daysArray = [];
+    debugger;
+
+    var currentTime = new Date();
+    currentTime = new Date(currentTime.setMonth(currentTime.getMonth() + 1));
+    var TodayDate = new Date();
+    var d = TodayDate.getDay();
+    var m = TodayDate.getMonth();
+
+    var CurrentMonth = currentTime.getMonth();
+    var daysInMonth = new Date(currentTime.getFullYear(), CurrentMonth, 0).getDate();
+   // daysArray.length = daysInMonth;
+    var array = new Array(daysInMonth);
+    for (var i = 1; i <= array.length; i++) {
+        daysArray[i] = i;
+    }
+    //var days = ["jan", "Fab", "Ma", "Ap", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+     var myArray = [];
+
+    @foreach (var d in Model.dailyCount)
+    {
+        @:myArray.push("@d");
+    }
+
+    var xValues = daysArray;
+    var yValues = myArray;
+    var barColors = ["red", "green", "blue", "orange", "brown", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02", "red", "green", "blue", "orange", "brown", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02"];
+    debugger;
+    new Chart("DaysChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+
+            legend: { display: false },
+            title: {
+                display: true
+                //text: "This Month" + " " + m
+            }
+        }
+    });
+</script>

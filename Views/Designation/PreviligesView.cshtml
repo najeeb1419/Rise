@@ -1,0 +1,700 @@
+﻿@model Risen.ViewModel.PriviligesViewModel
+@{
+    ViewBag.Title = "PreviligesView";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+@using Risen.Models
+
+@{
+    CompanyEmployee staff = new CompanyEmployee();
+    staff = Session["Employee"] as CompanyEmployee;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Trade Idea</h2>
+                </div>
+                @if (TempData["msg"] != null)
+                {
+                    if (TempData["msg"] == "empty")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Please!</strong>  Please fill all necessary fields.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                    else if (TempData["msg"] == "update")
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Updated successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+
+                }
+
+               
+                <label id="Alert_div" style="color:red"></label>
+                <label id="Alert_div1" style="color:green"></label>
+            </div>
+        </div>
+        <div class="row">
+            <form action="PreviligesView" method="post" id="Priviliged_frm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="checkbox" id="checkall" name="checkall" onclick="Checkall()">
+                        <label for="vehicle1"> Check all</label><br>
+                    </div>
+                </div>
+               
+
+                <div class="row">
+                    <input type="text" value="@Model.PrivilegesId" name="PrivilegesId" hidden />
+                    <input type="text" value="@Model.DesignationId" name="DesignationId" hidden />
+                    <div class="col-md-3">
+                        <div class="card" style="width: 18rem;" id="client_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Currency</h5>
+                                @if (Model.isClients == "on")
+                                {
+                                    <input type="checkbox" id="isClients" name="isClients" checked onclick="ClientsDiv()">
+                                    <label for="vehicle1">All</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isClients" name="isClients" onclick="ClientsDiv()">
+                                    <label for="vehicle1"> All</label><br>
+                                }
+                                @if (Model.isClientView == "on")
+                                {
+                                   
+                                    <input type="checkbox" id="isClientView" name="isClientView" checked>
+                                    <label for="vehicle2">View</label><br>
+                                }
+                                else
+                                {
+                                   
+                                    <input type="checkbox" id="isClientView" name="isClientView">
+                                    <label for="vehicle2">View</label><br>
+                                }
+                                @if (Model.isClientCreate == "on")
+                                {
+                                    <input type="checkbox" id="isClientCreate" name="isClientCreate" checked>
+                                    <label for="vehicle3">Create</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isClientCreate" name="isClientCreate">
+                                    <label for="vehicle3">Create</label><br>
+                                }
+                                @if (Model.isClientUpdate == "on")
+                                {
+                                    <input type="checkbox" id="isClientUpdate" name="isClientUpdate" checked>
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isClientUpdate" name="isClientUpdate">
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                                @if (Model.isClientDelet == "on")
+                                {
+                                    <input type="checkbox" id="isClientDelet" name="isClientDelet" checked>
+                                    <label for="vehicle3">Delete</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isClientDelet" name="isClientDelet">
+                                    <label for="vehicle3">Delete</label><br />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card" style="width: 18rem; height:215.5px" id="setting_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Setting</h5>
+                                @if (Model.IsSetting == "on")
+                                {
+                                    <input type="checkbox" name="IsSetting" checked />
+                                    <label for="vehicle3">Settings</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="IsSetting" />
+                                    <label for="vehicle3">Settings</label><br>
+                                }
+                                @if (Model.IsDashboard == "on")
+                                {
+                                    <input type="checkbox" name="IsDashboard" checked />
+                                    <label for="vehicle3"> Dashboard</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="IsDashboard" />
+                                    <label for="vehicle3"> Dashboard</label><br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" hidden>
+                        <div class="card" style="width: 18rem;" id="LeadUser_Id">
+                            <div class="card-body">
+                                <h5 class="card-title">LeadUser</h5>
+                                @if (Model.isLeadUser == "on")
+                                {
+                                    <input type="checkbox" id="isLeadUser" name="isLeadUser" checked onclick="LeadUserDiv()" />
+
+                                    <label for="vehicle1"> isLeadUser</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isLeadUser" name="isLeadUser" onclick="LeadUserDiv()" />
+                                    <label for="vehicle1"> isLeadUser</label><br>
+                                }
+                                @if (Model.isLeadUserView == "on")
+                                {
+                                    <input type="checkbox" id="isLeadUserView" name="isLeadUserView" checked />
+                                    <label for="vehicle2"> isLeadUserView</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isLeadUserView" name="isLeadUserView" />
+                                    <label for="vehicle2"> isLeadUserView</label><br>
+                                }
+                                @if (Model.isLeadUserUpdate == "on")
+                                {
+                                    <input type="checkbox" id="isLeadUserUpdate" name="isLeadUserUpdate" checked />
+                                    <label for="vehicle3"> isLeadUserUpdate</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isLeadUserUpdate" name="isLeadUserUpdate" />
+                                    <label for="vehicle3"> isLeadUserUpdate</label><br>
+                                }
+                                @if (Model.isLeadUser == "on")
+                                {
+                                    <input type="checkbox" id="isLeadUserConvertToCustomer" name="isLeadUserConvertToCustomer" checked />
+                                    <label for="vehicle3"> isConvertLeadToCustomer</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isLeadUserConvertToCustomer" name="isLeadUserConvertToCustomer" />
+                                    <label for="vehicle3"> isLeadUserConvertToCustomer</label><br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" hidden>
+                        <div class="card" style="width: 18rem;" id="company_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Company</h5>
+                                @if (Model.isCompany == "on")
+                                {
+                                    <input type="checkbox" id="isCompany" name="isCompany" checked onclick="CompanyDiv()" />
+                                    <label for="vehicle1"> isCompany</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isCompany" name="isCompany" onclick="CompanyDiv()">
+                                    <label for="vehicle1"> isCompany</label><br>
+                                }
+                                @if (Model.isCompanyView == "on")
+                                {
+                                    <input type="checkbox" id="isCompanyView" name="isCompanyView" checked />
+                                    <label for="vehicle2"> isCompanyView</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isCompanyView" name="isCompanyView">
+                                    <label for="vehicle2"> isCompanyView</label><br>
+                                }
+                                @if (Model.isCompanyCreate == "on")
+                                {
+                                    <input type="checkbox" id="isCompanyCreate" name="isCompanyCreate" checked>
+                                    <label for="vehicle3"> isCompanyCreate</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isCompanyCreate" name="isCompanyCreate">
+                                    <label for="vehicle3"> isCompanyCreate</label><br>
+                                }
+                                @if (Model.isCompanyUpdate == "on")
+                                {
+                                    <input type="checkbox" id="isCompanyUpdate" name="isCompanyUpdate" checked>
+                                    <label for="vehicle3"> isCompanyUpdate</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isCompanyUpdate" name="isCompanyUpdate">
+                                    <label for="vehicle3"> isCompanyUpdate</label><br>
+                                }
+                                @if (Model.isCompanyDelet == "on")
+                                {
+                                    <input type="checkbox" id="isCompanyDelet" name="isCompanyDelet" checked>
+                                    <label for="vehicle3"> isCompanyDelet</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isCompanyDelet" name="isCompanyDelet">
+                                    <label for="vehicle3"> isCompanyDelet</label><br>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card" style="width: 18rem; height:215.5px" id="Employee12_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Employee</h5>
+                                @if (Model.isEmployee == "on")
+                                {
+                                    <input type="checkbox" name="isEmployee" id="isEmployee" checked onclick="Employee123_Div()" />
+                                    <label for="vehicle3">All</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="isEmployee" id="isEmployee" onclick="Employee123_Div()" />
+                                    <label for="vehicle3">All</label><br>
+                                }
+                                @if (Model.isEmployeeView == "on")
+                                {
+                                    <input type="checkbox" name="isEmployeeView" checked id="isEmployeeView" />
+                                    <label for="vehicle3">View</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="isEmployeeView" id="isEmployeeView" />
+                                    <label for="vehicle3">View</label><br>
+                                }
+                                @if (Model.isEmployeeCreate == "on")
+                                {
+                                    <input type="checkbox" name="isEmployeeCreate" checked id="isEmployeeCreate" />
+                                    <label for="vehicle3">Create</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="isEmployeeCreate" id="isEmployeeCreate" />
+                                    <label for="vehicle3">Create</label><br>
+                                }
+                                @if (Model.isEmployeeUpdate == "on")
+                                {
+                                    <input type="checkbox" name="isEmployeeUpdate" checked id="isEmployeeUpdate" />
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="isEmployeeUpdate" id="isEmployeeUpdate" />
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card" style="width: 18rem; height:215.5px" id="Designation_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Designation</h5>
+                                @if (Model.isDesignation == "on")
+                                {
+                                    <input type="checkbox" id="isDesignation" name="isDesignation" checked onclick="DesignationDiv()">
+                                    <label for="vehicle1">All</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isDesignation" name="isDesignation" onclick="DesignationDiv()">
+                                    <label for="vehicle1">All</label><br>
+                                }
+                                @if (Model.isDesignationView == "on")
+                                {
+                                    <input type="checkbox" id="isDesignationView" name="isDesignationView" checked>
+                                    <label for="vehicle2">View</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isDesignationView" name="isDesignationView">
+                                    <label for="vehicle2">View</label><br>
+                                }
+                                @if (Model.isDesignationCreate == "on")
+                                {
+                                    <input type="checkbox" id="isDesignationCreate" name="isDesignationCreate" checked>
+                                    <label for="vehicle2">Create</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isDesignationCreate" name="isDesignationCreate">
+                                    <label for="vehicle2">Create</label><br>
+                                }
+                                @if (Model.isDesignationUpdate == "on")
+                                {
+                                    <input type="checkbox" id="isDesignationUpdate" name="isDesignationUpdate" checked>
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isDesignationUpdate" name="isDesignationUpdate">
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+
+                    <div class="col-md-3" hidden>
+                        <div class="card" style="width: 18rem;" id="product_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Product</h5>
+                                @if (Model.isProduct == "on")
+                                {
+                                    <input type="checkbox" id="isProduct" name="isProduct" checked onclick="ProductDiv()" />
+                                    <label for="vehicle1"> isProduct</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isProduct" name="isProduct" onclick="ProductDiv()">
+                                    <label for="vehicle1"> isProduct</label><br>
+                                }
+                                @if (Model.isProductView == "on")
+                                {
+                                    <input type="checkbox" id="isProductView" name="isProductView" checked />
+                                    <label for="vehicle2"> isProductView</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isProductView" name="isProductView">
+                                    <label for="vehicle2"> isProductView</label><br>
+                                }
+                                @if (Model.isProductCreate == "on")
+                                {
+                                    <input type="checkbox" id="isProductCreate" name="isProductCreate" checked />
+                                    <label for="vehicle2">isProductCreate</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isProductCreate" name="isProductCreate">
+                                    <label for="vehicle2">isProductCreate</label><br>
+                                }
+                                @if (Model.isProductUpdate == "on")
+                                {
+                                    <input type="checkbox" id="isProductUpdate" name="isProductUpdate" checked>
+                                    <label for="vehicle3"> isProductUpdate</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isProductUpdate" name="isProductUpdate">
+                                    <label for="vehicle3"> isProductUpdate</label><br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" hidden>
+                        <div class="card" style="width: 18rem;" id="policy_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Policy</h5>
+                                @if (Model.isPolicy == "on")
+                                {
+                                    <input type="checkbox" id="isPolicy" name="isPolicy" checked onclick="PolicyDiv()" />
+                                    <label for="vehicle1"> isPolicy</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isPolicy" name="isPolicy" onclick="PolicyDiv()">
+                                    <label for="vehicle1"> isPolicy</label><br>
+                                }
+                                @if (Model.isPolicyCreate == "on")
+                                {
+                                    <input type="checkbox" id="isPolicyCreate" name="isPolicyCreate" checked>
+                                    <label for="vehicle2"> isPolicyCreate</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isPolicyCreate" name="isPolicyCreate">
+                                    <label for="vehicle2"> isPolicyCreate</label><br>
+                                }
+                                @if (Model.isPolicyView == "on")
+                                {
+                                    <input type="checkbox" id="isPolicyView" name="isPolicyView" checked>
+                                    <label for="vehicle3"> isPolicyView</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isPolicyView" name="isPolicyView">
+                                    <label for="vehicle3"> isPolicyView</label><br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card" style="width: 18rem;" id="Staff_div">
+                            <div class="card-body">
+                                <h5 class="card-title">Trade Idea</h5>
+                                @if (Model.isStaff == "on")
+                                {
+                                    <input type="checkbox" id="isStaff" name="isStaff" checked onclick="StaffDiv()" />
+                                    <label for="vehicle1">All</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isStaff" name="isStaff" onclick="StaffDiv()">
+                                    <label for="vehicle1">All</label><br>
+                                }
+                                @if (Model.isStaffView == "on")
+                                {
+                                    <input type="checkbox" id="isStaffView" name="isStaffView" checked>
+                                    <label for="vehicle2">View</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isStaffView" name="isStaffView">
+                                    <label for="vehicle2">View</label><br>
+                                }
+                                @if (Model.isStaffCreate == "on")
+                                {
+                                    <input type="checkbox" id="isStaffCreate" name="isStaffCreate" checked>
+                                    <label for="vehicle3">Create</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isStaffCreate" name="isStaffCreate">
+                                    <label for="vehicle3">Create</label><br>
+                                }
+                                @if (Model.isStaffUpdate == "on")
+                                {
+                                    <input type="checkbox" id="isStaffUpdate" name="isStaffUpdate" checked>
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isStaffUpdate" name="isStaffUpdate">
+                                    <label for="vehicle3">Update</label><br>
+                                }
+                                @if (Model.MyCommission == "on")
+                                {
+                                    <input type="checkbox" name="MyCommission" checked />
+                                    <label for="vehicle3">Delete</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="MyCommission" />
+                                    <label for="vehicle3">Delete</label><br>
+                                }
+                                @if (Model.isLeadStaff == "on")
+                                {
+                                    <input type="checkbox" id="isLeadStaff" name="isLeadStaff" checked>
+                                    <label for="vehicle3">Add Take Profit</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isLeadStaff" name="isLeadStaff">
+                                    <label for="vehicle3">Add Take Profit</label><br>
+                                }
+                                @if (Model.isConverLeadPartner == "on")
+                                {
+                                    <input type="checkbox" id="isConverLeadPartner" name="isConverLeadPartner" checked>
+                                    <label for="vehicle3">Add Stop Lose</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" id="isConverLeadPartner" name="isConverLeadPartner">
+                                    <label for="vehicle3">Add Stop Lose</label><br>
+                                }
+                                @if (Model.ViewPartnerCommisson == "on")
+                                {
+                                    <input type="checkbox" name="ViewPartnerCommisson" checked />
+                                    <label for="vehicle3">Change Status</label><br>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="ViewPartnerCommisson" />
+                                    <label for="vehicle3">Change Status</label><br>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <input type="submit" style="width:100px" value="Update" class="btn buttoncolor" />
+            </form>
+        </div>
+
+        
+
+
+
+
+    </div>
+
+</div>
+
+
+
+
+
+<script>
+    function Checkall() {
+
+        if ($("#checkall").prop('checked') == true) {
+            $("#Priviliged_frm").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#Priviliged_frm").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+
+    function ClientsDiv() {
+
+        if ($("#isClients").prop('checked') == true) {
+            $("#client_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#client_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+
+
+    function LeadUserDiv() {
+
+        if ($("#isLeadUser").prop('checked') == true) {
+            $("#LeadUser_Id").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#LeadUser_Id").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+
+
+    function CompanyDiv() {
+
+        if ($("#isCompany").prop('checked') == true) {
+            $("#company_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#company_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+    function DesignationDiv() {
+
+        if ($("#isDesignation").prop('checked') == true) {
+            $("#Designation_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#Designation_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+    function Employee123_Div() {
+
+        if ($("#isEmployee").prop('checked') == true) {
+            $("#Employee12_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#Employee12_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+    //function DesignationDiv() {
+    //
+    //    if ($("#isDesignation").prop('checked') == true) {
+    //        $("#Designation_div").find('input[type=checkbox]').each(function () {
+    //            this.checked = true;
+    //        });
+    //    }
+    //    else {
+    //        $("#Designation_div").find('input[type=checkbox]').each(function () {
+    //            this.checked = false;
+    //        });
+    //    }
+    //}
+    function StaffDiv() {
+
+        if ($("#isStaff").prop('checked') == true) {
+            $("#Staff_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#Staff_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+
+
+    function ProductDiv() {
+
+        if ($("#isProduct").prop('checked') == true) {
+            $("#product_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#product_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+
+    function PolicyDiv() {
+
+        if ($("#isPolicy").prop('checked') == true) {
+            $("#policy_div").find('input[type=checkbox]').each(function () {
+                this.checked = true;
+            });
+        }
+        else {
+            $("#policy_div").find('input[type=checkbox]').each(function () {
+                this.checked = false;
+            });
+        }
+    }
+    //function SettingDiv() {
+    //
+    //    if ($("#IsSetting").prop('checked') == true) {
+    //        $("#setting_div").find('input[type=checkbox]').each(function () {
+    //            this.checked = true;
+    //        });
+    //    }
+    //    else {
+    //        $("#setting_div").find('input[type=checkbox]').each(function () {
+    //            this.checked = false;
+    //        });
+    //    }
+    //}
+
+</script>

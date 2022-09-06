@@ -1,0 +1,686 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+<style>
+    .col-md-6 {
+        margin-bottom: 10px;
+    }
+
+    .col-md-12 {
+        margin-bottom: 10px;
+    }
+
+    .required:after {
+        content: "*";
+        color: red;
+    }
+</style>
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Create Trade Idea</h2>
+
+
+                </div>
+            </div>
+        </div>
+        <form action="Dashbaord" enctype="multipart/form-data" method="post">
+            <div class="card" style="margin-bottom:10px">
+                <div class="container" style="margin-top:20px; margin-bottom:20px">
+                    <div class="row mr-2">
+                        <div class="col-md-6">
+                            <label class="control-label required">Type</label>
+                            <select name="Type" id="IdeaType_dropdown" required class="form-control" style="box-shadow: none">
+                                <option value="">--Select type--</option>
+                                <option value="1">Buy</option>
+                                <option value="2">Sell</option>
+                                <option value="3">Buy limit</option>
+                                <option value="4">Sell limit</option>
+                                <option value="5">Sell stop</option>
+                                <option value="6">Buy stop</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label required">Currency Pair</label>
+                            <select name="CurrencyListId" id="currencyDropdown" required class="form-control" style="box-shadow: none">
+                                <option value="">--Select Currency Pair--</option>
+                                @if (ViewBag.Currencies != null)
+                                {
+                                    foreach (var item in ViewBag.Currencies)
+                                    {
+                                        <option value="@item.CurrencyListId">@item.CurrencyList.CurrencyName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6" id="type_textbox">
+                            <label class="control-label required" id="type_lbl">Buy</label>
+                            <input style="box-shadow: none" type="number" step="any" name="Buy" id="Current_price" class="form-control" placeholder="" required value="" />
+                            <input style="box-shadow: none" type="number" hidden step="any" name="" id="CurrncyPrice" class="form-control" placeholder="" value="" />
+                            <label style="color:red" id="nullAlert"></label>
+
+                        </div>
+                        <div class="col-md-6" id="current_price_txt">
+                            <label class="control-label required" id="">Current Price</label>
+                            <input style="box-shadow: none" type="number" step="any" name="CurrentPrice" readonly id="Current_price1" class="form-control" placeholder="" required value="" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Remarks</label>
+                            <textarea style="box-shadow: none" type="text" name="Remarks" class="form-control" placeholder="" value=""></textarea>
+                        </div>
+                        <div class="col-md-12" style="margin-bottom:10px;">
+                            <label class="control-label">Attachment</label>
+                            <input style="box-shadow: none" type="file" class="form-control" name="" id="Staff_image" />
+                        </div>
+                        <div class="col-sm-12" style="margin-bottom: 10px; margin-top: 30px; justify-content: center; padding-left: 120px; padding-right: 120px">
+                            <img style="height:250px; width:100%; border:solid gray ;" src="~/Images/chart.png" id="Imag_src" />
+                        </div>
+                        <input type="text" id="staffImage_url123" name="Image" hidden value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="container ">
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <center><h3>Take Profit</h3></center>
+                            <div class="table_section padding_infor_info">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-danger " id="take_profit_table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    TP
+                                                </th>
+                                                <th>
+                                                    Points
+                                                </th>
+                                                <th style="text-align:right;">
+                                                    <a class="btn btn-sm bg-white fa fa-plus" style="margin-left:0px; color:black" id="Add_row_id"></a>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="takeProfit_tbody" style="background-color:#ede9e9">
+                                            <tr id="display_tr_">
+
+                                                <td>
+                                                    <span class="control-label required"></span>
+                                                    <input type="number" onchange="GetProfitPIPS(1)" id="tpRow_1" step="any" class="form-control" name="TP[]" required />
+                                                </td>
+                                                <td>
+                                                    <span class="control-label required"></span>
+                                                    <input type="number" step="any" id="tkpips_1" readonly class="form-control" name="ProfitPIPS[]" required />
+                                                </td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <center><h3>Stop Loss</h3></center>
+                            <div class="table_section padding_infor_info">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-danger">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    SL
+                                                </th>
+                                                <th>
+                                                    Points
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="background-color:#ede9e9" id="stoploss_body">
+                                            <tr id="display_tr_">
+                                                <td>
+                                                    <span class="control-label required"></span>
+                                                    <input type="number" onchange="GetLosePIPS()" id="stoplose_1" step="any" class="form-control" name="SL" required />
+                                                </td>
+                                                <td>
+                                                    <span class="control-label required"></span>
+                                                    <input type="number" step="any" readonly class="form-control" id="losePips" name="StopPIPS" required />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-5 mb3 ">
+                            <input type="submit" value="Submit" class="btn btn buttoncolor" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+
+    $("#type_textbox").hide();
+    $(".fg_toolbar", "#table_container").hide();
+    var i = 1;
+    $("#Add_row_id").click(function () {
+        if (i < 10) {
+            i = i + 1;
+            var AddRow = '<tr id=' + i + '><td><input type="number" onchange="GetProfitPIPS(' + i + ')" id="tpRow_' + i + '" step="any" class="form-control" name="TP[]" /><td><input type="number" id="tkpips_' + i + '" step="any" readonly class="form-control" name="ProfitPIPS[]"/></td><td><a class="text-danger fa fa-window-close fa-2x" style="margin-left:0px;color:white" id="Add_row_id" onclick="DeleteRow(' + i + ')"></a></td></tr>';
+            //$('#myTable tr:last').after('<tr>...</tr><tr>...</tr>');
+            $('#takeProfit_tbody').append(AddRow);
+        }
+    });
+
+    function DeleteRow(id) {
+        if (i > 0) {
+            i = i - 1;
+            $('#' + id).remove();
+        }
+    }
+
+    var currencyDropdownValue = "";
+    $("#currencyDropdown").click(function () {
+        currencyDropdownValue = $("#currencyDropdown").val();
+    });
+
+    var IdeaType_Value = "";
+    $("#Current_price").click(function () {
+        IdeaType_Value = $("#Current_price").val();
+    });
+
+    var IdeaType_dropdown = "";
+    $("#IdeaType_dropdown").click(function () {
+        IdeaType_dropdown = $("#IdeaType_dropdown").val();
+    });
+
+    //$("#IdeaType_dropdown").change(function () {
+    //    IdeaType_dropdownValue = $("#IdeaType_dropdown").val();
+    //});
+
+
+
+
+    function ClearAndAddTableRow() {
+        $("#takeProfit_tbody tr").remove();
+        $("#stoploss_body tr").remove();
+        var AddRow = '<tr id=' + i + '><td><span class="control-label required"></span><input required type="number" onchange="GetProfitPIPS(' + i + ')" id="tpRow_' + i + '" step="any" class="form-control" name="TP[]" /><td><span class="control-label required"></span><input required type="number" id="tkpips_' + i + '" step="any" readonly class="form-control required" name="ProfitPIPS[]"/></td><td></td></tr>';
+        //$('#myTable tr:last').after('<tr>...</tr><tr>...</tr>');
+        $('#takeProfit_tbody').append(AddRow);
+
+        $('#stoploss_body').append('<tr><td><span class="control-label required"></span><input onchange="GetLosePIPS()" id="stoplose_1" required  type="number" step="any"  class="form-control" name="SL"/></td><td><span class="control-label required"></span><input required id="losePips" type="number" step="any" class="form-control"   name="StopPIPS"/></td></tr>');
+    }
+
+
+    $("#Staff_image").change(function () {
+
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ChartImage',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Charts/" + response.ImageURL);
+
+            });
+    });
+
+    function GetProfitPIPS(id) {
+        debugger
+        var ideatype = $("#IdeaType_dropdown").val();
+        var tpValue = $("#tpRow_" + id).val();
+        tpValue = Math.floor(parseFloat(tpValue));
+        var PreviousTpValue = 0;
+        if (id > 1) {
+            var preId = id - 1;
+            PreviousTpValue = $("#tpRow_" + preId).val();
+        }
+        var currentPriceVal = $("#CurrncyPrice").val();
+        currentPriceVal =Math.floor(parseFloat(currentPriceVal));
+        var lablename = $("#type_lbl").text();
+        if (ideatype == 3 || ideatype == 4 || ideatype == 5 || ideatype == 6) {
+            currentPriceVal = $("#Current_price").val();
+        }
+        var currencyName = $("#currencyDropdown option:selected").text();
+        var lastthree = currencyName.substr(currencyName.length - 3);
+
+        if (currentPriceVal != "") {
+            if (currentPriceVal != null && currentPriceVal != "") {
+
+                if (ideatype == 2 || ideatype == 4 || ideatype == 5) {
+                    if (PreviousTpValue > 0 && PreviousTpValue <= tpValue) {
+                        alert("TP value must be less than previous TP value");
+                        $("#tpRow_" + id).val('');
+                    }
+                    else {
+                        if (parseFloat(tpValue) > parseFloat(currentPriceVal)) {
+
+                            alert("TP must be less than " + " " + lablename);
+                            $("#tpRow_" + id).val('');
+                            $("#tkpips_" + id).val('');
+                        }
+                        else {
+                                var countPips = currentPriceVal - tpValue;
+                                $("#tkpips_" + id).val(countPips);
+                                $("#tpRow_" + id).val(tpValue);
+                        }
+                    }
+                }
+                else if (ideatype == 1 || ideatype == 3 || ideatype == 6) {
+                    if (PreviousTpValue >= tpValue) {
+                        alert("TP value must be greater than previous TP value");
+                        $("#tpRow_" + id).val('');
+
+                    }
+                    else {
+                        if (parseFloat(tpValue) < parseFloat(currentPriceVal)) {
+                            alert("TP must be greater than " + " " + lablename);
+                            $("#tkpips_" + id).val('');
+                            $("#tpRow_" + id).val('');
+                        }
+                        else {
+                                var countPips = tpValue - currentPriceVal;
+                                $("#tkpips_" + id).val(Math.round(countPips));
+                                $("#tpRow_" + id).val(tpValue);
+                        }
+                    }
+
+                }
+                else {
+                    alert("Please select idea type first.");
+                    $("#tkpips_" + id).val('');
+                    $("#tpRow_" + id).val('');
+                }
+            }
+            else {
+                alert("Please select currency pair first.");
+                $("#tkpips_" + id).val('');
+                $("#tpRow_" + id).val('');
+            }
+        }
+        else {
+            alert($("#type_lbl").text() + " " + "can't be null.");
+            $("#tkpips_" + id).val('');
+            $("#tpRow_" + id).val('');
+        }
+    }
+
+
+    function GetLosePIPS() {
+        debugger;
+        var ideatype = $("#IdeaType_dropdown").val();
+        var slValue = $("#stoplose_1").val();
+        slValue = Math.floor(parseFloat(slValue));
+
+        var currentPriceVal = $("#Current_price1").val();
+        currentPriceVal = Math.floor(parseFloat(currentPriceVal));
+        var lablename = $("#type_lbl").text();
+        if (ideatype == 3 || ideatype == 4 || ideatype == 5 || ideatype == 6) {
+            currentPriceVal = $("#Current_price").val();
+        }
+
+        if (currentPriceVal != null && currentPriceVal != "") {
+            if (ideatype == 2 || ideatype == 4 || ideatype == 5) {
+                if (slValue < currentPriceVal) {
+                    alert("SL must be greater then " + " " + lablename);
+                    $("#stoplose_1").val('');
+                    $("#losePips").val('');
+                }
+                else {
+                    
+                        var countPips = currentPriceVal - slValue;
+                        $("#losePips").val(countPips);
+                        $("#stoplose_1").val(slValue);
+                }
+            }
+            else if (ideatype == 1 || ideatype == 3 || ideatype == 6) {
+                if (slValue > currentPriceVal) {
+                    alert("SL must be less then " + " " + lablename);
+                    $("#stoplose_1").val('');
+                    $("#losePips").val('');
+
+                }
+                else {
+                        var countPips = slValue - currentPriceVal;
+                        $("#losePips").val(countPips);
+                        $("#stoplose_1").val(slValue);
+                }
+            }
+            else {
+                alert("Please select idea type first.");
+                $("#stoplose_1").val('');
+                $("#losePips").val('');
+            }
+        }
+        else {
+
+            alert("Please select currency pair first.");
+            $("#losePips").val('');
+        }
+    }
+
+
+    $("#IdeaType_dropdown").change(function () {
+
+        var typeval = $("#IdeaType_dropdown").val();
+
+        var result = false;
+        var one = $("#tpRow_1").val();
+        var lossOne = $("#stoplose_1").val();
+
+        if (IdeaType_dropdown != "" && one != "" || lossOne != "" || i > 1) {
+
+            result = confirm("Are you sure, you want to change idea type?");
+        }
+        else {
+            result = true;
+        }
+
+        if (result) {
+            ClearAndAddTableRow();
+            if (typeval != "") {
+                $("#type_textbox").show();
+                /*  $("#IdeaType_dropdown").show();*/
+
+                if (typeval == 1) {
+                    $("#type_lbl").text("Buy");
+                    $("#Current_price").attr("readonly", "readonly");
+
+                    currencyPairPrice = $("#Current_price1").val();
+                    $("#CurrncyPrice").val(currencyPairPrice);
+                }
+                else if (typeval == 2) {
+                    $("#type_lbl").text("Sale");
+                    $("#Current_price").attr("readonly", "readonly");
+                    currencyPairPrice = $("#Current_price1").val();
+                    $("#CurrncyPrice").val(currencyPairPrice);
+
+                }
+                else if (typeval == 3) {
+                    $("#type_lbl").text("Buy Limit");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+                }
+                else if (typeval == 4) {
+                    $("#type_lbl").text("Sell Limit");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+                }
+                else if (typeval == 5) {
+                    $("#type_lbl").text("Sell Stop");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+
+                }
+                else if (typeval == 6) {
+
+                    $("#type_lbl").text("Buy Stop");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+                }
+            }
+            else {
+                $("#type_textbox").hide();
+                /* $("#IdeaType_dropdown").hide();*/
+            }
+
+        }
+        else {
+            if (IdeaType_dropdown != "") {
+                $("#IdeaType_dropdown").val(IdeaType_dropdown);
+            }
+        }
+    });
+
+
+
+
+    $("#Current_price").focusout(function () {
+
+        // JPY value Validation
+        var currPValue = $("#Current_price").val();
+        var pair = $("#currencyDropdown option:selected").text();
+        var ideatype = $("#IdeaType_dropdown").val();
+        var currencyValue = 0;
+        if (pair != "" && ideatype != "1" && ideatype != "2") {
+                currencyValue = Math.floor(parseFloat(currPValue));
+                $("#Current_price").val(currencyValue);
+        }
+        // end JPY value validation
+
+
+
+        var Current_price1 = $("#Current_price1").val();
+        var limit = $("#Current_price").val();
+        var lablename = $("#type_lbl").text();
+
+        var result = false;
+        var one = $("#tpRow_1").val();
+        var lossOne = $("#stoplose_1").val();
+        var yesNo = false;
+        if (IdeaType_dropdown != "" && one != "" || lossOne != "" || i > 1) {
+            yesNo = true;
+            result = confirm("Are you sure,you want to change " + lablename + " value ?");
+        }
+        else {
+            result = false;
+        }
+        if (ideatype != 1 && ideatype != 2) {
+            if (result) {
+                ClearAndAddTableRow();
+
+                var Current_price1 = $("#Current_price1").val();
+
+                if (Current_price1 != "" && Current_price1 != "0") {
+                    if (ideatype == "3" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                        alert("Buy limit must be less than current price.");
+                        $("#Current_price").val('');
+                    }
+                    else {
+
+                        $("#CurrncyPrice").val($("#Current_price").val());
+                    }
+                    if (ideatype == "4" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                        alert("Sell limit must be greater than current price.");
+                        $("#Current_price").val('');
+                    }
+                    else {
+                        $("#CurrncyPrice").val($("#Current_price").val());
+                    }
+                    if (ideatype == "5" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                        alert("Sell stop must be less than current price.");
+                        $("#Current_price").val('');
+                    }
+                    if (ideatype == "6" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                        alert("Buy stop must be greater than current price.");
+                        $("#Current_price").val('');
+                    }
+                    else {
+                        $("#CurrncyPrice").val($("#Current_price").val());
+                    }
+                }
+                else {
+
+                    if (limit != "") {
+                        alert("Please select currency pair first.");
+                        $("#Current_price").val('');
+                    }
+                }
+            }
+            else {
+                if (result == false && yesNo == true && IdeaType_Value != "") {
+                    var curr = $("#Current_price").val(IdeaType_Value);
+                    $("#CurrncyPrice").val(curr);
+                }
+                else {
+                    var Current_price1 = $("#Current_price1").val();
+
+                    if (Current_price1 != "" && Current_price1 != "0") {
+                        if (ideatype == "3" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                            alert("Buy limit must be less than current price.");
+                            $("#Current_price").val('');
+                        }
+                        else {
+                            $("#CurrncyPrice").val($("#Current_price").val());
+                        }
+                        if (ideatype == "4" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                            alert("Sell limit must be greater than current price.");
+                            $("#Current_price").val('');
+                        }
+                        else {
+                            $("#CurrncyPrice").val($("#Current_price").val());
+                        }
+                        if (ideatype == "5" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                            alert("Sell stop must be less than current price.");
+                            $("#Current_price").val('');
+                        }
+                        if (ideatype == "6" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                            alert("Buy stop must be greater than current price.");
+                            $("#Current_price").val('');
+                        }
+                        else {
+                            $("#CurrncyPrice").val($("#Current_price").val());
+                        }
+                    }
+                    else {
+
+                        if (limit != "") {
+                            alert("Please select currency pair first.");
+                            $("#Current_price").val('');
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    $("#Current_price").change(function () {
+        debugger;
+        var currPValue = $("#Current_price").val();
+        var pair = $("#currencyDropdown option:selected").text();
+        var ideatype = $("#IdeaType_dropdown").val();
+        var currencyValue = 0;
+        if (pair != "" && ideatype != "1" && ideatype != "2") {
+                currencyValue =Math.floor(parseFloat(currPValue));
+                $("#Current_price").val(currencyValue);
+        }
+    });
+
+    // on change currency get current price
+    $("#currencyDropdown").change(function () {
+        debugger;
+        var result = false;
+        var one = $("#tpRow_1").val();
+        var lossOne = $("#stoplose_1").val();
+        var currencyValue = 0;
+        if (currencyDropdownValue != "" && one != "" || lossOne != "" || i > 1) {
+
+            result = confirm("Are you sure, want to change currency pair?");
+        }
+        else {
+            result = true;
+        }
+
+        if (result) {
+            // call default table of take profit and stop loss
+            ClearAndAddTableRow();
+            // end call default table of take profit and stop loss
+
+            var currencyval = $("#currencyDropdown").val();
+            var pair = $("#currencyDropdown option:selected").text();
+            if (pair != "" && currencyval != "") {
+
+                $("#Current_price").show();
+                $.ajax({
+                    type: "GET",
+                    url: "https://api.finage.co.uk/last/index/" + pair + "?" + "apikey=API_KEY38T8YULAK4WQQ163ACWCHL6BSND4T4TT",
+                    // data: { TradingSignalId: tradingid },
+                    dataType: "json",
+                    success: function (data) {
+                        debugger;
+                        if (data != "") {
+
+                            currencyValue = Math.floor(parseFloat(data.price));
+                            $("#Current_price1").val(currencyValue);
+                            var typeValue = $("#IdeaType_dropdown").val();
+                            if (typeValue == "1" || typeValue == "2") {
+                                $("#Current_price").val(currencyValue);
+                                $("#Current_price").attr("readonly", "readonly");
+                                $("#CurrncyPrice").val(currencyValue);
+                            }
+                        }
+                    },
+                });
+            }
+            else {
+                $("#Current_price1").val('');
+                $("#Current_price").val('');
+                $("#CurrncyPrice").val('');
+            }
+        }
+        else {
+            $("#currencyDropdown").val(currencyDropdownValue);
+        }
+    });
+
+    //end
+
+    // after a while get currency current price
+    function FetchCurrencyData() {
+        var currencyval = $("#currencyDropdown").val();
+        var pair = $("#currencyDropdown option:selected").text();
+        var currencyValue = 0;
+        if (pair != "" && currencyval != "") {
+            $("#Current_price").show();
+            $.ajax({
+                type: "GET",
+                url: "https://api.finage.co.uk/last/index/" + pair + "?" + "apikey=API_KEY38T8YULAK4WQQ163ACWCHL6BSND4T4TT",
+                // data: { TradingSignalId: tradingid },header
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    currencyValue = Math.floor(parseFloat(data.price));
+                    $("#Current_price1").val(currencyValue);
+                    var typeValue = $("#IdeaType_dropdown").val();
+                    if (typeValue == "1" || typeValue == "2") {
+                        $("#Current_price").val(currencyValue);
+                        $("#Current_price").attr("readonly", "readonly");
+                    }
+                },
+            });
+        }
+        else {
+            $("#Current_price1").val('');
+        }
+    }
+    setInterval(FetchCurrencyData, 1000);
+//end
+
+</script>
+

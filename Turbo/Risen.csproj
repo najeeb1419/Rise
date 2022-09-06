@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19073E8D-DF40-4A69-86FA-E6C09CF1CF60}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Risen</RootNamespace>
+    <AssemblyName>Risen</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44301</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Extensions.Microsoft.DependencyInjection, Version=8.0.0.0, Culture=neutral, PublicKeyToken=e767ac9c89543656, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.Extensions.Microsoft.DependencyInjection.8.1.1\lib\netstandard2.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.3\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.3\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=3.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.3.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WebSockets, Version=0.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WebSockets.0.2.3.1\lib\net45\Microsoft.WebSockets.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz, Version=3.4.0.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.3.4.0\lib\net472\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.6.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=4.3.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.4.3.2\lib\net46\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Channels, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Channels.4.7.0\lib\netstandard2.0\System.Threading.Channels.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Websocket.Client, Version=4.4.0.0, Culture=neutral, PublicKeyToken=ae648c6d12f59b1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Websocket.Client.4.4.43\lib\netstandard2.0\Websocket.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Contaxt\RisenContext.cs" />
+    <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
+    <Compile Include="Controllers\DesignationController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IdeasController.cs" />
+    <Compile Include="Controllers\RisenAPIController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202205120852062_initial1.cs" />
+    <Compile Include="Migrations\202205120852062_initial1.designer.cs">
+      <DependentUpon>202205120852062_initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AllowNotification.cs" />
+    <Compile Include="Models\CurrencyList.cs" />
+    <Compile Include="Models\EmployeePIPS.cs" />
+    <Compile Include="Models\Jobclass.cs" />
+    <Compile Include="Models\JobScheduler.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\StopLose.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="ViewModel\AllowNotificationViewModel.cs" />
+    <Compile Include="ViewModel\ApiDTO.cs" />
+    <Compile Include="ViewModel\currencyJson.cs" />
+    <Compile Include="ViewModel\CustomerDTO.cs" />
+    <Compile Include="Models\CompanyEmployee.cs" />
+    <Compile Include="Models\ConfirmationCode.cs" />
+    <Compile Include="Models\Currencies.cs" />
+    <Compile Include="Models\Designation.cs" />
+    <Compile Include="Models\TakeProfit.cs" />
+    <Compile Include="Models\Privilege.cs" />
+    <Compile Include="Models\RegisterComapany.cs" />
+    <Compile Include="Models\RegisterCompanyActivation.cs" />
+    <Compile Include="Models\TradingSignals.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\AddCustomerApi.cs" />
+    <Compile Include="ViewModel\CompanyEmployeesApi.cs" />
+    <Compile Include="ViewModel\CustomerDetails.cs" />
+    <Compile Include="ViewModel\DashboardVM.cs" />
+    <Compile Include="ViewModel\DataTableViewModel.cs" />
+    <Compile Include="ViewModel\EducatorsListViewModel.cs" />
+    <Compile Include="ViewModel\EducatorsViewModel.cs" />
+    <Compile Include="ViewModel\EmployeePIPSViewModel.cs" />
+    <Compile Include="ViewModel\NotificationAPiViewModel.cs" />
+    <Compile Include="ViewModel\NotificationViewModel.cs" />
+    <Compile Include="ViewModel\PastResultList.cs" />
+    <Compile Include="ViewModel\PastResultViewModel.cs" />
+    <Compile Include="ViewModel\PriviligesViewModel.cs" />
+    <Compile Include="ViewModel\ReportList.cs" />
+    <Compile Include="ViewModel\ResponseAPI.cs" />
+    <Compile Include="ViewModel\StopLoseViewModel.cs" />
+    <Compile Include="ViewModel\TakeProfitViewModel.cs" />
+    <Compile Include="ViewModel\RegisterViewModel.cs" />
+    <Compile Include="ViewModel\TradingDTO.cs" />
+    <Compile Include="ViewModel\TradingReportObjectViewModel.cs" />
+    <Compile Include="ViewModel\TradingReportViewModel.cs" />
+    <Compile Include="ViewModel\TradingSignalsDto.cs" />
+    <Compile Include="ViewModel\TradingSignalViewModel.cs" />
+    <Compile Include="ViewModel\UserDTO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="css Jq link\css\animate.css" />
+    <Content Include="css Jq link\css\baguetteBox.min.css" />
+    <Content Include="css Jq link\css\bootstrap-grid.css" />
+    <Content Include="css Jq link\css\bootstrap-grid.min.css" />
+    <Content Include="css Jq link\css\bootstrap-reboot.css" />
+    <Content Include="css Jq link\css\bootstrap-reboot.min.css" />
+    <Content Include="css Jq link\css\bootstrap-select.css" />
+    <Content Include="css Jq link\css\bootstrap.css" />
+    <Content Include="css Jq link\css\bootstrap.min.css" />
+    <Content Include="css Jq link\css\calendar.css" />
+    <Content Include="css Jq link\css\calendar.min.css" />
+    <Content Include="css Jq link\css\color_2.css" />
+    <Content Include="css Jq link\css\custom.css" />
+    <Content Include="css Jq link\css\flaticon.css" />
+    <Content Include="css Jq link\css\font-awesome.css" />
+    <Content Include="css Jq link\css\font-awesome.min.css" />
+    <Content Include="css Jq link\css\jquery.fancybox.css" />
+    <Content Include="css Jq link\css\jquery.fancybox.min.css" />
+    <Content Include="css Jq link\css\owl.carousel.css" />
+    <Content Include="css Jq link\css\perfect-scrollbar.css" />
+    <Content Include="css Jq link\css\responsive.css" />
+    <Content Include="css Jq link\css\semantic.min.css" />
+    <Content Include="css Jq link\css\style.css" />
+    <Content Include="css Jq link\dashboard_2.html" />
+    <Content Include="css Jq link\fonts\flaticon.css" />
+    <Content Include="css Jq link\fonts\flaticon.html" />
+    <Content Include="css Jq link\fonts\Flaticon.svg" />
+    <Content Include="css Jq link\fonts\fontawesome-webfont.svg" />
+    <Content Include="css Jq link\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="css Jq link\images\landing_page\stack-of-three-black-hot-stones-spa-salon-vector-16122479.jpg" />
+    <Content Include="css Jq link\images\layout_img\american-express.png" />
+    <Content Include="css Jq link\images\layout_img\bg1.png" />
+    <Content Include="css Jq link\images\layout_img\error.png" />
+    <Content Include="css Jq link\images\layout_img\g1.jpg" />
+    <Content Include="css Jq link\images\layout_img\g10.jpg" />
+    <Content Include="css Jq link\images\layout_img\g11.jpg" />
+    <Content Include="css Jq link\images\layout_img\g12.jpg" />
+    <Content Include="css Jq link\images\layout_img\g13.jpg" />
+    <Content Include="css Jq link\images\layout_img\g14.jpg" />
+    <Content Include="css Jq link\images\layout_img\g15.jpg" />
+    <Content Include="css Jq link\images\layout_img\g16.jpg" />
+    <Content Include="css Jq link\images\layout_img\g2.jpg" />
+    <Content Include="css Jq link\images\layout_img\g3.jpg" />
+    <Content Include="css Jq link\images\layout_img\g4.jpg" />
+    <Content Include="css Jq link\images\layout_img\g5.jpg" />
+    <Content Include="css Jq link\images\layout_img\g6.jpg" />
+    <Content Include="css Jq link\images\layout_img\g7.jpg" />
+    <Content Include="css Jq link\images\layout_img\g8.jpg" />
+    <Content Include="css Jq link\images\layout_img\g9.jpg" />
+    <Content Include="css Jq link\images\layout_img\login_image.jpg" />
+    <Content Include="css Jq link\images\layout_img\map_icon.png" />
+    <Content Include="css Jq link\images\layout_img\mastercard.png" />
+    <Content Include="css Jq link\images\layout_img\msg1.png" />
+    <Content Include="css Jq link\images\layout_img\msg2.png" />
+    <Content Include="css Jq link\images\layout_img\msg3.png" />
+    <Content Include="css Jq link\images\layout_img\msg4.png" />
+    <Content Include="css Jq link\images\layout_img\msg5.png" />
+    <Content Include="css Jq link\images\layout_img\pattern.png" />
+    <Content Include="css Jq link\images\layout_img\pattern_h.png" />
+    <Content Include="css Jq link\images\layout_img\paypal.png" />
+    <Content Include="css Jq link\images\layout_img\user_img.jpg" />
+    <Content Include="css Jq link\images\layout_img\visa.png" />
+    <Content Include="css Jq link\images\logo\izlatechnologies.png" />
+    <Content Include="css Jq link\images\logo\logo.png" />
+    <Content Include="css Jq link\images\logo\logo_black.png" />
+    <Content Include="css Jq link\images\logo\logo_icon.png" />
+    <Content Include="css Jq link\js\analyser.js" />
+    <Content Include="css Jq link\js\animate.js" />
+    <Content Include="css Jq link\js\bootstrap-select.js" />
+    <Content Include="css Jq link\js\bootstrap.bundle.js" />
+    <Content Include="css Jq link\js\bootstrap.bundle.min.js" />
+    <Content Include="css Jq link\js\bootstrap.js" />
+    <Content Include="css Jq link\js\bootstrap.min.js" />
+    <Content Include="css Jq link\js\calendar.js" />
+    <Content Include="css Jq link\js\calendar.min.js" />
+    <Content Include="css Jq link\js\Chart.bundle.js" />
+    <Content Include="css Jq link\js\Chart.bundle.min.js" />
+    <Content Include="css Jq link\js\Chart.js" />
+    <Content Include="css Jq link\js\Chart.min.js" />
+    <Content Include="css Jq link\js\chart_custom_style1.js" />
+    <Content Include="css Jq link\js\chart_custom_style2.js" />
+    <Content Include="css Jq link\js\custom.js" />
+    <Content Include="css Jq link\js\custom_chart.js" />
+    <Content Include="css Jq link\js\jquery-3.3.1.min.js" />
+    <Content Include="css Jq link\js\jquery.fancybox.js" />
+    <Content Include="css Jq link\js\jquery.fancybox.min.js" />
+    <Content Include="css Jq link\js\jquery.min.js" />
+    <Content Include="css Jq link\js\owl.carousel.js" />
+    <Content Include="css Jq link\js\perfect-scrollbar.min.js" />
+    <Content Include="css Jq link\js\popper.min.js" />
+    <Content Include="css Jq link\js\semantic.min.js" />
+    <Content Include="css Jq link\js\settings.html" />
+    <Content Include="css Jq link\js\utils.js" />
+    <Content Include="documentation\css\32px.png" />
+    <Content Include="documentation\css\bootstrap.min.css" />
+    <Content Include="documentation\css\style.css" />
+    <Content Include="documentation\css\throbber.gif" />
+    <Content Include="documentation\css\tree-viewer.css" />
+    <Content Include="documentation\img\favicon.ico" />
+    <Content Include="documentation\img\logo.png" />
+    <Content Include="documentation\js\bootstrap.min.js" />
+    <Content Include="documentation\js\jquery-3.1.0.min.js" />
+    <Content Include="documentation\js\jstree.active.js" />
+    <Content Include="documentation\js\jstree.min.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Images\chart.png" />
+    <Content Include="Images\Charts\18c6d618-2a2e-442a-a84c-a617800ad9a3.jpg" />
+    <Content Include="Images\Charts\463968cf-2cc8-4966-b0a4-5d19e43e45f6.jpg" />
+    <Content Include="Images\Charts\67fd470c-3014-4523-a738-0342b8e77844.jpg" />
+    <Content Include="Images\Charts\931f1a99-7981-4344-84eb-47567f3d279a.jpg" />
+    <Content Include="Images\Charts\de05912f-6fea-4984-9f91-a9d62e4eb013.jpg" />
+    <Content Include="Images\combination chart.png" />
+    <Content Include="Images\Currency\10dab25e-a46e-4afa-98e1-16456bcf21da.jpg" />
+    <Content Include="Images\Currency\117ccd7b-2cc7-4f9b-b48f-a0a22b6a8efb.png" />
+    <Content Include="Images\Currency\1651238b-168b-4236-aea4-a48be2fa4889.png" />
+    <Content Include="Images\Currency\1a375021-6a15-43cb-9bc6-88cdbc8f783e.png" />
+    <Content Include="Images\Currency\258648ef-2351-403f-be7d-1d67b61ed9b8.jpg" />
+    <Content Include="Images\Currency\466a9203-f7b6-4394-be05-878948bb67da.png" />
+    <Content Include="Images\Currency\530df28a-b0a4-4c9c-9155-247f48329bab.png" />
+    <Content Include="Images\Currency\5701417f-d2c4-430d-89a4-0eabe772187b.png" />
+    <Content Include="Images\Currency\5e2deb61-8efa-4ef2-b685-82dd076c3c30.jpg" />
+    <Content Include="Images\Currency\5eed6c7d-f494-4942-aab3-5395d2fdab47.jpg" />
+    <Content Include="Images\Currency\604112b6-c232-4a12-ba63-1032b1f7d623.png" />
+    <Content Include="Images\Currency\7289d570-2ef4-4edd-8dca-a5ea03bdb8c6.jpg" />
+    <Content Include="Images\Currency\744492e7-49d9-4b30-9dc4-fe3817323084.jpg" />
+    <Content Include="Images\Currency\7a13a96f-4313-482c-b1f4-5bf75981cb72.png" />
+    <Content Include="Images\Currency\7d8cd5c6-c6a6-4066-9377-d89d0a82d980.jpg" />
+    <Content Include="Images\Currency\871fc83c-d1d6-4fb2-83c1-e6d3c4b69274.png" />
+    <Content Include="Images\Currency\8e6adf62-0df0-4345-bed6-6fcd043c4f23.png" />
+    <Content Include="Images\Currency\943575d2-17d8-48b0-810d-b59343ce82ad.jpg" />
+    <Content Include="Images\Currency\986534f5-8710-46b6-959b-5d66b96ae2e3.jpg" />
+    <Content Include="Images\Currency\9e917dde-e76f-42fe-97a5-0d7524024fa8.png" />
+    <Content Include="Images\Currency\aebd5162-71eb-469a-a9cf-067e9efe5822.jpg" />
+    <Content Include="Images\Currency\aee99bab-a857-44ec-90f4-491961950024.png" />
+    <Content Include="Images\Currency\b70a4e3d-bccb-49ca-b78f-11dacec7dcf8.png" />
+    <Content Include="Images\Currency\b7359d93-ba0d-46f1-8f60-56219257d585.jpg" />
+    <Content Include="Images\Currency\bb75ce15-0cf6-42d5-8bbe-c1f0ef2f4b54.jpg" />
+    <Content Include="Images\Currency\bfdf488b-4120-4785-8eee-84d1abed494d.png" />
+    <Content Include="Images\Currency\c054e18c-9ca8-41f7-ab18-f3c4eceb6325.jpg" />
+    <Content Include="Images\Currency\c80f583f-90e4-4243-8a83-327daee91b54.jpg" />
+    <Content Include="Images\Currency\c9a758ca-fb39-4da3-a4d8-d00c7eb9dd8e.jpg" />
+    <Content Include="Images\Currency\cd904e48-204d-41eb-bc33-804554ced9aa.jpg" />
+    <Content Include="Images\Currency\d8b0a565-ba66-4739-b4a3-b3116b214b9c.jpg" />
+    <Content Include="Images\Currency\eb3228b4-223b-4b02-bf58-febb7c5171df.jpg" />
+    <Content Include="Images\Currency\edcb3a2e-f120-4991-aad4-fe79e3b15170.jpg" />
+    <Content Include="Images\Currency\ee6ec9a0-f278-4794-b06c-1c1b6e2a1faa.png" />
+    <Content Include="Images\Currency\f61e4121-46f1-48ca-a1e5-14909bb77d51.jpg" />
+    <Content Include="Images\Currency\f7e240bd-19dc-4f19-8825-3befb291f504.jpg" />
+    <Content Include="Images\Currency\f8642995-04c9-4b3e-98b4-560534346693.png" />
+    <Content Include="Images\Employee\048ff992-4944-4321-9d17-09cc7437e0b3.jpg" />
+    <Content Include="Images\Employee\1c6fd022-74a9-42c5-aa12-abcaf87d32ac.jpg" />
+    <Content Include="Images\Employee\27eedb28-9b3d-4713-9d68-756196baab6d.jpg" />
+    <Content Include="Images\Employee\336b1690-acb8-4ece-a1f8-a441877f73ee.jpg" />
+    <Content Include="Images\Employee\3c8c3d64-5057-43e9-8b60-5a992734e398.png" />
+    <Content Include="Images\Employee\3f4a66b4-036c-4e67-815d-581968b98361.jpg" />
+    <Content Include="Images\Employee\40a4d5d4-cdfa-406c-ba39-a844d136eba8.jpg" />
+    <Content Include="Images\Employee\4500676d-4357-4275-a8d2-759e8deebdf7.jpg" />
+    <Content Include="Images\Employee\4a012fe4-55e2-4784-ab8f-dd7ba318cd4f.jpg" />
+    <Content Include="Images\Employee\52cc2c0b-ee27-44fd-91af-bb7878926947.jpg" />
+    <Content Include="Images\Employee\5e4ddb84-fcd6-4e4b-b321-3cbcf7f43c22.jpg" />
+    <Content Include="Images\Employee\62f4be87-6244-40c1-86c4-60c2dfe00d03.jpg" />
+    <Content Include="Images\Employee\6835fc8c-55fc-4340-b1d5-adc77dcf6783.jpg" />
+    <Content Include="Images\Employee\6a73dfb8-5c53-497b-bd9a-080afbf855c1.jpg" />
+    <Content Include="Images\Employee\7108e596-3096-4b9a-81ba-6d73a348d8b5.png" />
+    <Content Include="Images\Employee\81df9e64-008b-41c8-81a5-a4200789d354.png" />
+    <Content Include="Images\Employee\839a126d-2bba-4f0f-87ed-355a5682be4f.png" />
+    <Content Include="Images\Employee\839bd405-4b46-4db9-bcab-54a8d87d538d.jpg" />
+    <Content Include="Images\Employee\9a8d13e5-d34f-4b62-b333-72b14ce020e6.png" />
+    <Content Include="Images\Employee\9df07c5d-f6fd-46b1-80b5-ce8ae75b1093.jpg" />
+    <Content Include="Images\Employee\a0b59610-84e3-4198-b2f1-5be26b176441.jpg" />
+    <Content Include="Images\Employee\b05adc07-8f32-49fd-abbe-3fb47b1f3c60.jpg" />
+    <Content Include="Images\Employee\b163d13d-d10d-4e33-95be-11a7ec237fba.jpg" />
+    <Content Include="Images\Employee\b4577a6d-ae0f-4b51-9b65-d3edb572fc86.jpg" />
+    <Content Include="Images\Employee\bd114598-d75e-40a2-8167-45c579bab715.jpg" />
+    <Content Include="Images\Employee\c327d8f5-5d54-473a-92f7-f701bf7034d4.jpg" />
+    <Content Include="Images\Employee\d0090498-7ba1-47ba-a0d0-62f42603f946.png" />
+    <Content Include="Images\Employee\da6422f4-543d-457d-af33-01d07421f6cc.jpg" />
+    <Content Include="Images\Employee\e10c0790-818e-4fd2-91b4-58ec21e225cd.jpg" />
+    <Content Include="Images\Employee\f4c73adf-01f9-415a-bd57-983edac43a8c.png" />
+    <Content Include="Images\Employee\fc85c220-dccd-41c9-ad6b-6d4d092e9622.jpg" />
+    <Content Include="Images\Employee\fe4d9f83-c775-4297-aa9d-3cabef2fe7b1.jpg" />
+    <Content Include="Images\favicon.png" />
+    <Content Include="Images\FhHRx.gif" />
+    <Content Include="Images\istockphoto-1320895190-612x612.jpg" />
+    <Content Include="Images\login_image.jpg" />
+    <Content Include="Images\Logo.png" />
+    <Content Include="Images\rm21-background-tong-058.jpg" />
+    <Content Include="Images\select_image.png" />
+    <Content Include="Images\Spinner-2.gif" />
+    <Content Include="Images\Trading\20413a48-45bd-4786-8aa1-a51d1efb652b.jpg" />
+    <Content Include="Images\Trading\2e964fd1-425c-4af0-ab72-03ebf5f55757.jpg" />
+    <Content Include="Images\Trading\3b1e259e-cb96-4397-86d6-43d616f78878.jpg" />
+    <Content Include="Images\Trading\4ae2492d-f8fa-4dba-86d9-6b520259f2b3.jpg" />
+    <Content Include="Images\Trading\ab3d1e09-8cc8-4fe1-b8d2-43ec9ea08a3e.jpg" />
+    <Content Include="Images\Trading\Logo.png.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="css Jq link\css\bootstrap-grid.css.map" />
+    <Content Include="css Jq link\css\bootstrap-grid.min.css.map" />
+    <Content Include="css Jq link\css\bootstrap-reboot.css.map" />
+    <Content Include="css Jq link\css\bootstrap-reboot.min.css.map" />
+    <Content Include="css Jq link\css\bootstrap.css.map" />
+    <Content Include="css Jq link\css\bootstrap.min.css.map" />
+    <Content Include="css Jq link\fonts\Flaticon.eot" />
+    <Content Include="css Jq link\fonts\Flaticon.ttf" />
+    <Content Include="css Jq link\fonts\Flaticon.woff" />
+    <Content Include="css Jq link\fonts\fontawesome-webfont.eot" />
+    <Content Include="css Jq link\fonts\fontawesome-webfont.ttf" />
+    <Content Include="css Jq link\fonts\fontawesome-webfont.woff" />
+    <Content Include="css Jq link\fonts\fontawesome-webfont.woff2" />
+    <Content Include="css Jq link\fonts\FontAwesome.otf" />
+    <Content Include="css Jq link\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="css Jq link\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="css Jq link\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="css Jq link\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="css Jq link\fonts\_flaticon.scss" />
+    <Content Include="css Jq link\images\.DS_Store" />
+    <Content Include="css Jq link\images\layout_img\.DS_Store" />
+    <Content Include="css Jq link\js\bootstrap.bundle.js.map" />
+    <Content Include="css Jq link\js\bootstrap.bundle.min.js.map" />
+    <Content Include="css Jq link\js\bootstrap.js.map" />
+    <Content Include="css Jq link\js\bootstrap.min.js.map" />
+    <Content Include="libman.json" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.3.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\SweelAlert.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_CustomLayout.cshtml" />
+    <Content Include="Views\Home\Dashbaord.cshtml" />
+    <Content Include="Views\Ideas\TradingSignalView.cshtml" />
+    <Content Include="Views\Ideas\EditTradingSignal.cshtml" />
+    <Content Include="Views\Authentication\Login.cshtml" />
+    <Content Include="Views\Authentication\Logout.cshtml" />
+    <Content Include="Views\Employee\EditEmployee.cshtml" />
+    <Content Include="Views\Employee\EditStaff.cshtml" />
+    <Content Include="Views\Employee\EmployeeView.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\AllUsers.cshtml" />
+    <Content Include="Views\Currency\CurrencyView.cshtml" />
+    <Content Include="Views\Ideas\TradingDetail.cshtml" />
+    <Content Include="Views\Employee\MyProfile.cshtml" />
+    <Content Include="Views\Employee\EditProfile.cshtml" />
+    <Content Include="Views\Designation\DesignationView.cshtml" />
+    <Content Include="Views\Designation\PreviligesView.cshtml" />
+    <Content Include="Views\Shared\_LifeProCustomLayout.cshtml" />
+    <Content Include="Views\Currency\EditCurrency.cshtml" />
+    <Content Include="Views\Authentication\dummy.cshtml" />
+    <Content Include="Views\Socket\SoketView.cshtml" />
+    <Content Include="Views\Service\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="lib\" />
+    <Folder Include="Views\Api\" />
+    <Folder Include="Views\TurboAPI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202205120852062_initial1.resx">
+      <DependentUpon>202205120852062_initial1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50350</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44301/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

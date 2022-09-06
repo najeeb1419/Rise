@@ -1,0 +1,873 @@
+﻿@model Risen.Models.TradingSignals
+@{
+    ViewBag.Title = "EditTradingSignal";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+
+}
+<style>
+    .col-md-6 {
+        margin-bottom: 10px;
+    }
+
+    .col-md-12 {
+        margin-bottom: 10px;
+    }
+
+    .required:after {
+        content: "*";
+        color: red;
+    }
+</style>
+@using Risen.Models
+
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Update Trade Idea</h2>
+                </div>
+
+            </div>
+        </div>
+        @if (privileges.isStaffView == true && privileges.isStaffUpdate)
+        {
+            <form action="EditTradingSignal" enctype="multipart/form-data" method="post">
+                <div class="card" style="margin-bottom:10px">
+                    <div class="container" style="margin-top:20px; margin-bottom:20px">
+
+                        @if (TempData["msg"] == "empty")
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Please!</strong> fill all necessary fields.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        }
+                        <div class="row mr-2">
+                            <div class="col-md-6">
+                                <label class="control-label required">Type</label>
+                                <select name="Type" id="IdeaType_dropdown" required class="form-control" style="box-shadow: none">
+                                    @if (Model.Type == null || Model.Type == "")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option selected value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+                                    else if (Model.Type == "1")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option selected value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+                                    else if (Model.Type == "2")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option value="1">Buy</option>
+                                        <option selected value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+                                    else if (Model.Type == "3")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option selected value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+                                    else if (Model.Type == "4")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option selected value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+                                    else if (Model.Type == "5")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option selected value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+                                    else if (Model.Type == "6")
+                                    {
+                                        <option value="">--Select type--</option>
+                                        <option value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option selected value="6">Buy stop</option>
+                                    }
+                                    else
+                                    {
+                                        <option selected value="">--Select type--</option>
+                                        <option value="1">Buy</option>
+                                        <option value="2">Sell</option>
+                                        <option value="3">Buy limit</option>
+                                        <option value="4">Sell limit</option>
+                                        <option value="5">Sell stop</option>
+                                        <option value="6">Buy stop</option>
+                                    }
+
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" value="@Model.TradingSignalId" name="TradingSignalId" id="TradingSignalId12" hidden />
+                                <label class="control-label required">Currency Pair</label>
+                                <select name="CurrencyListId" required class="form-control" id="currencyDropdown" style="box-shadow: none">
+                                    <option selected value="@Model.CurrencyListId">@Model.CurrencyList.firstImage</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" id="type_textbox">
+                                @if (Model.Type == "1")
+                                {
+                                    <label class="control-label required" id="type_lbl">Buy</label>
+                                }
+                                else if (Model.Type == "2")
+                                {
+                                    <label class="control-label required" id="type_lbl">Sell</label>
+                                }
+                                else if (Model.Type == "3")
+                                {
+                                    <label class="control-label required" id="type_lbl">Buy limit</label>
+                                }
+                                else if (Model.Type == "4")
+                                {
+                                    <label class="control-label required" id="type_lbl">Sell limit</label>
+                                }
+                                else if (Model.Type == "5")
+                                {
+                                    <label class="control-label required" id="type_lbl">Sell stop</label>
+                                }
+                                else if (Model.Type == "6")
+                                {
+                                    <label class="control-label required" id="type_lbl">Buy stop</label>
+                                }
+                                <input style="box-shadow: none" type="number" step="any" name="Buy" id="Current_price" class="form-control" placeholder="" required value="@Model.Buy" />
+                                <input style="box-shadow: none" type="number" hidden step="any" name="" id="CurrncyPrice" class="form-control" placeholder="" value="@Model.Buy" />
+                                <label style="color:red" id="nullAlert"></label>
+                            </div>
+                            <div class="col-md-6" id="current_price_txt">
+                                <label class="control-label required" id="type_lbl">Current Price</label>
+                                <input style="box-shadow: none" type="number" step="any" name="" readonly id="Current_price1" class="form-control" placeholder="" required value="@Model.Buy" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="control-label ">Remarks</label>
+                                <textarea style="box-shadow: none" type="text" name="Remarks" class="form-control" placeholder="">@Model.Remarks</textarea>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom:10px;">
+                                <label class="control-label">Attachment</label>
+                                <input style="box-shadow: none" type="file" class="form-control" name="" id="Staff_image" />
+                            </div>
+                            @if (Model.Image == null || Model.Image == "")
+                            {
+                                <div class="col-sm-12" style="margin-bottom: 10px; margin-top:30px; justify-content: center; padding-left: 70px; padding-right: 70px">
+                                    <img style="height:250px; width:100%; border:solid gray ;" src="~/Images/chart.png" id="Imag_src" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-12" style="margin-bottom: 10px; margin-top: 30px; justify-content: center; padding-left: 120px; padding-right: 120px ">
+                                    <img style="height:250px; width:100%; border:solid gray ;" src="~/Images/Charts/@Model.Image" id="Imag_src" />
+                                </div>
+                            }
+                            <input type="text" id="staffImage_url123" name="Image" hidden value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="container ">
+                        <div class="row mt-5">
+                            <div class="col-md-6">
+                                <center><h3>Take Profit</h3></center>
+                                <div class="table_section padding_infor_info">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover " id="take_profit_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        TP
+                                                    </th>
+                                                    <th>
+                                                        Points
+                                                    </th>
+                                                    <th style="text-align:right;">
+                                                        <a class="btn btn-sm bg-white fa fa-plus" style="margin-left:0px; color:black" id="Add_row_id"></a>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="takeProfit_tbody" style="background-color:#ede9e9">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <center><h3>Stop Loss</h3></center>
+                                <div class="table_section padding_infor_info">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-danger" id="stoploss_body">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        SL
+                                                    </th>
+                                                    <th>
+                                                        Points
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="stoploss_body" style="background-color:#ede9e9">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (privileges.isStaffUpdate)
+                            {
+                                <div class="col-md-12 mt-2 mb-3 ">
+                                    <input type="submit" value="Save Change" class="btn buttoncolor" />
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <h3>You are not authorized user.</h3>
+        }
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    var k = 0;
+    // document ready call
+    var typeval = $("#IdeaType_dropdown").val();
+
+    var IdeaType_Value = "";
+    $("#Current_price").click(function () {
+        IdeaType_Value = $("#Current_price").val();
+    });
+
+    var IdeaType_dropdown = "";
+    $("#IdeaType_dropdown").click(function () {
+        IdeaType_dropdown = $("#IdeaType_dropdown").val();
+    });
+
+    //$("#IdeaType_dropdown").change(function () {
+    //    IdeaType_dropdownValue = $("#IdeaType_dropdown").val();
+    //});
+
+
+
+
+    function ClearAndAddTableRow() {
+        k = 1;
+        $("#takeProfit_tbody tr").remove();
+        $("#stoploss_body tr").remove();
+        var AddRow = '<tr id=' + k + '><td><span class="control-label required"></span><input required type="number" onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" step="any" class="form-control" name="TP[]" /><td><span class="control-label required"></span><input required type="number" id="tkpips_' + k + '" step="any" readonly class="form-control required" name="ProfitPIPS[]"/></td><td></td></tr>';
+        //$('#myTable tr:last').after('<tr>...</tr><tr>...</tr>');
+        $('#takeProfit_tbody').append(AddRow);
+
+        $('#stoploss_body').append('<tr><td><span class="control-label required"></span><input onchange="GetLosePIPS()" id="stoplose_1" required  type="number" step="any"  class="form-control" name="SL"/></td><td><span class="control-label required"></span><input required id="losePips" type="number" step="any" class="form-control"  name="StopPIPS"/></td></tr>');
+    }
+
+    if (typeval != "") {
+        $("#type_textbox").show();
+        /*  $("#IdeaType_dropdown").show();*/
+
+        if (typeval == 1) {
+            $("#type_lbl").text("Buy");
+            $("#Current_price").attr("readonly", "readonly");
+            var currentPriceVal = $("#Current_price1").val();
+            $("#Current_price").val(currentPriceVal);
+        }
+        else if (typeval == 2) {
+            $("#type_lbl").text("Sale");
+            $("#Current_price").attr("readonly", "readonly");
+            var currentPriceVal = $("#Current_price1").val();
+            $("#Current_price").val(currentPriceVal);
+        }
+        else if (typeval == 3) {
+            $("#type_lbl").text("Buy Limit");
+            $("#Current_price").removeAttr("readonly");
+            $("#Current_price").val('');
+            $("#CurrncyPrice").val('');
+        }
+        else if (typeval == 4) {
+            $("#type_lbl").text("Sell Limit");
+            $("#Current_price").removeAttr("readonly");
+            $("#Current_price").val('');
+            $("#CurrncyPrice").val('');
+        }
+        else if (typeval == 5) {
+            $("#type_lbl").text("Sell Stop");
+            $("#Current_price").removeAttr("readonly");
+            $("#Current_price").val('');
+            $("#CurrncyPrice").val('');
+
+        }
+        else if (typeval == 6) {
+
+            $("#type_lbl").text("Buy Stop");
+            $("#Current_price").removeAttr("readonly");
+            $("#Current_price").val('');
+            $("#CurrncyPrice").val('');
+        }
+    }
+    else {
+        $("#type_textbox").hide();
+        /* $("#IdeaType_dropdown").hide();*/
+    }
+
+    // end document ready call
+
+
+    $("#Staff_image").change(function () {
+        var element = this;
+        var formData = new FormData();
+        var totalFiles = element.files.length;
+        for (var i = 0; i < totalFiles; i++) {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/Home/ChartImage',
+            dataType: 'json',
+            data: formData,
+            contentType: false,
+            processData: false
+        })
+            .done(function (response) {
+                document.getElementById('staffImage_url123').value = response.ImageURL;
+                $("#Imag_src").attr("src", "/Images/Charts/" + response.ImageURL);
+
+            });
+
+    });
+
+    var k = 0;
+    var tradingid = $("#TradingSignalId12").val();
+
+    if (tradingid != 0) {
+        $.ajax({
+            type: "GET",
+            url: "/Ideas/GetProfitLost",
+            data: { TradingSignalId: tradingid },
+            dataType: "json",
+            success: function (data) {
+                if (data != "") {
+                    //for first  row because first dos'nt have delete button
+                    for (var i = 0; i < data.TakeProfitList.length; i++) {
+                        k = k + 1;
+                        if (data.TakeProfitList[i].Disble == true) {
+                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><span class="control-label required"></span><input readonly onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><span class="control-label required"></span><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
+                        }
+                        else {
+                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><span class="control-label required"></span><input onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><span class="control-label required"></span><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
+                        }
+                        break;
+                    }
+                    //break for first  row because first dos'nt have delete button
+
+                    //Remainig records start from second record
+                    for (var i = 1; i < data.TakeProfitList.length; i++) {
+                        k = k + 1;
+                        if (data.TakeProfitList[i].Disble == true) {
+                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><input readonly onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" required type="number" step="any" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><input readonly required step="any" type="number" id="tkpips_' + k + '" type="number" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td></td></tr>');
+                        }
+                        else {
+                            $('#takeProfit_tbody').append('<tr id=' + k + '><td><input type="number" step="any" onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" value=' + data.TakeProfitList[i].TP + ' class="form-control" name="TP[]"/></td><td><input readonly type="number" id="tkpips_' + k + '" step="any" class="form-control" value=' + data.TakeProfitList[i].Points + ' name="ProfitPIPS[]"/></td><td><a class="text-danger fa fa-window-close fa-2x" style="margin-left:0px;color:white" id="Add_row_id" onclick="DeleteRow(' + k + ')"></a></td></tr>');
+                        }
+                    }
+                    //end
+                    //Stop Loss we just need first record
+                    $('#stoploss_body').append('<tr><td><span class="control-label required"></span><input onchange="GetLosePIPS()" id="stoplose_1" required  type="number" step="any" value=' + data.StopLose.SL + ' class="form-control" name="SL"/></td><td><span class="control-label required"></span><input required id="losePips" type="number" step="any" readonly class="form-control" value=' + data.StopLose.Points + ' name="StopPIPS"/></td></tr>');
+
+                    //end stop loss
+                }
+            },
+        });
+    }
+
+
+    $(".fg_toolbar", "#table_container").hide();
+    /*var i = 1;*/
+
+    $("#Add_row_id").click(function () {
+
+        if (k < 10) {
+
+            k = k + 1;
+            var AddRow = '<tr id=' + k + '><td><input onchange="GetProfitPIPS(' + k + ')" id="tpRow_' + k + '" type="number" step="any" class="form-control" name="TP[]" /><td><input step="any" readonly type="number" id="tkpips_' + k + '" class="form-control" name="ProfitPIPS[]"/></td><td><a class="text-danger fa fa-window-close fa-2x" style="margin-left:0px;color:white" id="Add_row_id" onclick="DeleteRow(' + k + ')"></a></td></tr>';
+            //$('#myTable tr:last').after('<tr>...</tr><tr>...</tr>');
+            $('#takeProfit_tbody').append(AddRow);
+        }
+    });
+
+    function DeleteRow(id) {
+
+        if (k > 0) {
+            k = k - 1;
+            $('#' + id).remove();
+        }
+    }
+
+
+
+    function GetProfitPIPS(id) {
+        var ideatype = $("#IdeaType_dropdown").val();
+        var tpValue = $("#tpRow_" + id).val();
+        tpValue = Math.floor(parseFloat(tpValue));
+        var PreviousTpValue = 0;
+        if (id > 1) {
+            var preId = id - 1;
+            PreviousTpValue = $("#tpRow_" + preId).val();
+        }
+        var currentPriceVal = $("#CurrncyPrice").val();
+        currentPriceVal = Math.floor(parseFloat(currentPriceVal));
+        var lablename = $("#type_lbl").text();
+        if (ideatype == 3 || ideatype == 4 || ideatype == 5 || ideatype == 6) {
+            currentPriceVal = $("#Current_price").val();
+        }
+        var currencyName = $("#currencyDropdown option:selected").text();
+        var lastthree = currencyName.substr(currencyName.length - 3);
+
+        if (currentPriceVal != "") {
+            if (currentPriceVal != null && currentPriceVal != "") {
+
+                if (ideatype == 2 || ideatype == 4 || ideatype == 5) {
+                    if (PreviousTpValue > 0 && PreviousTpValue <= tpValue) {
+                        alert("TP value must be less than previous TP value");
+                        $("#tpRow_" + id).val('');
+                        $("#tkpips_" + id).val('');
+                    }
+                    else {
+                        if (parseFloat(tpValue) > parseFloat(currentPriceVal)) {
+
+                            alert("TP must be less than " + " " + lablename);
+                            $("#tpRow_" + id).val('');
+                            $("#tkpips_" + id).val('');
+                        }
+                        else {
+                            var countPips = currentPriceVal - tpValue;
+                            $("#tkpips_" + id).val(countPips);
+                            $("#tpRow_" + id).val(tpValue);
+                        }
+                    }
+                }
+                else if (ideatype == 1 || ideatype == 3 || ideatype == 6) {
+                    if (PreviousTpValue >= tpValue) {
+                        alert("TP value must be greater than previous TP value");
+                        $("#tpRow_" + id).val('');
+                        $("#tkpips_" + id).val('');
+                    }
+                    else {
+                        if (parseFloat(tpValue) < parseFloat(currentPriceVal)) {
+                            alert("TP must be greater than " + " " + lablename);
+                            $("#tkpips_" + id).val('');
+                            $("#tpRow_" + id).val('');
+                        }
+                        else {
+                            var countPips = tpValue - currentPriceVal;
+                            $("#tkpips_" + id).val(Math.round(countPips));
+                            $("#tpRow_" + id).val(tpValue);
+                        }
+                    }
+
+                }
+                else {
+                    alert("Please select idea type first.");
+                    $("#tkpips_" + id).val('');
+                    $("#tpRow_" + id).val('');
+                }
+            }
+            else {
+                alert("Please select currency pair first.");
+                $("#tkpips_" + id).val('');
+                $("#tpRow_" + id).val('');
+            }
+        }
+        else {
+            alert($("#type_lbl").text() + " " + "can't be null.");
+            $("#tkpips_" + id).val('');
+            $("#tpRow_" + id).val('');
+        }
+    }
+
+
+    function GetLosePIPS() {
+        var ideatype = $("#IdeaType_dropdown").val();
+        var slValue = $("#stoplose_1").val();
+        slValue = Math.floor(parseFloat(slValue));
+
+        var currentPriceVal = $("#Current_price1").val();
+        currentPriceVal = Math.floor(parseFloat(currentPriceVal));
+        var lablename = $("#type_lbl").text();
+        if (ideatype == 3 || ideatype == 4 || ideatype == 5 || ideatype == 6) {
+            currentPriceVal = $("#Current_price").val();
+        }
+
+        if (currentPriceVal != null && currentPriceVal != "") {
+            if (ideatype == 2 || ideatype == 4 || ideatype == 5) {
+                if (slValue < currentPriceVal) {
+                    alert("SL must be greater then " + " " + lablename);
+                    $("#stoplose_1").val('');
+                    $("#losePips").val('');
+                }
+                else {
+
+                    var countPips = currentPriceVal - slValue;
+                    $("#losePips").val(countPips);
+                    $("#stoplose_1").val(slValue);
+                }
+            }
+            else if (ideatype == 1 || ideatype == 3 || ideatype == 6) {
+                if (slValue > currentPriceVal) {
+                    alert("SL must be less then " + " " + lablename);
+                    $("#stoplose_1").val('');
+                    $("#losePips").val('');
+
+                }
+                else {
+                    var countPips = slValue - currentPriceVal;
+                    $("#losePips").val(countPips);
+                    $("#stoplose_1").val(slValue);
+                }
+            }
+            else {
+                alert("Please select idea type first.");
+                $("#stoplose_1").val('');
+                $("#losePips").val('');
+            }
+        }
+        else {
+
+            alert("Please select currency pair first.");
+            $("#stoplose_1").val('');
+            $("#losePips").val('');
+        }
+    }
+
+
+    $("#IdeaType_dropdown").change(function () {
+        var typeval = $("#IdeaType_dropdown").val();
+
+        var result = false;
+        var one = $("#tpRow_1").val();
+        var lossOne = $("#stoplose_1").val();
+
+        if (IdeaType_dropdown != "" && one != "" || lossOne != "" || i > 1) {
+
+            result = confirm("Are you sure, you want to change idea type?");
+        }
+        else {
+            result = true;
+        }
+
+        if (result) {
+            ClearAndAddTableRow();
+            if (typeval != "") {
+                $("#type_textbox").show();
+                /*  $("#IdeaType_dropdown").show();*/
+
+                if (typeval == 1) {
+                    $("#type_lbl").text("Buy");
+                    $("#Current_price").attr("readonly", "readonly");
+
+                    currencyPairPrice = $("#Current_price1").val();
+                    $("#CurrncyPrice").val(currencyPairPrice);
+
+
+                }
+                else if (typeval == 2) {
+                    $("#type_lbl").text("Sale");
+                    $("#Current_price").attr("readonly", "readonly");
+                    currencyPairPrice = $("#Current_price1").val();
+                    $("#CurrncyPrice").val(currencyPairPrice);
+
+                }
+                else if (typeval == 3) {
+                    $("#type_lbl").text("Buy Limit");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+                }
+                else if (typeval == 4) {
+                    $("#type_lbl").text("Sell Limit");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+                }
+                else if (typeval == 5) {
+                    $("#type_lbl").text("Sell Stop");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+
+                }
+                else if (typeval == 6) {
+
+                    $("#type_lbl").text("Buy Stop");
+                    $("#Current_price").removeAttr("readonly");
+                    $("#Current_price").val('');
+                    $("#CurrncyPrice").val('');
+                }
+            }
+            else {
+                $("#type_textbox").hide();
+                /* $("#IdeaType_dropdown").hide();*/
+            }
+
+        }
+        else {
+            if (IdeaType_dropdown != "") {
+                $("#IdeaType_dropdown").val(IdeaType_dropdown);
+            }
+        }
+    });
+
+    $("#Current_price").focusout(function () {
+
+        // JPY value Validation
+        var currPValue = $("#Current_price").val();
+        var pair = $("#currencyDropdown option:selected").text();
+        var ideatype = $("#IdeaType_dropdown").val();
+        var currencyValue = 0;
+        if (pair != "" && ideatype != "1" && ideatype != "2") {
+            var lastthree = pair.substr(pair.length - 3);
+            if (lastthree == "JPY") {
+                currencyValue = parseFloat(currPValue).toFixed(2);
+                $("#Current_price").val(currencyValue);
+            }
+            else {
+                currencyValue = parseFloat(currPValue).toFixed(4);
+                $("#Current_price").val(currencyValue);
+
+            }
+        }
+        // end JPY value validation
+
+
+
+        var Current_price1 = $("#Current_price1").val();
+        var limit = $("#Current_price").val();
+        var lablename = $("#type_lbl").text();
+
+        var result = false;
+        var one = $("#tpRow_1").val();
+        var lossOne = $("#stoplose_1").val();
+        var yesNo = false;
+        if (IdeaType_dropdown != "" && one != "" || lossOne != "" || i > 1) {
+            yesNo = true;
+            result = confirm("Are you sure,you want to change " + lablename + " value ?");
+        }
+        else {
+            result = false;
+        }
+        if (ideatype != 1 && ideatype != 2) {
+            if (result) {
+                ClearAndAddTableRow();
+
+                var Current_price1 = $("#Current_price1").val();
+
+                if (Current_price1 != "" && Current_price1 != "0") {
+                    if (ideatype == "3" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                        alert("Buy limit must be less than current price.");
+                        $("#Current_price").val('');
+                    }
+                    else {
+
+                        $("#CurrncyPrice").val($("#Current_price").val());
+                    }
+                    if (ideatype == "4" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                        alert("Sell limit must be greater than current price.");
+                        $("#Current_price").val('');
+                    }
+                    else {
+                        $("#CurrncyPrice").val($("#Current_price").val());
+                    }
+                    if (ideatype == "5" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                        alert("Sell stop must be less than current price.");
+                        $("#Current_price").val('');
+                    }
+                    if (ideatype == "6" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                        alert("Buy stop must be greater than current price.");
+                        $("#Current_price").val('');
+                    }
+                    else {
+                        $("#CurrncyPrice").val($("#Current_price").val());
+                    }
+                }
+                else {
+
+                    if (limit != "") {
+                        alert("Please select currency pair first.");
+                        $("#Current_price").val('');
+                    }
+                }
+            }
+            else {
+                if (result == false && yesNo == true && IdeaType_Value != "") {
+                    var curr = $("#Current_price").val(IdeaType_Value);
+                    $("#CurrncyPrice").val(curr);
+                }
+                else {
+                    var Current_price1 = $("#Current_price1").val();
+
+                    if (Current_price1 != "" && Current_price1 != "0") {
+                        if (ideatype == "3" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                            alert("Buy limit must be less than current price.");
+                            $("#Current_price").val('');
+                        }
+                        else {
+                            $("#CurrncyPrice").val($("#Current_price").val());
+                        }
+                        if (ideatype == "4" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                            alert("Sell limit must be greater than current price.");
+                            $("#Current_price").val('');
+                        }
+                        else {
+                            $("#CurrncyPrice").val($("#Current_price").val());
+                        }
+                        if (ideatype == "5" && parseFloat(limit) >= parseFloat(Current_price1)) {
+                            alert("Sell stop must be less than current price.");
+                            $("#Current_price").val('');
+                        }
+                        if (ideatype == "6" && parseFloat(limit) <= parseFloat(Current_price1)) {
+                            alert("Buy stop must be greater than current price.");
+                            $("#Current_price").val('');
+                        }
+                        else {
+                            $("#CurrncyPrice").val($("#Current_price").val());
+                        }
+                    }
+                    else {
+
+                        if (limit != "") {
+                            alert("Please select currency pair first.");
+                            $("#Current_price").val('');
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+
+
+    // on change currency get current price
+    $("#currencyDropdown").change(function () {
+        var currencyval = $("#currencyDropdown").val();
+
+        var pair = $("#currencyDropdown option:selected").text();
+        if (pair != "" && currencyval != "") {
+            pair = pair.replace(/[\/\\]/g, '');
+            $("#Current_price").show();
+            $.ajax({
+                type: "GET",
+                url: "https://api.finage.co.uk/last/forex/" + pair + "?" + "apikey=API_KEY38T8YULAK4WQQ163ACWCHL6BSND4T4TT",
+                // data: { TradingSignalId: tradingid },
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+
+                        $("#Current_price1").val(data.bid);
+                        var typeValue = $("#IdeaType_dropdown").val();
+                        if (typeValue == "1" || typeValue == "2") {
+                            $("#Current_price").val(data.bid);
+                            $("#Current_price").attr("readonly", "readonly");
+                            $("#CurrncyPrice").val(data.bid);
+
+                        }
+                    }
+                },
+            });
+
+        }
+        else {
+            $("#Current_price1").val('');
+            $("#Current_price").val('');
+            $("#CurrncyPrice").val('');
+
+        }
+
+
+    });
+
+    //end
+
+
+    // after a while get currency current price
+    function FetchCurrencyData() {
+        var currencyval = $("#currencyDropdown").val();
+
+        var pair = $("#currencyDropdown option:selected").text();
+        if (pair != "" && currencyval != "") {
+            pair = pair.replace(/[\/\\]/g, '');
+            $("#Current_price").show();
+            $.ajax({
+                type: "GET",
+                url: "https://api.finage.co.uk/last/forex/" + pair + "?" + "apikey=API_KEY38T8YULAK4WQQ163ACWCHL6BSND4T4TT",
+                // data: { TradingSignalId: tradingid },
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        $("#Current_price1").val(data.bid);
+                    }
+                    $("#Current_price1").val(data.bid);
+                    var typeValue = $("#IdeaType_dropdown").val();
+                    if (typeValue == "1" || typeValue == "2") {
+                        $("#Current_price").val(data.bid);
+                        $("#Current_price").attr("readonly", "readonly");
+                    }
+                },
+            });
+
+        }
+        else {
+            $("#Current_price1").val('');
+        }
+    }
+   /* setInterval(FetchCurrencyData, 1000);*/
+    //end
+</script>
+
+
+

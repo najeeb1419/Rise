@@ -1,0 +1,290 @@
+﻿<!doctype html>
+<html lang="en">
+@using System.Linq
+@using Risen.Models
+
+@{ string Name = "";
+    RegisterComapany company = new RegisterComapany();
+    CompanyEmployee employee = new CompanyEmployee();
+    Privileges privileges = new Privileges();
+    string Image = "";
+    if (Session["Company"] != null || Session["Employee"] != null)
+    {
+        if (Session["Company"] != null)
+        {
+            company = Session["Company"] as RegisterComapany;
+            Name = company.Name;
+            Image = company.logo;
+        }
+        else if (Session["Employee"] != null)
+        {
+            employee = Session["Employee"] as CompanyEmployee;
+            Name = employee.fName;
+            Image = employee.lName;
+        }
+        privileges = Session["Priviliges"] as Privileges;
+    } }
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="~/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/assets/libs/css/style.css">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="~/assets/vendor/charts/chartist-bundle/chartist.css">
+    <link rel="stylesheet" href="~/assets/vendor/charts/morris-bundle/morris.css">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/charts/c3charts/c3.css">
+    <link rel="stylesheet" href="~/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <title>Risen</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <style>
+        .table {
+            background-color: #e1e1e1;
+            color: black;
+        }
+
+        table thead {
+            background-color: #013153;
+            color: white;
+        }
+
+        .table thead th, .table th {
+            color: white;
+        }
+
+        .backgroundcolor {
+            background-image: linear-gradient(#830000, #d70a0a);
+        }
+
+        .backgroundtitle {
+            color: white;
+        }
+
+        .btnstyle {
+            color: white;
+            border-radius: 40px;
+            border: none !important;
+            /*background-color: #ef0808;*/
+            background-image: linear-gradient(to right, #480606, #b50000);
+        }
+
+        .closebtn {
+            border: none;
+            border-radius: 40px;
+        }
+        /*.btnstyle:focus{
+            border:none;
+        }
+            .btnstyl {
+                border: none;
+            }
+        */
+    </style>
+
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+    <div class="dashboard-main-wrapper">
+        <!-- ============================================================== -->
+        <!-- navbar -->
+        <!-- ============================================================== -->
+        <div class="dashboard-header">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+
+                <a class="navbar-brand" href="~/Employee/MyProfile"><img style="width:100% ;height:61px" src="~/Images/Logo.png" /></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        <li class="nav-item">
+                            <div id="custom-search" class="top-search-bar">
+                                <input class="form-control" type="text" placeholder="Search..">
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown nav-user">
+                            @if (employee.Image != null)
+                            {
+                                <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/Images/Employee/@employee.Image" alt="" class="user-avatar-md rounded-circle"></a>
+                            }
+                            else
+                            {
+                                <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="~/Images/Logo.png" alt="" class="user-avatar-md rounded-circle"></a>
+                            }
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    @if (employee != null)
+                                    {
+                                        <h5 class="mb-0 text-white nav-user-name">@employee.fName @employee.lName</h5>
+                                    }
+                                    else
+                                    {
+                                        <h5 class="mb-0 text-white nav-user-name">Risen</h5>
+                                    }
+
+                                    <span class="status"></span><span class="ml-2">Available</span>
+                                </div>
+                                <a class="dropdown-item" href="~/Employee/MyProfile"><i class="fas fa-user mr-2"></i>My Profile</a>
+                                @if (privileges.IsSetting)
+                                {
+                                    <a class="dropdown-item" href="~/Designation/DesignationView"><i class="fas fa-cog mr-2"></i>Setting</a>
+                                }
+                                <a class="dropdown-item" href="~/Authentication/Logout"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+        <div class="nav-left-sidebar sidebar-dark" style="background-color: #ef0808; background-image: linear-gradient(to right, #480606, #b50000); ">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Menu
+                            </li>
+                            @if (privileges.IsDashboard)
+                            {
+                                <li class="nav-item ">
+                                    <a class="nav-link " href="~/Home/Index" aria-controls="submenu-1"><i style="color:white;" class="fa fa-home"></i>Dashboard <span class="badge badge-success">6</span></a>
+                                </li>
+                            }
+                            @if (privileges.isStaffView)
+                            {
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-signal text-white"></i>Trade Ideas</a>
+                                    <div id="submenu-4" class="collapse submenu" style="">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="~/Ideas/TradingSignalView">All Trade Idea</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="~/Home/Dashbaord">Add Trade Idea</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                            @if (privileges.isEmployeeView)
+                            {
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="~/Employee/EmployeeView"><i style="color:white;" class="fa fa-user-circle"></i>Employee</a>
+                                </li>
+                            }
+                            @if (privileges.isClientView)
+                            {
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="~/Currency/CurrencyView"><i style="color:white;" class="fa fa-dollar-sign"></i>Currencies</a>
+                                </li>
+                            }
+                            @if (privileges.isDesignationView)
+                            {
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="~/Designation/DesignationView"><i style="color:white;" class="fa fa-cog"></i>Settings</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <div class="dashboard-ecommerce">
+                <div class="container-fluid dashboard-content ">
+                    <div class="ecommerce-widget">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" style="">
+                            Copyright © 2021  All rights reserved by Izla Tech.
+                        </div>
+                        @*<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="text-md-right footer-links d-none d-sm-block">
+                                    <a href="javascript: void(0);">About</a>
+                                    <a href="javascript: void(0);">Support</a>
+                                    <a href="javascript: void(0);">Contact Us</a>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper  -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1 -->
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <!-- bootstap bundle js -->
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <!-- slimscroll js -->
+    <script src="~/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <!-- main js -->
+    <script src="~/assets/libs/js/main-js.js"></script>
+    <!-- chart chartist js -->
+    <script src="~/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+    <!-- sparkline js -->
+    <script src="~/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
+    <!-- morris js -->
+    <script src="~/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+    <script src="~/assets/vendor/charts/morris-bundle/morris.js"></script>
+    <!-- chart c3 js -->
+    <script src="~/assets/vendor/charts/c3charts/c3.min.js"></script>
+    <script src="~/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
+    <script src="~/assets/vendor/charts/c3charts/C3chartjs.js"></script>
+    <script src="~/assets/libs/js/dashboard-ecommerce.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js" integrity="sha512-MqEDqB7me8klOYxXXQlB4LaNf9V9S0+sG1i8LtPOYmHqICuEZ9ZLbyV3qIfADg2UJcLyCm4fawNiFvnYbcBJ1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+
+    @* $(document).ready(function () {
+                $('table').DataTable({
+                    "ordering": false
+                });
+            });
+        </script>*@
+
+
+</body>
+
+</html>

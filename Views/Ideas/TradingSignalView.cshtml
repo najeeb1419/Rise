@@ -1,0 +1,502 @@
+﻿@model  IEnumerable<Risen.Models.TradingSignals>
+@{
+    ViewBag.Title = "TradingSignalView";
+    //Layout = "~/Views/Shared/_CustomLayout.cshtml";
+    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+}
+@using Risen.Models
+@{
+    RegisterComapany company = new RegisterComapany();
+    company = Session["Company"] as RegisterComapany;
+
+    Privileges privileges = new Privileges();
+    privileges = Session["Priviliges"] as Privileges;
+}
+
+@* new *@
+
+<div class="midde_cont" id="page">
+    <div class="container-fluid">
+        <div class="row column_title">
+            <div class="col-md-12">
+                <div class="page_title">
+                    <h2>Trade Idea</h2>
+                </div>
+                @if (TempData["msg"] != null)
+                {
+                    if (TempData["msg"] == "empty")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Please!</strong>  Please fill all necessary fields.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                    else if (TempData["msg"] == "success")
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Updated successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+                }
+                <br />
+                <label id="Alert_div" style="color:red"></label>
+                <label id="Alert_div1" style="color:green"></label>
+            </div>
+            <div class="white_shd full margin_bottom_30" style="margin-top:0px;">
+                @if (privileges.isStaffView)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="white_shd full margin_bottom_30" style="margin-top:10px;">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align:right; margin-left:-1%">
+                                        @if (privileges.isStaffCreate)
+                                        {
+                                            <a class="btn buttoncolor" href="/Home/Dashbaord">New Trade Idea</a>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="table_section padding_infor_info">
+                                    <div class="table-responsive-sm">
+                                        <table class="table table-hover " id="Trading_table" style="border:1px solid gray">
+                                            <thead class="bg-light text-dark">
+                                                <tr>
+                                                    <th style="width:5%">
+                                                        #No
+                                                    </th>
+                                                    <th style="width:10%">
+                                                        Currency Pair
+                                                    </th>
+                                                    <th style="width:5%">
+                                                        Type
+                                                    </th>
+                                                    <th style="width:10%">
+                                                        Entry At
+                                                    </th>
+                                                    <th style="width:10%">
+                                                        Created By
+                                                    </th>
+                                                    <th style="width:15%">
+                                                        Created Date
+                                                    </th>
+                                                    <th style="width:15%">
+                                                        Status
+                                                    </th>
+                                                    <th style="text-align: center; width: 20%">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    int i = 0;
+                                                }
+                                                @foreach (var item in Model.OrderByDescending(x => x.TradingSignalId))
+                                                {
+                                                    i++;
+                                                <tr id="display_tr_@item.TradingSignalId">
+                                                    <td>
+                                                        @i
+                                                    </td>
+                                                    <td>
+                                                        @item.CurrencyList.CurrencyName
+                                                    </td>
+                                                    @if (item.Type == "1")
+                                                    {
+                                                        <td>Buy</td>
+                                                    }
+                                                    else if (item.Type == "2")
+                                                    {
+                                                        <td>Sell</td>
+                                                    }
+                                                    else if (item.Type == "3")
+                                                    {
+                                                        <td>Buy limit</td>
+                                                    }
+                                                    else if (item.Type == "4")
+                                                    {
+                                                        <td>Sell limit</td>
+                                                    }
+                                                    else if (item.Type == "5")
+                                                    {
+                                                        <td>Sell stop</td>
+                                                    }
+                                                    else if (item.Type == "6")
+                                                    {
+                                                        <td>Buy stop</td>
+                                                    }
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Buy)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.CreatedBy)
+                                                    </td>
+                                                    <td>
+                                                        @{
+                                                            var CreatedDate = item.CreatedTime.ToString("dd-MM-yyyy hh:mm:ss tt");
+                                                        }
+                                                        @CreatedDate
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control" id="TradingStatus_@item.TradingSignalId" onchange="ChnageStatus(@item.TradingSignalId)">
+                                                            @if (item.Status == "0")
+                                                            {
+                                                                <option selected value="0">Pending</option>
+                                                                <option value="1">Approved</option>
+                                                                <option value="2">Rejected</option>
+                                                            }
+                                                            else if (item.Status == "1")
+                                                            {
+                                                                <option value="0">Pending</option>
+                                                                <option selected value="1">Approved</option>
+                                                                <option value="2">Rejected</option>
+                                                            }
+                                                            else if (item.Status == "2")
+                                                            {
+                                                                <option value="0">Pending</option>
+                                                                <option value="1">Approved</option>
+                                                                <option selected value="2">Rejected</option>
+                                                            }
+                                                            else if (item.Status == "4")
+                                                            {
+                                                                <lable>Ended</lable>
+                                                            }
+                                                            else if (item.Status == "5")
+                                                            {
+                                                                <lable>Completed</lable>
+                                                            }
+
+                                                        </select>
+                                                    </td>
+                                                    <td style="text-align:right">
+
+                                                        @if (privileges.isStaffUpdate)
+                                                        {
+                                                            <a href="/Ideas/EditTradingSignal?id=@item.TradingSignalId" class="btn btn-outline-warning btn-sm" title="Edit"><span class="fa fa-pencil" aria-hidden="true"></span></a>
+                                                        }
+                                                       
+                                                        <button data-toggle="collapse" href="#hidden_tr_@item.TradingSignalId" onclick="GetTradingData(@item.TradingSignalId)" class="btn  btn-sm" title="View Detail" style=" border: none; background-color: #0F85B1;  color: white;"><span id="icon_@item.TradingSignalId" class="fa fa-caret-down" aria-hidden="true"></span></button>
+                                                    </td>
+                                                </tr>
+                                                    <tr id="hidden_tr_@item.TradingSignalId">
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form enctype="multipart/form-data" id="TakeProfit_frm">
+                                <div class="modal-content">
+                                    <div class="modal-header backgroundcolor">
+                                        <h5 class="modal-title backgroundtitle" id="exampleModalLabel">Create Take Profit</h5>
+                                        <button type="button" class="close backgroundtitle" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="control-label">TP</label>
+                                                <input type="number" class="form-control" name="TP" id="TP" placeholder="" value="" required />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="control-label">Points</label>
+                                                <input type="number" class="form-control" name="PIPS" id="PIPS" placeholder="" value="" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn  btn-outline-default closebtn" data-dismiss="modal">Close</button>
+                                        <button type="button" id="TakeProfit_Submit_btn" class="btn buttoncolor">Save changes</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="modal fade modal-dialog-scrollable" id="StopLoss" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form enctype="multipart/form-data" id="StopLoss_frm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title backgroundtitle" id="exampleModalLabel">Create Stop Loss</h5>
+                                        <button type="button" class="close backgroundtitle" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="control-label">SL</label>
+                                                <input type="number" class="form-control" name="SL" id="SLLoss" placeholder="" value="" required />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="control-label">Points</label>
+                                                <input type="number" class="form-control" name="StopPIPS" id="PIPSLoss" placeholder="" value="" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default closebtn" data-dismiss="modal">Close</button>
+                                        <button type="button" id="StopLoss_Submit_btn" class="btn buttoncolor">Save changes</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+    /* Initialization of datatables */
+    $(document).ready(function () {
+        $('table.display').DataTable();
+    });
+</script>
+<script>
+    var TradingSignalId = 0;
+
+    function GetTakePrfit(id) {
+
+        TradingSignalId = id;
+    }
+
+    function GetTradingData(id) {
+
+        if (id != 0) {
+            $.ajax({
+                type: "GET",
+                url: "/Ideas/GetProfitLost",
+                data: { TradingSignalId: id },
+                dataType: "json",
+                success: function (data) {
+
+                    if (data != "") {
+
+                        $('#hidden_tr_' + id).children().remove();
+                        var takeProfittbl = "<td style='background:#e7e1e0;width:50%' colspan='5'><center><h5 style='color:black'>Take Profit</h5></center><table class='table table-hover'><thead ><tr><th>#</th><th>TP</th><th>Points</th></tr></thead><tbody>"
+                        if (data.TakeProfitList.length > 0) {
+                            for (var i = 0; i < data.TakeProfitList.length; i++) {
+                                var j = i + 1;
+                                takeProfittbl += '<tr><td>' + j + '</td><td>' + data.TakeProfitList[i].TP + '</td><td>' + data.TakeProfitList[i].Points + '</td></tr>';
+                            }
+                        }
+                        else {
+                            takeProfittbl += '<tr><td colspan="3"><center><h6>No data found.</h6></center></td></tr>';
+                        }
+
+                        takeProfittbl += "</tbody></table></td>"
+                        takeProfittbl += "<td style='background:#e7e1e0;width:50%;vertical-align:baseline;' colspan='4'><center><h5 style='color:black'>Stop Lose</h5></center><table class='table'><thead style='background-image:linear-gradient(toright,#480606,#b50000);background-color: #ef0808;'><tr><th>SL</th><th>Points</th></tr></thead><tbody>"
+                        //for (var i = 0; i < data.StopLoseList.length; i++) {
+                        //    var j = i + 1;
+                        if (data.StopLose.StopLoseId > 0) {
+                            takeProfittbl += '<tr><td>' + data.StopLose.SL + '</td><td>' + data.StopLose.Points + '</td></tr>';
+                        }
+                        else {
+                            takeProfittbl += '<tr><td colspan=="2"><center><h6>No data found.</h6></center></td></tr>';
+                        }
+                        /*}*/
+                        takeProfittbl += "</tbody></table></td>"
+                        //$('#myTable tr:last').after('<tr>...</tr><tr>...</tr>');
+                        $('#hidden_tr_' + id).append(takeProfittbl);
+                        $('#hidden_tr_' + id).show();
+                    }
+                    else if (data != "NoData") {
+                        alert("not data found");
+                        $('#hidden_tr_' + id).hide();
+                    }
+                    else if (data != "Expire") {
+                        alert("Session Expire Please Refresh The Page");
+                        $('#hidden_tr_' + id).hide();
+                    }
+                },
+            });
+        }
+        else {
+
+            alert("Please first select record");
+        }
+    }
+
+    //$(document).ready(function () {
+    //    $('#Trading_table').DataTable({
+    //        "ordering": false
+    //    });
+    //});
+
+    $("#TakeProfit_Submit_btn").click(function () {
+        var TP = $("#TP").val();
+        var PIPS = $("#PIPS").val();
+        if (TP != "" && PIPS !== "" && TradingSignalId != 0 && TradingSignalId != "") {
+            $.ajax({
+                type: "POST",
+                url: "/Ideas/TakeProfit",
+                data: { TP: TP, PIPS: PIPS, TradingSignalId: TradingSignalId },
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "Empty") {
+                        $("#Alert_div").show();
+                        $("#Alert_div1").hide();
+                        $("#Alert_div").text("Please fill all fields.");
+                        $('#exampleModal').modal('toggle');
+                    }
+                    else if (data == "success") {
+                        $("#Alert_div").hide();
+                        $("#Alert_div1").show();
+                        $("#Alert_div1").text("Take Profit added successfully.");
+                        $('#exampleModal').modal('toggle');
+                        $("#TP").val('');
+                        $("#PIPS").val('');
+                    }
+                    else if (data == "exist") {
+                        $("#Alert_div").show();
+                        $("#Alert_div1").hide();
+                        $("#Alert_div").text("You can't add more than ten records.");
+                        $('#exampleModal').modal('toggle');
+                    }
+                    else if (data == "expire") {
+                        alert("Session Has Been Expired Please Refresh The Page.");
+                        $('#exampleModal').modal('toggle');
+                    }
+                },
+            });
+        }
+        else {
+
+            alert("Please fill all input fields.");
+            $("#Alert_div").hide();
+        }
+    });
+
+    $("#StopLoss_Submit_btn").click(function () {
+        var TP = $("#SLLoss").val();
+        var PIPS = $("#PIPSLoss").val();
+        if (TP != "" && PIPS !== "" && TradingSignalId != 0 && TradingSignalId != "") {
+            $.ajax({
+                type: "POST",
+                url: "/Ideas/StopLoss",
+                data: { SL: TP, PIPS: PIPS, TradingSignalId: TradingSignalId },
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "Empty") {
+                        $("#Alert_div").show();
+                        $("#Alert_div1").hide();
+                        $("#Alert_div").text("Please fill all fields.");
+                        $('#StopLoss').modal('toggle');
+                    }
+                    else if (data == "success") {
+                        $("#Alert_div").hide();
+                        $("#Alert_div1").show();
+                        $("#Alert_div1").text("Take Profit added successfully.");
+                        $('#StopLoss').modal('toggle');
+                        $("#SLLoss").val('');
+                        $("#PIPSLoss").val('');
+                    }
+                    else if (data == "exist") {
+                        $("#Alert_div").show();
+                        $("#Alert_div1").hide();
+                        $("#Alert_div").text("You can't add more than one records.");
+                        $('#StopLoss').modal('toggle');
+                    }
+                    else if (data == "expire") {
+                        alert("Session Has Been Expired Please Refresh The Page.");
+                        $('#StopLoss').modal('toggle');
+                    }
+                },
+            });
+        }
+        else {
+
+            alert("Please fill all input fields.");
+            $("#Alert_div").hide();
+        }
+    });
+
+    function DeleteTradingIdea(id) {
+
+        if (confirm('Are you sure you want to delete this Idea?')) {
+            if (id != 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Ideas/DeleteTrading",
+                    data: { TradingSignalId: id },
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data == "success") {
+                            $("#Alert_div").text("Deleted successfully.");
+                            //Swal.fire(
+                            //    'Deleted!',
+                            //    'Successfully Deleted!',
+                            //    'success'
+                            //)
+                            location.reload();
+
+                        }
+                        else if (data == "expire") {
+                            alert("Session Has Been Expired Please Refresh The Page.");
+                        }
+                    },
+                });
+            }
+            else {
+
+                alert("Please first select record");
+            }
+        }
+    }
+
+    function ChnageStatus(id) {
+
+        var status = $("#TradingStatus_" + id).val();
+        if (id != 0) {
+            $.ajax({
+                type: "POST",
+                url: "/Ideas/ChnageStatus",
+                data: { TradingSignalId: id, status: status },
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "success") {
+                        $("#TradingStatus_" + id).val(status);
+                        location.reload();
+                    }
+                    else if (data == "expire") {
+
+                        alert("Session expired please refresh the page.");
+                    }
+                    else if (data == "Empty") {
+
+                        alert("record not found");
+                    }
+                },
+            });
+        }
+        else {
+
+            alert("Please first select record");
+        }
+    }
+</script>
