@@ -30,7 +30,7 @@ namespace Risen.Controllers
                 {
                     ViewBag.admin = "";
                 }
-                var Employeelist = db.CompanyEmployees.Where(x => x.Enable == true).ToList();
+                var Employeelist = db.CompanyEmployees.Where(x => x.Enable == true && x.Companyid==employee1.Companyid).ToList();
                 var Designation = db.Designations.Where(x => x.Enable == true).ToList();
                 ViewBag.Designation = Designation;
 
@@ -109,7 +109,7 @@ namespace Risen.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditEmployee(CompanyEmployee employee)
+        public ActionResult EditEmployee(CompanyEmployee employee , string IsBlocked, string IsHide)
         {
             if (Session["Employee"] != null || Session["Company"] != null)
             {
@@ -140,6 +140,8 @@ namespace Risen.Controllers
                     findemployee.Address = employee.Address;
                     findemployee.DateOfBirth = employee.DateOfBirth;
                     findemployee.Password = employee.Password;
+                    findemployee.IsBlocked = IsBlocked != null ? true : false;
+                    findemployee.IsHide = IsHide != null ? true : false;
                     if (employee.Image != "" && employee.Image != null)
                     {
                         findemployee.Image = employee.Image;

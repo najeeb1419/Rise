@@ -2,7 +2,7 @@
 @model Risen.Models.CompanyEmployee
 @{
     ViewBag.Title = "EditProfile";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 }
 
 <style>
@@ -70,7 +70,6 @@
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script>
      $("#Staff_image").change(function () {
-         debugger;
         var element = this;
         var formData = new FormData();
         var totalFiles = element.files.length;
@@ -88,7 +87,6 @@
 
         })
             .done(function (response) {
-                debugger;
                 document.getElementById('staffImage_url123').value = response.ImageURL;
                 $("#Imag_src").attr("src", "/Images/Employee/" + response.ImageURL);
             });

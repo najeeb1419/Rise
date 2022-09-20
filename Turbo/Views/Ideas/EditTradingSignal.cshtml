@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "EditTradingSignal";
     //Layout = "~/Views/Shared/_CustomLayout.cshtml";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 
 }
 <style>
@@ -38,7 +38,7 @@
 
             </div>
         </div>
-        @if (privileges.isStaffView == true && privileges.isStaffUpdate)
+        @if (privileges.isTradeIdeaView == true && privileges.isTradeIdeaUpdate)
         {
             <form action="EditTradingSignal" enctype="multipart/form-data" method="post">
                 <div class="card" style="margin-bottom:10px">
@@ -252,7 +252,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if (privileges.isStaffUpdate)
+                            @if (privileges.isTradeIdeaUpdate)
                             {
                                 <div class="col-md-12 mt-2 mb-3 ">
                                     <input type="submit" value="Save Change" class="btn buttoncolor" />

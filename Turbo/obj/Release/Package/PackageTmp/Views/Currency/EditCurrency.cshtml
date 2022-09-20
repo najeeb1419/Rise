@@ -1,7 +1,7 @@
 ﻿@model Risen.Models.Currencies
 @{
     ViewBag.Title = "EditCurrency";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 
 }
 
@@ -42,7 +42,7 @@
 
             </div>
         </div>
-        @if (privileges.isClientUpdate)
+        @if (privileges.isCurrencyUpdate)
         {
             <div class="card">
                 <label hidden id="currencyNamelbl">Please select currency pair.</label>
@@ -147,7 +147,7 @@
                             }
                             <input type="text" id="staffImage_url123" name="FirstCurrencyImage" hidden required value="" />
                             <input type="text" id="staffImage_url1231" name="SecondCurrencyImage" hidden required value="" />
-                            @if (privileges.isClientCreate)
+                            @if (privileges.isCurrencyUpdate)
                             {
                                 <div class="col-md-12" style="margin-bottom:10px;">
                                     <br /><br />
@@ -173,7 +173,6 @@
    
 
     $("#Staff_image").change(function () {
-        debugger;
         var element = this;
         var formData = new FormData();
         var totalFiles = element.files.length;
@@ -198,7 +197,6 @@
     });
 
      $("#Staff_image1").change(function () {
-        debugger;
         var element = this;
         var formData = new FormData();
         var totalFiles = element.files.length;
@@ -223,9 +221,6 @@
 
     //currency dropdown
     $("#currencyNoUpdate").change(function () {
-        debugger;
-
-
         var Curren = $("#currencyNoUpdate").val();
         if (Curren != "") {
             //$("#CurrencyUpdate_btn").prop("disabled", true);
@@ -245,7 +240,6 @@
                     data: { id: currencyid, Curren: Curren},
                     dataType: "json",
                     success: function (data) {
-                        debugger;
                         if (data == "ok") {
                             $("#currencyNamelbl").hide();
                             $("#CurrencyUpdate_btn").prop("disabled", false);
@@ -270,7 +264,6 @@
     });
 
     $("#CurrencyUpdate_btn").click(function () {
-        debugger;
         var CurrencyName = $("#currencyNoUpdate option:selected").text();
         var Curren = $("#currencyNoUpdate").val();
         var currencyid = $("#Currency_id").val();

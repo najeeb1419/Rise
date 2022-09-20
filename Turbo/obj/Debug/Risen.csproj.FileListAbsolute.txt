@@ -520,3 +520,9 @@ C:\Users\.NET DEVELOPER\Desktop\Risen\Turbo\bin\System.Diagnostics.DiagnosticSou
 C:\Users\.NET DEVELOPER\Desktop\Risen\Turbo\bin\Microsoft.Extensions.Logging.Abstractions.xml
 C:\Users\.NET DEVELOPER\Desktop\Risen\Turbo\bin\Quartz.xml
 C:\Users\.NET DEVELOPER\Desktop\Risen\Turbo\bin\System.Diagnostics.DiagnosticSource.xml
+D:\Izla\Risen\Turbo\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Izla\Risen\Turbo\bin\Quartz.dll
+D:\Izla\Risen\Turbo\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Izla\Risen\Turbo\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Izla\Risen\Turbo\bin\Quartz.xml
+D:\Izla\Risen\Turbo\bin\System.Diagnostics.DiagnosticSource.xml

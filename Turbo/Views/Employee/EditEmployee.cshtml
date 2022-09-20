@@ -6,7 +6,7 @@
     ViewBag.Title = "EditEmployee";
 
     //Layout = "~/Views/Shared/_CustomLayout.cshtml";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 
 }
 @using Risen.Models
@@ -122,10 +122,17 @@
                             }
                             else
                             {
-                                <input type="file" class="form-control"  name="Staff_image" id="Staff_image" />
+                                <input type="file" class="form-control" name="Staff_image" id="Staff_image" />
                             }
                         </div>
-
+                        <div class="col-md-6 bit">
+                            <label class="">Block</label>
+                            <input type="checkbox" name="IsBlocked" value="@Model.IsBlocked" checked="@Model.IsBlocked" />
+                        </div>
+                        <div class="col-md-6 bit">
+                            <label class="">Hide</label>
+                            <input type="checkbox" name="IsHide" value="@Model.IsHide" checked="@Model.IsHide" />
+                        </div>
                         @if (Model.Image == null)
                         {
                             <div class="col-md-12">

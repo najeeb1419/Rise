@@ -1,7 +1,7 @@
 ﻿@model Risen.Models.Currencies
 @{
     ViewBag.Title = "EditCurrency";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 
 }
 
@@ -42,7 +42,7 @@
 
             </div>
         </div>
-        @if (privileges.isClientUpdate)
+        @if (privileges.isCurrencyUpdate)
         {
             <div class="card">
                 <label hidden id="currencyNamelbl">Please select currency pair.</label>
@@ -147,7 +147,7 @@
                             }
                             <input type="text" id="staffImage_url123" name="FirstCurrencyImage" hidden required value="" />
                             <input type="text" id="staffImage_url1231" name="SecondCurrencyImage" hidden required value="" />
-                            @if (privileges.isClientCreate)
+                            @if (privileges.isCurrencyUpdate)
                             {
                                 <div class="col-md-12" style="margin-bottom:10px;">
                                     <br /><br />

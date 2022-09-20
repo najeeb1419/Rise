@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Index";
     //Layout = "~/Views/Shared/_CustomLayout.cshtml";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 
 }
 @using Risen.Models
@@ -41,11 +41,11 @@
         <div class="row column_title">
             <div class="col-md-12">
                 <div class="page_title">
-                    <h2>Risen Dashboard</h2>
+                    <h2>Turbo Dashboard</h2>
                 </div>
             </div>
         </div>
-        @if (privileges.IsDashboard == true)
+        @if (privileges.isDashboard == true)
         {
             <div class="row column1">
                 @if (privileges.isEmployeeView)
@@ -69,7 +69,7 @@
                     </div>
                 }
 
-                @if (privileges.isStaffView)
+                @if (privileges.isTradeIdea)
                 {
                     <div class="col-md-6 col-lg-3 ">
                         <a href="/Ideas/TradingSignalView">
@@ -90,7 +90,7 @@
                     </div>
                 }
 
-                @if (privileges.isClientView)
+                @if (privileges.isCurrency)
                 {
                     <div class="col-md-6 col-lg-3 ">
                         <a href="/Currency/CurrencyView">
@@ -209,7 +209,7 @@
                                                     @i
                                                 </td>
                                                 <td>
-                                                    @item.CurrencyList.firstImage
+                                                    @item.CurrencyList.CurrencyName
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.Buy)
@@ -224,7 +224,6 @@
                                                     @CreatedDate
                                                 </td>
                                             </tr>
-
                                         }
                                     }
                                 </tbody>
@@ -242,7 +241,6 @@
 
 
 </div>
-
 <script src="js/Chart.min.js"></script>
 <script src="js/Chart.bundle.min.js"></script>
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
@@ -284,10 +282,7 @@
 
 
 
-    // days chart
     var daysArray = [];
-    debugger;
-
     var currentTime = new Date();
     currentTime = new Date(currentTime.setMonth(currentTime.getMonth() + 1));
     var TodayDate = new Date();
@@ -296,12 +291,10 @@
 
     var CurrentMonth = currentTime.getMonth();
     var daysInMonth = new Date(currentTime.getFullYear(), CurrentMonth, 0).getDate();
-   // daysArray.length = daysInMonth;
     var array = new Array(daysInMonth);
     for (var i = 1; i <= array.length; i++) {
         daysArray[i] = i;
     }
-    //var days = ["jan", "Fab", "Ma", "Ap", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
      var myArray = [];
 
     @foreach (var d in Model.dailyCount)
@@ -312,7 +305,6 @@
     var xValues = daysArray;
     var yValues = myArray;
     var barColors = ["red", "green", "blue", "orange", "brown", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02", "red", "green", "blue", "orange", "brown", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02", "#31676d", "#3e0a45", "#070226", "#436066", "#f52c86", "#0b7a14", "#bfbc02"];
-    debugger;
     new Chart("DaysChart", {
         type: "bar",
         data: {

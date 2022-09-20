@@ -521,7 +521,6 @@ namespace Risen.Controllers
                         {
                             db.Users.Add(user1);
                             db.SaveChanges();
-                            res.StatusCode = "200";
                             res.Message = "User data added successfully";
                             return Request.CreateResponse(HttpStatusCode.OK, res);
                         }
@@ -529,17 +528,15 @@ namespace Risen.Controllers
                 }
                 else
                 {
-                    res.StatusCode = "1000";
-                    res.Message = "object is null";
+
                     return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                 }
 
             }
             catch (Exception ex)
             {
-                res.StatusCode = "1000";
                 res.Message = ex.Message;
-                return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, res);
             }
         }
 
@@ -551,7 +548,6 @@ namespace Risen.Controllers
 
             ReportList reportList = new ReportList();
             TradingReportObjectViewModel tradingReportObjectViewModel = new TradingReportObjectViewModel();
-
             ResponseAPI res = new ResponseAPI();
             List<TradingReportViewModel> TradList = new List<TradingReportViewModel>();
             TradingReportViewModel tradingReportVM = new TradingReportViewModel();
@@ -563,11 +559,9 @@ namespace Risen.Controllers
                 {
                     if (CheckApiToken(apiDTO.companyId, apiDTO.apiToken))
                     {
-
                         var emplist = db.CompanyEmployees.Where(x => x.Companyid == apiDTO.companyId && x.Enable == true).ToList();
                         foreach (var item1 in emplist)
                         {
-                            int WonSum = 0;
                             int lossSumm = 0;
                             tradingReportVM = new TradingReportViewModel();
                             var query = db.EmployeePIPs.Where(x => x.CompanyId == apiDTO.companyId.ToString() && x.CompanyEmployeeID == item1.CompanyEmployeeID).ToList();
@@ -582,11 +576,6 @@ namespace Risen.Controllers
                                 var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
                                 var lastDayOfMonth = new DateTime(date.Year, date.Month, daysInMonth);
                                 query = query.Where(x => x.CreatedTime.Date >= firstDayOfMonth.Date && x.CreatedTime.Date <= lastDayOfMonth.Date).ToList();
-                                tradingReportVM.PointsGain = query.Where(x => x.PIPS >= 0 && x.Disable==false).Count();
-                                tradingReportVM.PointsLose = query.Where(x => x.PIPS < 0 && x.Disable == false).Count();
-                                WonSum = query.Where(x => x.PIPS > 0 && x.Disable == true).Sum(x => x.PIPS);
-                                lossSumm = query.Where(x => x.PIPS < 0 && x.Disable == false).Sum(x => x.PIPS);
-
                             }
                             else if (apiDTO.reportType.ToLower() == "weekly")
                             {
@@ -601,49 +590,38 @@ namespace Risen.Controllers
                                 DateTime currentWeekStartDate = date.AddDays(-daysTillCurrentDay);
                                 DateTime CurrentWeekLastDate = currentWeekStartDate.AddDays(6);
                                 query = query.Where(x => x.CreatedTime.Date >= currentWeekStartDate.Date && x.CreatedTime.Date <= CurrentWeekLastDate.Date).ToList();
-                                tradingReportVM.PointsGain = query.Where(x => x.PIPS >= 0 && x.Disable == false).Count();
-                                tradingReportVM.PointsLose = query.Where(x => x.PIPS < 0 && x.Disable == false).Count();
-                                WonSum = query.Where(x => x.PIPS > 0 && x.Disable == true).Sum(x => x.PIPS);
-                                lossSumm = query.Where(x => x.PIPS < 0 && x.Disable == false).Sum(x => x.PIPS);
                             }
-                            else
-                            {
-                                tradingReportVM.PointsGain = query.Where(x => x.PIPS >= 0 && x.Disable == false).Count();
-                                tradingReportVM.PointsLose = query.Where(x => x.PIPS < 0 && x.Disable == false).Count();
-                                WonSum = query.Where(x => x.PIPS > 0 && x.Disable == true).Sum(x => x.PIPS);
-                                lossSumm = query.Where(x => x.PIPS < 0 && x.Disable == false).Sum(x => x.PIPS);
-                            }
+                            var calculate = CalculatePIPS(query);
+                            tradingReportVM.PointsGain = calculate.PIPSWonCount;
+                            tradingReportVM.PointsLose = calculate.PIPSLossCount;
+                            //
                             tradingReportVM.CreatedById = Convert.ToInt32(item1.CompanyEmployeeID);
                             tradingReportVM.EmployeeId = Convert.ToInt32(item1.CompanyEmployeeID);
                             tradingReportVM.Image = "/Images/Employee/" + item1.Image;
                             tradingReportVM.EmployeeName = item1.fName + " " + item1.lName;
-                            tradingReportVM.wonSum = WonSum;
-                            tradingReportVM.lossSum = Math.Abs(lossSumm);
-                            lossSumm = Math.Abs(lossSumm);
+                            tradingReportVM.wonSum = calculate.PIPSWonSum;
+                            tradingReportVM.lossSum = Math.Abs(calculate.PIPSLossSum);
+                            lossSumm = Math.Abs(calculate.PIPSLossSum);
                             float wonPercentage = 0;
                             float lossPercentage = 0;
-                            if (WonSum > 0 || lossSumm > 0)
+                            if (calculate.PIPSWonSum > 0 || lossSumm > 0)
                             {
-                                float total = WonSum + lossSumm;
-                                wonPercentage = (WonSum / total) * 100;
+                                float total = calculate.PIPSWonSum + lossSumm;
+                                wonPercentage = (calculate.PIPSWonSum / total) * 100;
                                 lossPercentage = (lossSumm / total) * 100;
                                 tradingReportVM.wonPercentage = wonPercentage;
                                 tradingReportVM.lossPercentage = lossPercentage;
                             }
-
                             if (tradingReportVM.EmployeeId > 0)
                             {
                                 tradingReportVM.EmployeeId = Convert.ToInt32(tradingReportVM.EmployeeId);
                             }
-
                             if (tradingReportVM.PointsLose > 0 || tradingReportVM.PointsGain > 0)
                             {
                                 TradList.Add(tradingReportVM);
                             }
                         }
-
                         res.Message = "Ok";
-                        res.StatusCode = "200";
                         tradingReportObjectViewModel.response = res;
                         tradingReportObjectViewModel.tradingReportList = TradList;
                         reportList.tradingReport = tradingReportObjectViewModel;
@@ -651,23 +629,19 @@ namespace Risen.Controllers
                     }
                     else
                     {
-
                         res.Message = "Your are not authorized.";
-                        res.StatusCode = "1000";
                         return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                     }
                 }
                 else
                 {
                     res.Message = "Your company not registerd.";
-                    res.StatusCode = "1000";
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
             }
             catch (Exception ex)
             {
                 res.Message = ex.Message;
-                res.StatusCode = "1000";
                 return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
             }
 
@@ -766,28 +740,24 @@ namespace Risen.Controllers
                         }
                         notificationAPi.notificationList = notificationVMlist;
                         res.Message = "Ok";
-                        res.StatusCode = "200";
                         notificationAPi.response = res;
                         return Request.CreateResponse(HttpStatusCode.OK, notificationAPi);
                     }
                     else
                     {
                         res.Message = "You are not authorized user.";
-                        res.StatusCode = "200";
                         return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                     }
                 }
                 else
                 {
                     res.Message = "Your company not registered.";
-                    res.StatusCode = "1000";
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
             }
             catch (Exception ex)
             {
                 res.Message = ex.Message;
-                res.StatusCode = "1000";
             }
             return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
         }
@@ -829,28 +799,24 @@ namespace Risen.Controllers
                         }
                         notificationAPi.notificationList = notificationVMlist;
                         res.Message = "Ok";
-                        res.StatusCode = "200";
                         notificationAPi.response = res;
                         return Request.CreateResponse(HttpStatusCode.OK, notificationAPi);
                     }
                     else
                     {
                         res.Message = "You are not authorized user.";
-                        res.StatusCode = "200";
                         return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                     }
                 }
                 else
                 {
                     res.Message = "Your company not registered.";
-                    res.StatusCode = "1000";
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
             }
             catch (Exception ex)
             {
                 res.Message = ex.Message;
-                res.StatusCode = "1000";
             }
             return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
         }
@@ -896,11 +862,12 @@ namespace Risen.Controllers
                                 List<EmployeePIPS> pipsList = new List<EmployeePIPS>();
 
                                 pipsList = db.EmployeePIPs.Where(x => x.CompanyId == user.companyid.ToString() && x.CompanyEmployeeID == edu.employeeId).ToList();
-
-                                edu.pointsWin = pipsList.Where(x => x.PIPS >= 0 && x.Disable == false).Count();
-                                edu.pointsLoss = pipsList.Where(x => x.PIPS < 0 && x.Disable == false).Count();
-                                edu.wonSum = pipsList.Where(x => x.PIPS >= 0 && x.Disable == true).Sum(x => x.PIPS);
-                                edu.lossSum = pipsList.Where(x => x.PIPS < 0 && x.Disable == false).Sum(x => x.PIPS);
+                                var pipsCaluculation = CalculatePIPS(pipsList);
+                                edu.pointsWin =  pipsCaluculation.PIPSWonCount;
+                                edu.pointsLoss = pipsCaluculation.PIPSLossCount;
+                                edu.wonSum =     pipsCaluculation.PIPSWonSum;
+                                edu.lossSum =    pipsCaluculation.PIPSLossSum;
+                                
                                 edu.wonPercentage = (edu.wonSum / edu.wonSum + edu.lossSum) * 100;
                                 edu.lossPercentage = (100 - edu.wonPercentage);
 
@@ -914,21 +881,18 @@ namespace Risen.Controllers
                     else
                     {
                         res.Message = "You are not authorized user.";
-                        res.StatusCode = "200";
                         return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                     }
                 }
                 else
                 {
                     res.Message = "Your company not registered.";
-                    res.StatusCode = "1000";
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
             }
             catch (Exception ex)
             {
                 res.Message = ex.Message;
-                res.StatusCode = "1000";
             }
             return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
         }
@@ -951,25 +915,21 @@ namespace Risen.Controllers
                             {
                                 if (notif.companyId == 0)
                                 {
-                                    res.StatusCode = "1000";
                                     res.Message = "CompanyId can't be null";
                                     return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                                 }
                                 else if (notif.employeeId == 0)
                                 {
-                                    res.StatusCode = "1000";
                                     res.Message = "employeeId can't be null";
                                     return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                                 }
                                 else if (notif.apiToken == "" || notif.apiToken == null)
                                 {
-                                    res.StatusCode = "1000";
                                     res.Message = "apiToken can't be null";
                                     return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                                 }
                                 else if (notif.userId == 0)
                                 {
-                                    res.StatusCode = "1000";
                                     res.Message = "userId can't be null";
                                     return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                                 }
@@ -982,11 +942,9 @@ namespace Risen.Controllers
                                 {
                                     db.AllowNotifications.Remove(finduser);
                                     db.SaveChanges();
-                                    res.StatusCode = "200";
                                     res.Message = "Notificatons allow successfully";
                                     return Request.CreateResponse(HttpStatusCode.OK, res);
                                 }
-                                res.StatusCode = "200";
                                 res.Message = "";
                                 return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                                 //var finduser = db.
@@ -1002,25 +960,21 @@ namespace Risen.Controllers
                                     notif.status = false;
                                     db.AllowNotifications.Add(notification);
                                     db.SaveChanges();
-                                    res.StatusCode = "200";
                                     res.Message = "Notifications off successfully";
                                     return Request.CreateResponse(HttpStatusCode.OK, res);
                                 }
-                                res.StatusCode = "200";
                                 res.Message = "Notifications already off";
                                 return Request.CreateResponse(HttpStatusCode.OK, res);
                             }
                         }
                         else
                         {
-                            res.StatusCode = "1000";
                             res.Message = "Your company not registerd";
                             return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                         }
                     }
                     else
                     {
-                        res.StatusCode = "1000";
                         res.Message = "object is null";
                         return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
                     }
@@ -1028,14 +982,12 @@ namespace Risen.Controllers
                 else
                 {
                     res.Message = "You are not authorized user.";
-                    res.StatusCode = "200";
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
 
             }
             catch (Exception ex)
             {
-                res.StatusCode = "1000";
                 res.Message = ex.Message;
                 return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
             }
@@ -1106,23 +1058,31 @@ namespace Risen.Controllers
                     else
                     {
                         res.Message = "You are not authorized user.";
-                        res.StatusCode = "200";
                         return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                     }
                 }
                 else
                 {
                     res.Message = "Your company not registered.";
-                    res.StatusCode = "1000";
                     return Request.CreateResponse(HttpStatusCode.Unauthorized, res);
                 }
             }
             catch (Exception ex)
             {
                 res.Message = ex.Message;
-                res.StatusCode = "1000";
+                return Request.CreateResponse(HttpStatusCode.ExpectationFailed, res);
             }
-            return Request.CreateResponse(HttpStatusCode.NotImplemented, res);
+           
+        }
+
+        public PIPSCalculation CalculatePIPS(List<EmployeePIPS> input)
+        {
+            PIPSCalculation pipsCalculation = new PIPSCalculation();
+            pipsCalculation.PIPSWonCount = input.Where(x => x.Status.ToLower() == "won").Count();
+            pipsCalculation.PIPSLossCount = input.Where(x => x.Status.ToLower() == "loss").Count();
+            pipsCalculation.PIPSWonSum = input.Where(x => x.Status.ToLower() == "won").Sum(x => x.PIPS);
+            pipsCalculation.PIPSLossSum = input.Where(x => x.Status.ToLower() == "loss").Sum(x => x.PIPS);
+            return pipsCalculation;
         }
     }
 }

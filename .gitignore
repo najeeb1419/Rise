@@ -3,3 +3,6 @@
 ################################################################################
 
 /.vs/Risen
+/Turbo/bin/app.publish/bin/
+/Turbo/bin/app.publish/bin/app.publish/bin/
+/Turbo/obj/

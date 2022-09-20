@@ -248,3 +248,9 @@ D:\Izla\Risen\Turbo\obj\Release\Risen.csproj.CoreCompileInputs.cache
 D:\Izla\Risen\Turbo\obj\Release\Risen.csproj.CopyComplete
 D:\Izla\Risen\Turbo\obj\Release\Risen.dll
 D:\Izla\Risen\Turbo\obj\Release\Risen.pdb
+D:\Izla\Risen\Turbo\bin\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Izla\Risen\Turbo\bin\Quartz.dll
+D:\Izla\Risen\Turbo\bin\System.Diagnostics.DiagnosticSource.dll
+D:\Izla\Risen\Turbo\bin\Microsoft.Extensions.Logging.Abstractions.xml
+D:\Izla\Risen\Turbo\bin\Quartz.xml
+D:\Izla\Risen\Turbo\bin\System.Diagnostics.DiagnosticSource.xml

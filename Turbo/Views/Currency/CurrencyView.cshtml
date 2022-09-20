@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "CurrencyView";
     //Layout = "~/Views/Shared/_CustomLayout.cshtml";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 
 }
 
@@ -53,68 +53,68 @@
         </div>
 
         <div>
-            @if (privileges.isClientCreate)
+            @if (privileges.isCurrencyCreate)
             {
                 @*<div class="container" style="margin:20px;">
-                    <label hidden id="currencyNamelbl">Please select currency pair.</label>
-                    <form action="CurrencyView" enctype="multipart/form-data" method="post">
-                        <div class="row">
+                <label hidden id="currencyNamelbl">Please select currency pair.</label>
+                <form action="CurrencyView" enctype="multipart/form-data" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                                <label class="control-label">Currency(1)</label>
+                                <input style="box-shadow: none" type="text" name="FirstCurrency" class="form-control" placeholder="" required value="" />
+                            </div>
                             <div class="col-md-6">
-                                    <label class="control-label">Currency(1)</label>
-                                    <input style="box-shadow: none" type="text" name="FirstCurrency" class="form-control" placeholder="" required value="" />
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="control-label">Currency(2)</label>
-                                    <input style="box-shadow: none" type="text" name="SecondCurrency" class="form-control" placeholder="" required value="" />
-                                </div>
-                            <div class="col-md-12 mb-4">
-                                <label class="control-label">Currency</label>
-                                <select class="form-control" name="CurrencyListId" id="addCurrency_dropdown">
-                                    <option value="">--select--</option>
-                                    @foreach (var item in ViewBag.CurrencyList)
-                                    {
-                                        <option value="@item.CurrencyListId">@item.firstImage</option>
-                                    }
-                                </select>
+                                <label class="control-label">Currency(2)</label>
+                                <input style="box-shadow: none" type="text" name="SecondCurrency" class="form-control" placeholder="" required value="" />
                             </div>
-                            <div class="col-md-6" style="margin-bottom:10px;">
-                                <label class="control-label">Image(1)</label>
-                                <input style="box-shadow: none" type="file" class="form-control" name="Staff_img" id="Staff_image" required />
-                            </div>
-                            <div class="col-md-6" style="margin-bottom:10px;">
-                                <label class="control-label">Image(2)</label>
-                                <input style="box-shadow: none" type="file" class="form-control" name="Staff_img1" id="Staff_image1" required />
-                            </div>
-                            <div class="col-sm-6" style="margin-bottom:10px">
-                                <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src" />
-                            </div>
-                            <div class="col-sm-6" style="margin-bottom:10px">
-                                <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src1" />
-                            </div>
-                            <input type="text" id="staffImage_url123" name="FirstCurrencyImage" hidden required value="" />*
-                            <input type="text" id="staffImage_url1231" name="SecondCurrencyImage" hidden required value="" />
-
-                            @if (privileges.isClientCreate)
-                            {
-                                <div class="col-md-12" style="margin-bottom:10px;">
-                                    <br />
-                                    <br />
-                                    <input type="submit" value="Submit" id="AddCurrency_btn" class="btn btn buttoncolor" style="width:100px" />
-                                </div>
-                            }
+                        <div class="col-md-12 mb-4">
+                            <label class="control-label">Currency</label>
+                            <select class="form-control" name="CurrencyListId" id="addCurrency_dropdown">
+                                <option value="">--select--</option>
+                                @foreach (var item in ViewBag.CurrencyList)
+                                {
+                                    <option value="@item.CurrencyListId">@item.firstImage</option>
+                                }
+                            </select>
                         </div>
-                    </form>
-                </div>*@
+                        <div class="col-md-6" style="margin-bottom:10px;">
+                            <label class="control-label">Image(1)</label>
+                            <input style="box-shadow: none" type="file" class="form-control" name="Staff_img" id="Staff_image" required />
+                        </div>
+                        <div class="col-md-6" style="margin-bottom:10px;">
+                            <label class="control-label">Image(2)</label>
+                            <input style="box-shadow: none" type="file" class="form-control" name="Staff_img1" id="Staff_image1" required />
+                        </div>
+                        <div class="col-sm-6" style="margin-bottom:10px">
+                            <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src" />
+                        </div>
+                        <div class="col-sm-6" style="margin-bottom:10px">
+                            <img style="height:120px; width:100px; border:solid gray" src="~/Images/select_image.png" id="Imag_src1" />
+                        </div>
+                        <input type="text" id="staffImage_url123" name="FirstCurrencyImage" hidden required value="" />*
+                        <input type="text" id="staffImage_url1231" name="SecondCurrencyImage" hidden required value="" />
+
+                        @if (privileges.isCurrencyCreate)
+                        {
+                            <div class="col-md-12" style="margin-bottom:10px;">
+                                <br />
+                                <br />
+                                <input type="submit" value="Submit" id="AddCurrency_btn" class="btn btn buttoncolor" style="width:100px" />
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>*@
             }
 
-            @if (privileges.isClientView)
+            @if (privileges.isCurrencyView)
             {
                 <div class="row mt-5">
                     <div class="col-md-12">
                         <div class="white_shd full margin_bottom_30" style="margin-top:20px;">
                             <div class="full graph_head">
                                 <div class="heading1  margin_0">
-                                    <h2>Currencies</h2>
+                                    <h2>Indices</h2>
                                 </div>
                             </div>
                             <div class="table_section padding_infor_info">
@@ -139,7 +139,7 @@
                                             </th>
                                             @*<th>
 
-                                                </th>*@
+                                        </th>*@
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -169,16 +169,16 @@
                                                         @CreatedDate
                                                     </td>
                                                     @*<td>
-                                                        @if (privileges != null)
+                                                    @if (privileges != null)
+                                                    {
+                                                        if (privileges.isClientUpdate)
                                                         {
-                                                            if (privileges.isClientUpdate)
-                                                            {
-                                                                <center>
-                                                                    <a href="/Currency/EditCurrency?id=@item.CurrenciesId" class="btn  btn-outline-warning btn-sm"><span class="fa fa-pencil" aria-hidden="true"></span></a>
-                                                                </center>
-                                                            }
+                                                            <center>
+                                                                <a href="/Currency/EditCurrency?id=@item.CurrenciesId" class="btn  btn-outline-warning btn-sm"><span class="fa fa-pencil" aria-hidden="true"></span></a>
+                                                            </center>
                                                         }
-                                                    </td>*@
+                                                    }
+                                                </td>*@
                                                 </tr>
                                             }
                                         }

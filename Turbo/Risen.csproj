@@ -247,6 +247,8 @@
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\StopLose.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
+    <Compile Include="obj\Release\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="ViewModel\AllowNotificationViewModel.cs" />
     <Compile Include="ViewModel\ApiDTO.cs" />
     <Compile Include="ViewModel\currencyJson.cs" />
@@ -273,6 +275,7 @@
     <Compile Include="ViewModel\NotificationViewModel.cs" />
     <Compile Include="ViewModel\PastResultList.cs" />
     <Compile Include="ViewModel\PastResultViewModel.cs" />
+    <Compile Include="ViewModel\PIPSCalculation.cs" />
     <Compile Include="ViewModel\PriviligesViewModel.cs" />
     <Compile Include="ViewModel\ReportList.cs" />
     <Compile Include="ViewModel\ResponseAPI.cs" />
@@ -674,6 +677,8 @@
     <Content Include="assets\vendor\timeline\img\cd-icon-picture.svg" />
     <Content Include="assets\vendor\timeline\js\main.js" />
     <Content Include="assets\vendor\vector-map\jqvmap.css" />
+    <Content Include="bin\Risen.dll" />
+    <Content Include="bin\Risen.pdb" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -986,7 +991,7 @@
     <Content Include="Views\Employee\EditProfile.cshtml" />
     <Content Include="Views\Designation\DesignationView.cshtml" />
     <Content Include="Views\Designation\PreviligesView.cshtml" />
-    <Content Include="Views\Shared\_LifeProCustomLayout.cshtml" />
+    <Content Include="Views\Shared\_RisenLayout.cshtml" />
     <Content Include="Views\Currency\EditCurrency.cshtml" />
     <Content Include="Views\Authentication\dummy.cshtml" />
     <Content Include="Views\Socket\SoketView.cshtml" />

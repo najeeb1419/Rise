@@ -87,6 +87,7 @@
             background-repeat: no-repeat;
             background-position: center;
         }
+
         .col-md-12 {
             margin-bottom: 10px;
         }
@@ -124,8 +125,8 @@
             Image = employee.lName;
         }
         privileges = Session["Priviliges"] as Privileges;
-    } 
     }
+}
 
 
 <body class="dashboard dashboard_2">
@@ -164,17 +165,17 @@
                         <li class="activeclass" id="Li_1">
                             @if (privileges != null)
                             {
-                                if (privileges.IsDashboard)
+                                if (privileges.isDashboard)
                                 {
                                 }
-                                if (privileges.IsDashboard)
+                                if (privileges.isDashboard)
                                 {
                                     <a href="~/Home/Index"><i class="fa fa-tachometer-alt iconcolor"></i> <span class="iconcolor">Dashboard</span></a>}
                             }
                         </li>
                         @if (privileges != null)
                         {
-                            if (privileges.isStaffView)
+                            if (privileges.isTradeIdea)
                             {
                                 <li class="nav-item activeclass" onclick="ActiveLink(2)" id="Li_2">
                                     <a class="nav-link iconcolor" href="~/Ideas/TradingSignalView" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-signal iconcolor"></i> <span class="iconcolor">Trading Ideas</span></a>
@@ -183,7 +184,7 @@
                         }
                         @if (privileges != null)
                         {
-                            if (privileges.isStaffView)
+                            if (privileges.isTradeIdeaCreate)
                             {
                                 <li class="nav-item activeclass" onclick="ActiveLink(3)" id="Li_3">
                                     <a class="nav-link iconcolor" href="~/Home/Dashbaord" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-signal iconcolor"></i> <span class="iconcolor">Add Trading Idea</span></a>
@@ -204,7 +205,7 @@
 
                         @if (privileges != null)
                         {
-                            if (privileges.isClientView)
+                            if (privileges.isCurrency)
                             {
                                 <li class="nav-item activeclass" onclick="ActiveLink(5)" id="Li_5">
                                     <a class="nav-link iconcolor" href="~/Currency/CurrencyView" ata-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-dollar-sign iconcolor"></i> <span class="iconcolor">Indices</span></a>
@@ -263,7 +264,7 @@
                                                 }
                                                 @if (privileges != null)
                                                 {
-                                                    if (privileges.IsSetting)
+                                                    if (privileges.isSetting)
                                                     {
                                                         <a class="dropdown-item" href="/Designation/DesignationView">Settings</a>}
                                                 }
@@ -316,13 +317,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn  closebtn" data-dismiss="modal">Close</button>
-                                    @if (privileges != null)
-                                    {
-                                        if (privileges.isEmployeeCreate)
-                                        {
-                                            <button type="button" id="Notification_btn" class="btn buttoncolor">Send</button>
-                                        }
-                                    }
+                                    <button type="button" id="Notification_btn" class="btn buttoncolor">Send</button>
                                 </div>
                             </div>
                         </form>
@@ -343,7 +338,7 @@
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
-  
+
     <script src="~/css Jq link/js/popper.min.js"></script>
     <script src="~/css Jq link/js/bootstrap.min.js"></script>
     <script src="~/css Jq link/js/animate.js"></script>
@@ -361,7 +356,6 @@
 
     <script>
         function ActiveLink(id) {
-            debugger;
             for (var i = 1; i < 7; i++) {
                 $("#Li_" + i).removeProp("background-color");
             }
@@ -394,7 +388,6 @@
 
 
          $("#customerNotificationImage").change(function () {
-             debugger;
              var element = this;
              var formData = new FormData();
              var totalFiles = element.files.length;
@@ -418,7 +411,6 @@
 
 
         $("#Notification_btn").click(function () {
-            debugger;
             var title = $("#title").val();
             var NotBody = $("#body").val();
             var notImage = $("#customeImage_123").val();

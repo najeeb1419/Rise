@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "TradingSignalView";
     //Layout = "~/Views/Shared/_CustomLayout.cshtml";
-    Layout = "~/Views/Shared/_LifeProCustomLayout.cshtml";
+    Layout = "~/Views/Shared/_RisenLayout.cshtml";
 }
 @using Risen.Models
 @{
@@ -49,7 +49,7 @@
                 <label id="Alert_div1" style="color:green"></label>
             </div>
             <div class="white_shd full margin_bottom_30" style="margin-top:0px;">
-                @if (privileges.isStaffView)
+                @if (privileges.isTradeIdeaView)
                 {
                     <div class="row">
                         <div class="col-md-12">
@@ -60,39 +60,37 @@
                                             <div class="row pl-5 pr-5">
                                                 <div class="col-md-2">
                                                     <label>Status</label>
-                                                    <select class="form-control" name="Status" id="tradeStatus">
-                                                        <option value="">--Select--</option>
-                                                        <option value="">Active</option>
+                                                    <select class="form-control" name="Status" id="tradeStatus" onchange="BindDataTable()">
+                                                        <option value="">All</option>
+                                                        <option value="0">Pending</option>
+                                                        <option value="1">Approved</option>
+                                                        <option value="2">Rejected</option>
                                                         <option value="5">Won</option>
                                                         <option value="4">Loss</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <label>Indices</label>
-                                                    <select class="form-control" name="CurrencyName" id="CurrencyName_id">
-                                                        <option value="">--Select--</option>
+                                                    <label>Currency</label>
+                                                    <select class="form-control" name="CurrencyName" id="CurrencyName_id" onchange="BindDataTable()">
+                                                        <option value="">All</option>
                                                         @foreach (var item in ViewBag.currencieslist)
                                                         {
-                                                            <option value="@item.CurrencyList.firstImage">@item.CurrencyList.firstImage</option>
+                                                            <option value="@item.CurrencyList.CurrencyName">@item.CurrencyList.CurrencyName</option>
                                                         }
                                                     </select>
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label>Employee</label>
-                                                    <select class="form-control" name="EmployeeId" id="Employee_Id">
+                                                    <select class="form-control" name="EmployeeId" id="Employee_Id" onchange="BindDataTable()">
                                                         @foreach (var item in ViewBag.employee)
                                                         {
                                                             <option value="@item.CompanyEmployeeID">@item.fName @item.lName</option>
                                                         }
                                                     </select>
                                                 </div>
-                                                <div class="col-md-2">
+                                                <div class="offset-4 col-md-2">
                                                     <label style="color:white"> .</label>
-                                                    <input style="display:block" type="button" onclick="BindDataTable()" value="Search" class="btn buttoncolor" />
-                                                </div>
-                                                <div class="offset-2 col-md-2">
-                                                    <label style="color:white"> .</label>
-                                                    @if (privileges.isStaffCreate)
+                                                    @if (privileges.isTradeIdeaCreate)
                                                     {
                                                         <a style="display:block" class="btn buttoncolor" href="/Home/Dashbaord">New Trade Idea</a>
                                                     }
@@ -238,41 +236,6 @@
     });
 
 
-
-    function DeleteTradingIdea(id) {
-
-        if (confirm('Are you sure you want to delete this Idea?')) {
-            if (id != 0) {
-                $.ajax({
-                    type: "POST",
-                    url: "/Ideas/DeleteTrading",
-                    data: { TradingSignalId: id },
-                    dataType: "json",
-                    success: function (data) {
-
-                        if (data == "success") {
-                            $("#Alert_div").text("Deleted successfully.");
-                            //Swal.fire(
-                            //    'Deleted!',
-                            //    'Successfully Deleted!',
-                            //    'success'
-                            //)
-                            location.reload();
-
-                        }
-                        else if (data == "expire") {
-                            alert("Session Has Been Expired Please Refresh The Page.");
-                        }
-                    },
-                });
-            }
-            else {
-
-                alert("Please first select record");
-            }
-        }
-    }
-
     function ChangeStatus(id) {
         var status = $("#TradingStatus_" + id).val();
         if (id != 0) {
@@ -354,7 +317,6 @@
                         else if (Type == "6") {
                             return 'Buy stop'
                         }
-
                     }
                 },
                 {
@@ -406,12 +368,13 @@
                         if (status == "0" || status == "1" || status == "2") {
                             buttons += '<a href="/Ideas/EditTradingSignal?id=' + TradingSignalId + '" class="btn btn-sm buttoncolor">Edit</a> '
                         }
+                        else {
+                            buttons += '<a href="/Ideas/EditTradingSignal?id=' + TradingSignalId + '" class="btn btn-sm buttoncolor">View</a> '
+                        }
                         buttons += ' <button data-toggle="modal" data-target="#tradePips" href="#hidden_tr_' + TradingSignalId + '" onclick="GetTradingData(' + TradingSignalId + ')" class="btn  btn-sm" title="View Detail" style=" border: none; background-color: #0F85B1;  color: white;"><span id="icon_' + TradingSignalId + '" class="fa fa-caret-down" aria-hidden="true"></span></button>'
                         return buttons
                     }
-
                 },
-
             ]
         });
 

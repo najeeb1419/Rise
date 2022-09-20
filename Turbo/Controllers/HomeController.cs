@@ -47,11 +47,10 @@ namespace Risen.Controllers
                     companyid = company.RegisterComapanyID;
                     name = company.Name;
                     CreatedById = null;
-                    var tradingSignals = db.TradingSignals.Where(x => x.Companyid == companyid.ToString() && x.Disable == false).ToList();
+                    var tradingSignals = db.TradingSignals.Where(x => x.Companyid == companyid.ToString()).ToList();
                     CountTradingIdeas = tradingSignals.Count();
                     dashbaord.TradingIdeas = CountTradingIdeas;
                     ViewBag.TradingSignal = tradingSignals.Take(10).ToList();
-
                     // Barchart data
                     for (int i = 1; i < 13; i++)
                     {
@@ -85,17 +84,18 @@ namespace Risen.Controllers
 
                     CompanyEmployee employee1 = new CompanyEmployee();
                     employee1 = Session["Employee"] as CompanyEmployee;
+                    var privileges = Session["Priviliges"] as Privileges;
                     //employee1 = TempData["Employee"] as CompanyEmployee;
 
                     companyid = employee1.Companyid;
                     name = employee1.fName + " " + employee1.lName;
                     CreatedById = employee1.CompanyEmployeeID;
-                    if (employee1.Designation.Name == "Admin")
+                    if (employee1.Designation.Name == "Admin" || privileges.isManager == true)
                     {
-                        var tradingSignals = db.TradingSignals.Where(x => x.Companyid == companyid.ToString() && x.Disable == false).ToList();
+                        var tradingSignals = db.TradingSignals.Include("CompanyEmployee").Where(x => x.Companyid == companyid.ToString()).Take(30).ToList();
                         CountTradingIdeas = tradingSignals.Count();
-                        dashbaord.TradingIdeas = CountTradingIdeas;
-                        ViewBag.TradingSignal = tradingSignals;
+                        dashbaord.TradingIdeas = tradingSignals.Count();
+                        ViewBag.TradingSignal = tradingSignals.Take(10).ToList();
 
                         // Barchart data for admin
                         for (int i = 1; i < 13; i++)
@@ -124,10 +124,9 @@ namespace Risen.Controllers
                     }
                     else
                     {
-                        var tradingSignals = db.TradingSignals.Where(x => x.Companyid == companyid.ToString() && x.Disable == false && x.CreatedById == employee1.CompanyEmployeeID).ToList();
-                        CountTradingIdeas = tradingSignals.Count();
-                        dashbaord.TradingIdeas = tradingSignals.Count();
-                        ViewBag.TradingSignal = tradingSignals;
+                        var tradingSignals = db.TradingSignals.Where(x => x.Companyid == companyid.ToString() && x.CreatedById == employee1.CompanyEmployeeID).ToList();
+                        dashbaord.TradingIdeas = CountTradingIdeas;
+                        ViewBag.TradingSignal = tradingSignals.Take(10).ToList();
 
                         // monthly barchrt data
                         for (int i = 1; i < 13; i++)
@@ -171,7 +170,6 @@ namespace Risen.Controllers
                 return RedirectToAction("Login", "Authentication");
             }
         }
-
         [HttpGet]
         public ActionResult Dashbaord()
         {
